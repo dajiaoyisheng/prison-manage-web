@@ -1,0 +1,468 @@
+/* 公共样式 */
+
+/* reset.css begin */
+
+/*! minireset.css v0.0.3 | MIT License | github.com/jgthms/minireset.css */
+
+html,
+body,
+p,
+ol,
+ul,
+li,
+dl,
+dt,
+dd,
+blockquote,
+figure,
+fieldset,
+legend,
+textarea,
+pre,
+iframe,
+hr,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: 100%;
+  font-weight: normal;
+}
+
+ul {
+  list-style: none;
+}
+
+button,
+input,
+select,
+textarea {
+  margin: 0;
+  border: none;
+  outline: none;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+body {
+  background: #f3f6f8;
+}
+
+font-family: "Helvetica Neue",
+Helvetica,
+"PingFang SC",
+"Hiragino Sans GB",
+"Microsoft YaHei",
+"微软雅黑",
+Arial,
+sans-serif;
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+img,
+embed,
+iframe,
+object,
+audio,
+video {
+  height: auto;
+  max-width: 100%;
+}
+
+iframe {
+  border: 0;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+td,
+th {
+  padding: 0;
+  text-align: left;
+}
+
+a {
+  color: rgb(160, 171, 181);
+  text-decoration: none;
+}
+
+/* reset.css end */
+
+.nav-wrap {
+  background-color: rgb(47, 50, 60);
+  height: 60px;
+  position: fixed;
+  z-index: 1500;
+  width: 100%;
+}
+
+.nav-ul {
+  /* background-color: rgb(47, 50, 60); */
+  margin: 0 auto;
+  width: 1200px;
+}
+
+div.content-wrap {
+  /* width: 1200px; */
+  margin: 0 auto;
+  padding-top: 60px;
+  background: #fff;
+}
+
+/* .workbench-wrap {
+  width: 100%;
+  margin: 0 auto;
+} */
+
+/* 当屏幕宽度小于1200px */
+
+/* @media only screen and (max-width: 1200px) {
+  .content-wrap {
+    width: 90%;
+  }
+} */
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+.text-center {
+  text-align: right;
+}
+
+/* 垂直方向居中 begin*/
+
+/* 相对具有定位属性的父级 */
+
+/* Vertical centering */
+
+.v-c {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Horizontally centered */
+
+.h-c {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.fixed-center {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* 垂直方向居中 end */
+
+.clearfix:after {
+  clear: both;
+  content: '.';
+  display: block;
+  width: 0;
+  height: 0;
+  visibility: hidden;
+}
+
+/* 横线 begin */
+
+.h-line {
+  display: block;
+  /*设置为块级元素会独占一行形成上下居中的效果*/
+  position: relative;
+  /*定位横线（当横线的父元素）*/
+}
+
+.h-line:after {
+  content: '';
+  /*CSS伪类用法*/
+  position: absolute;
+  /*定位背景横线的位置*/
+  top: 51%;
+  background: #e9ebf0;
+  /*宽和高做出来的背景横线*/
+  width: 83%;
+  height: 1px;
+  right: 0;
+}
+
+/* 横线 end */
+
+.num-color {
+  color: #0a74bb;
+}
+
+/* 表格begin */
+
+table {
+  width: 100%;
+  color: #606266;
+}
+
+thead {
+  color: #909399;
+  font-weight: 500;
+}
+
+tr {
+  background-color: #fff;
+}
+
+.el-table td,
+.el-table th.is-leaf {
+  border-bottom: 1px solid #ebeef5;
+}
+
+th>.cell {
+  position: relative;
+  word-wrap: normal;
+  vertical-align: middle;
+  width: 100%;
+}
+
+td {
+  transition: background-color .25s ease;
+}
+
+th {
+  white-space: nowrap;
+  overflow: hidden;
+  user-select: none;
+  text-align: left;
+  background-color: #fff;
+}
+
+td,
+th {
+  border-bottom: 1px solid #ebeef5;
+  padding: 12px 0;
+  min-width: 0;
+  box-sizing: border-box;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  position: relative;
+}
+
+.cell {
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  word-break: break-all;
+  line-height: 23px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.el-table-wrap {
+  border: 1px solid #dcdcdc;
+}
+
+/* 表格最后一列可操作项 */
+
+.operating span {
+  color: #59c4ee;
+  cursor: pointer;
+  margin-right: 1%;
+}
+
+/* 表格end */
+
+/* 选项卡begin */
+
+.el-tabs__header {
+  margin: 15px 0 15px;
+}
+
+.el-tabs--bottom .el-tabs__item.is-bottom:nth-child(2),
+.el-tabs--bottom .el-tabs__item.is-top:nth-child(2),
+.el-tabs--top .el-tabs__item.is-bottom:nth-child(2),
+.el-tabs--top .el-tabs__item.is-top:nth-child(2) {
+  padding-left: 4px;
+}
+
+.el-tabs--bottom .el-tabs__item.is-bottom:last-child,
+.el-tabs--bottom .el-tabs__item.is-top:last-child,
+.el-tabs--top .el-tabs__item.is-bottom:last-child,
+.el-tabs--top .el-tabs__item.is-top:last-child {
+  padding-right: 4px;
+}
+
+.el-tabs__item {
+  padding: 0 4px;
+  border: 1px solid #59c4ee;
+  color: #59c4ee;
+  height: 26px;
+  line-height: 26px;
+}
+
+.el-tabs__item.is-active {
+  color: #fff;
+  background: #59c4ee;
+}
+
+.el-tabs__active-bar {
+  height: 0px;
+}
+
+.el-tabs__nav-wrap::after {
+  height: 0;
+}
+
+/* 选项卡end */
+
+/*  */
+
+/* .el-input__inner{
+  height: 30px;
+  line-height: 30px;
+} */
+
+/* 分页begin */
+
+.el-pagination-wrap {
+  width: 100%;
+  text-align: right;
+  padding: 20px 0;
+  background-color: #fff;
+}
+
+.el-pagination__jump {
+  margin-left: 0;
+}
+
+.el-pagination.is-background .el-pager li:not(.disabled).active {
+  background-color: #eef9fd;
+  color: #59c4ee;
+}
+
+.el-pagination.is-background .btn-next,
+.el-pagination.is-background .btn-prev,
+.el-pagination.is-background .el-pager li {
+  /* border: 1px solid #dcdcdc; */
+}
+
+.el-pagination.is-background .btn-next,
+.el-pagination.is-background .btn-prev,
+.el-pagination.is-background .el-pager li {
+  background-color: #fff;
+}
+
+.el-pager li {}
+
+/* 分页end */
+
+.pp-r-t .el-select,
+.pp-r-t .pp-input {
+  width: 12%;
+}
+
+/* 时间筛选器begin */
+
+.q-v-t .el-date-editor.el-input,
+.q-v-t .el-date-editor.el-input__inner {
+  width: 36%;
+}
+
+/* 时间筛选器end */
+
+/* 筛选条件begin */
+
+.filter-wrap {
+  height: 70px;
+  line-height: 70px;
+}
+
+/* 筛选条件end */
+
+/* el行外下边距begin */
+
+.el-row {
+  margin-bottom: 20px;
+}
+
+/* el行外下边距end */
+
+/* 搜索按钮颜色begin */
+
+/* .el-input-group__append,
+.el-input-group__prepend {
+  background-color: #59c4ee;
+  color: #fff;
+} */
+.search-btn {
+  background-color: #59c4ee;
+  color: #fff;
+}
+
+/* 搜索按钮颜色end */
+
+/* 内容begin */
+
+.w1200 {
+  width: 1200px;
+  margin: 0 auto;
+}
+
+.contentMain {
+  background: #fff;
+  border: 1px solid #e0e3ec;
+  border-radius: 1px;
+  padding: 0 2%;
+}
+
+.contentInfo {
+  color: #59C4EE;
+  height: 55px;
+  line-height: 55px;
+  background: #f3f6f8;
+}
+
+.puu-params {
+  height: 70px;
+  line-height: 70px;
+  font-size: 14px;
+}
+
+/* 内容end */
+
+.return-btn {
+  background: #e8e8e8;
+}
+
+/* 下拉框位置beging */
+
+.el-popper[x-placement^=bottom] {
+  margin-top: -12px;
+}
+
+/* 下拉框位置end */
