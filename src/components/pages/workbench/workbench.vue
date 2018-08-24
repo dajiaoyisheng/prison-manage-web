@@ -153,7 +153,6 @@
       // 人员分类
       this.$ajxj.get('/getBenchChartPie')
         .then(function (res) {
-          // _this.loading = false;
           console.log(res.data);
           
           _this.benchChartPieData = res.data
@@ -163,7 +162,6 @@
       // 预警事件分类
       this.$ajxj.get('/getBenchChartbarData')
         .then(function (res) {
-          // _this.loading = false;
           _this.benchChartbarData = res.data
         }).catch(function (error) {
           console.log(error);
@@ -171,7 +169,6 @@
       // 人员状态
       this.$ajxj.get('/prisonersStutas')
         .then(function (res) {
-          // _this.loading = false;
           _this.prisonersStutas = res.data.data
         }).catch(function (error) {
           console.log(error);

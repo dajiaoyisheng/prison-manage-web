@@ -10,7 +10,9 @@ import sysOptionsData from './data/sysoptions';
 import prisonarea from './data/prisonarea';
 import { serverInfoData } from './data/serverinfo';
 import posunsualData from './data/posunusual';
+import pManageDatas from './data/pManageDatas';
 import calendarData from './data/calendar';
+import pointnameData from './data/pointname';
 
 export default {
     /**
@@ -134,6 +136,15 @@ export default {
                 }, 1000);
             });
         });
+        // 服刑人员管理
+        mock.onPost('/getPManageDatas').reply(config => {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    defaultResData.data = pManageDatas;
+                    resolve([200, defaultResData])
+                }, 1000);
+            });
+        });
 
         mock.onGet('/getPrisonerInfo').reply(config => {
             return new Promise((resolve, reject) => {
@@ -193,6 +204,15 @@ export default {
             return new Promise((resolve, reject) => {
                 setTimeout(() => {
                     defaultResData.data = calendarData.holidayDates;
+                    resolve([200, defaultResData])
+                }, 1000);
+            });
+        });
+
+        mock.onGet('/getPointNameDatas').reply(config => {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    defaultResData.data = pointnameData;
                     resolve([200, defaultResData])
                 }, 1000);
             });

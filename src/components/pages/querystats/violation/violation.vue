@@ -139,7 +139,7 @@
           "prisonerName": this.parame.prisonerName,
         }
         this.$ajxj.post('/getPosunusualItems', this.parame).then(function (respnose) {
-          console.log(_this.parame);
+          console.log('respnose',respnose);
           _this.ppuTableDatas = respnose.data.items;
           _this.pagination.totalRows = respnose.data.totalRows;
         }).catch(function (error) {

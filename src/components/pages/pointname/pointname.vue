@@ -1,7 +1,19 @@
 <template>
   <div id="pointname">
     <el-container class="pn-container">
-      <el-aside class="pn-aside" style="width: 250px;"><el-tree :data="treeData" :props="defProps" @node-click="handleNodeClick"></el-tree></el-aside>
+      <el-aside v-if="pnAside" class="pn-aside" style="width: 250px;">
+        <el-tree :data="treeData" node-key="id" @node-click="handleNodeClick" default-expand-all :expand-on-click-node="false">
+          <span class="custom-tree-node" slot-scope="{ node, data }">
+            <span> <i :class="node.icon"></i>{{ node.label }}</span>
+          </span>
+        </el-tree>
+      </el-aside>
+      <el-aside class="pn-center" style="width: 5px;">
+        <div style="position: absolute; top:50%">
+          <img v-if="pnAside" @click="pnAside=false" src="@/assets/right.gif">
+          <img v-if="!pnAside" @click="pnAside=true" src="@/assets/left.gif">
+        </div>
+      </el-aside>
       <el-main class="pn-main">
         <el-container class="pn-main-container">
           <el-header style="height: 40px; line-height: 40px; vertical-align: middle; border-bottom: none;">
@@ -14,15 +26,19 @@
               <section class="pn-main-main-top">
                 <el-card class="box-card">
                   <div slot="header"><span style="color: red;">未到人员列表({{ topTableData.length }}人)</span></div>
-                  <el-table :data="topTableData" stripe style="width: 100%" height="192">
-                    <el-table-column prop="number"      label="编号"></el-table-column>
-                    <el-table-column prop="name"        label="姓名"></el-table-column>
-                    <el-table-column prop="warningType" label="预警事件类型"></el-table-column>
-                    <el-table-column prop="lastArea"    label="最后一次被定位区域"  min-width="150px"></el-table-column>
-                    <el-table-column prop="lastTime"    label="最后一次被定位时间"></el-table-column>
-                    <el-table-column label="视频" width="100px">
+                  <el-table :data="topTableData" stripe style="width: 100%" height="210">
+                    <el-table-column prop="number"      label="编号"              min-width="100px"></el-table-column>
+                    <el-table-column label="姓名"        min-width="100px">
                       <template slot-scope="scope">
-                        <button class="btn" @click="showVideo('topTableData', scope.$index, scope.row)">视频</button>
+                        <span class="btn" @click="showItem(scope.$index, scope.row)">{{ scope.row.name }}</span>
+                      </template>
+                    </el-table-column>
+                    <el-table-column prop="warningType" label="预警事件类型"       min-width="120px"></el-table-column>
+                    <el-table-column prop="lastArea"    label="最后一次被定位区域"  min-width="230px"></el-table-column>
+                    <el-table-column prop="lastTime"    label="最后一次被定位时间"  min-width="200px"></el-table-column>
+                    <el-table-column label="视频" width="100px" fixed="right">
+                      <template slot-scope="scope">
+                        <el-button class="btn" @click="showVideo('topTableData', scope.$index, scope.row)" type="text" size="mini">查看</el-button>
                       </template>
                     </el-table-column>
                   </el-table>
@@ -34,15 +50,19 @@
               <section class="pn-main-main-bottom">
                 <el-card class="box-card">
                   <div slot="header"><span>已到人员列表({{ bottomTableData.length }}人)</span></div>
-                  <el-table :data="bottomTableData" stripe style="width: 100%" height="330">
-                    <el-table-column prop="number" label="编号"></el-table-column>
-                    <el-table-column prop="name"   label="姓名"></el-table-column>
-                    <el-table-column prop="area"   label="当前区域" min-width="150px"></el-table-column>
-                    <el-table-column prop="time"   label="识别时间"></el-table-column>
-                    <el-table-column prop="func"   label="识别方法"></el-table-column>
-                    <el-table-column label="视频" width="100px">
+                  <el-table :data="bottomTableData" stripe style="width: 100%" height="315">
+                    <el-table-column prop="number" label="编号"     min-width="100px"></el-table-column>
+                    <el-table-column label="姓名"  min-width="100px">
                       <template slot-scope="scope">
-                        <button class="btn" @click="showVideo('bottomTableData', scope.$index, scope.row)">视频</button>
+                        <span class="btn" @click="showItem(scope.$index, scope.row)">{{ scope.row.name }}</span>
+                      </template>
+                    </el-table-column>
+                    <el-table-column prop="area"   label="当前区域" min-width="230px"></el-table-column>
+                    <el-table-column prop="time"   label="识别时间" min-width="200px"></el-table-column>
+                    <el-table-column prop="func"   label="识别方法" min-width="100px"></el-table-column>
+                    <el-table-column label="视频" width="100px" fixed="right">
+                      <template slot-scope="scope">
+                        <el-button class="btn" @click="showVideo('bottomTableData', scope.$index, scope.row)" type="text" size="mini">查看</el-button>
                       </template>
                     </el-table-column>
                   </el-table>
@@ -75,6 +95,7 @@
     data() {
       return {
         message: "人员点名",
+        pnAside: true,
         pnMainAside: false,
         parameter: {
           name: ''
@@ -89,89 +110,9 @@
             currentPage : 1,
             totalRows : 100
         },
-        topTableData: [
-          {
-            number: 'A010101',
-            name: '张三',
-            warningType: '无法定位',
-            lastArea: '第一监区/一号监舍楼/一层/监舍1',
-            lastTime: '13:01:23 07/23/2018'
-          }, {
-            number: 'A010102',
-            name: '李四',
-            warningType: '无法定位',
-            lastArea: '第一监区/一号监舍楼/一层/监舍1',
-            lastTime: '13:01:23 07/23/2018'
-          }, {
-            number: 'A010103',
-            name: '王五',
-            warningType: '无法定位',
-            lastArea: '第一监区/一号监舍楼/一层/监舍1',
-            lastTime: '13:01:23 07/23/2018'
-          }
-        ],
-        bottomTableData: [
-          {
-            number: 'A010102',
-            name: '李一',
-            area: '第一监区/生产车间/生产车间1',
-            time: '13:02:23 07/23/2018',
-            func: '人脸/视觉码'
-          }, {
-            number: 'A010102',
-            name: '李一',
-            area: '第一监区/生产车间/生产车间1',
-            time: '13:02:23 07/23/2018',
-            func: '人脸/视觉码'
-          }, {
-            number: 'A010102',
-            name: '李一',
-            area: '第一监区/生产车间/生产车间1',
-            time: '13:02:23 07/23/2018',
-            func: '人脸/视觉码'
-          }
-        ],
-        treeData: [
-          {
-            label: '一级 1',
-            children: [{
-              label: '二级 1-1',
-              children: [{
-                label: '三级 1-1-1'
-              }]
-            }]
-          }, {
-            label: '一级 2',
-            children: [{
-              label: '二级 2-1',
-              children: [{
-                label: '三级 2-1-1'
-              }]
-            }, {
-              label: '二级 2-2',
-              children: [{
-                label: '三级 2-2-1'
-              }]
-            }]
-          }, {
-            label: '一级 3',
-            children: [{
-              label: '二级 3-1',
-              children: [{
-                label: '三级 3-1-1'
-              }]
-            }, {
-              label: '二级 3-2',
-              children: [{
-                label: '三级 3-2-1'
-              }]
-            }]
-          }
-        ],
-        defProps: {
-          children: 'children',
-          label: 'label'
-        }
+        topTableData: [],
+        bottomTableData: [],
+        treeData: []
       }
     },
     methods: {
@@ -192,8 +133,36 @@
       },
       closeVideo: function() {
         this.pnMainAside = false;
+      },
+      showItem: function(index, row) {
+        this.$router.push({
+          path: "/personnelposition"
+        });
       }
-    }
+    },
+    mounted() {
+      var _this = this;
+      this.$ajxj.get('/getPrisonareatree')
+        .then(function (res) {
+          _this.treeData = res.data;
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+        .then(function () {
+        });
+
+        this.$ajxj.get('/getPointNameDatas')
+        .then(function (res) {
+          _this.topTableData = res.data.topTableData;
+          _this.bottomTableData = res.data.bottomTableData;
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+        .then(function () {
+        });
+    },
   }
 </script>
 
@@ -205,6 +174,16 @@
   .pn-aside {
     padding: 10px;
     border: 1px solid #C0C4CC;
+  }
+
+  .pn-center {
+    border-right: 1px solid #C0C4CC;
+  }
+
+  .pn-center img {
+    width:5px; 
+    height:40px; 
+    cursor: pointer;
   }
 
   .pn-main {
@@ -247,5 +226,14 @@
 
   .btn {
     cursor: pointer;
+  }
+
+  .custom-tree-node {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    padding-right: 8px;
   }
 </style>

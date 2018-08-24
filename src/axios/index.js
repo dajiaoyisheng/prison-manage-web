@@ -8,27 +8,33 @@ axios.defaults.withCredentials = false;
 
 // 设置content-type
 // 这里处理的是 针对SpringMVC Controller 无法正确获得请求参数的问题
-axios.interceptors.request.use(
-    config => {
-        config.headers = {
-            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-        }
-        const data = config.data
-        if (!data) {
-            return config
-        }
-        // const key = Object.keys(data)
-            // 重写data，由{"name":"name","password":"password"} 改为 name=name&password=password
-        // config.data = encodeURI(key.map(name => `${name}=${data[name]}`).join('&'))
-            // 设置Content-Type
-        return config
-    },
-    error => {
-        return Promise.reject(error)
-    }
-)
+// axios.interceptors.request.use(
+//     config => {
+//         config.headers = {
+//             'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+//         }
+//         const data = config.data
+//         if (!data) {
+//             return config
+//         }
+//         return config
+//     },
+//     error => {
+//         return Promise.reject(error)
+//     }
+// )
+// 添加请求拦截器
+axios.interceptors.request.use(function (config) {
+    // 在发送请求之前做些什么
+    store.state.loading = true;
+    return config;
+  }, function (error) {
+    // 对请求错误做些什么
+    return Promise.reject(error);
+  });
 
 axios.interceptors.response.use(response => {
+    store.state.loading = false;
     const res = response.data;
     if (res.status !== 0) {
         Message({
@@ -37,7 +43,6 @@ axios.interceptors.response.use(response => {
             duration: 5 * 1000
         })
     } else {
-        store.state.loading = false;
         return response.data
     }
 }, error => {
