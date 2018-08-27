@@ -236,7 +236,7 @@
     }
 </script>
 
-<style>
+<style scoped>
     .el-header {
         border-bottom: 1px solid #333;
         line-height: 60px;

@@ -3,39 +3,41 @@
     <el-row style="margin: 10px 10px;">
       <el-col :span="6">
         <span>
-          <span>时间</span>
-          <el-date-picker style="width: 80%" size="small" v-model="params.period" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+          <span class="puu-params-label">时间:</span>
+          <el-date-picker style="width: 40%" size="small" v-model="params.startTime" type="datetime" placeholder="选择开始时间"></el-date-picker>
+          <span>-</span>
+          <el-date-picker style="width: 40%" size="small" v-model="params.endTime" type="datetime" placeholder="选择结束时间"></el-date-picker>
         </span>
       </el-col>
       <el-col :span="5">
-        <span>预警事件类型:</span>
+        <span class="puu-params-label">预警事件类型:</span>
         <el-select size="small" v-model="params.warningType" placeholder="请选择">
           <el-option v-for="item in warningTypes" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </el-col>
       <el-col :span="5">
-        <span>服刑人员类型:</span>
+        <span class="puu-params-label">服刑人员类型:</span>
         <el-select size="small" v-model="params.prisonerType" placeholder="请选择">
           <el-option v-for="item in prisonerTypes" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </el-col>
       <el-col :span="6">
-        <span>服刑人员姓名/编号:</span>
+        <span class="puu-params-label">服刑人员姓名/编号:</span>
         <el-input size="small" class="puu-input" v-model="params.prisonerName" placeholder="请输入" clearable></el-input>
       </el-col>
       <el-col :span="1">
-        <el-button size="small" type="primary" @click="doQuery()">查询</el-button>
+        <el-button size="mini" type="primary" @click="doQuery()">查询</el-button>
       </el-col>
       <el-col :span="1">
-        <el-button size="small" type="primary" @click="clear()">清空</el-button>
+        <el-button size="mini" type="primary" @click="clear()">清空</el-button>
       </el-col>
     </el-row>
     <section class="puu-items">
-      <el-table :data="ppuTableDatas" border stripe style="width: 100%;" height="780">
+      <el-table :data="ppuTableDatas" stripe style="width: 100%;" height="780">
         <el-table-column prop="startTime"    label="预警开始时间" min-width="170px"></el-table-column>
         <el-table-column prop="endTime"      label="预警结束时间" min-width="170px"></el-table-column>
-        <el-table-column prop="timeLen"      label="预警时长"     min-width="120px"></el-table-column>
-        <el-table-column prop="prisonerName" label="服刑人员姓名" min-width="120px">
+        <el-table-column prop="timeLen"      label="预警时长"     min-width="120px"  align="center"></el-table-column>
+        <el-table-column prop="prisonerName" label="服刑人员姓名" min-width="120px"  align="center">
           <template slot-scope="scope">
             <el-popover placement="bottom-start" width="240" trigger="hover" @show="showPrisoner()">
               <el-row style="margin-bottom: 0px;">
@@ -59,11 +61,11 @@
                   <div class="puu-item-popover"><span>服刑日期：</span>{{ prisonerInfo.crimeTime }}</div>
                 </el-col>
               </el-row>
-              <div slot="reference">{{ scope.row.prisonerName }}</div>
+              <div style="color: #59c4ee" slot="reference">{{ scope.row.prisonerName }}</div>
             </el-popover>
           </template>
         </el-table-column>
-        <el-table-column prop="prisonerNum"  label="服刑人员编码"  min-width="120px">
+        <el-table-column prop="prisonerNum"  label="服刑人员编码"  min-width="120px" align="center">
           <template slot-scope="scope">
             <el-popover placement="bottom-start" width="240" trigger="hover" @show="showPrisoner()">
               <el-row style="margin-bottom: 0px;">
@@ -87,16 +89,19 @@
                   <div class="puu-item-popover"><span>服刑日期：</span>{{ prisonerInfo.crimeTime }}</div>
                 </el-col>
               </el-row>
-              <div slot="reference">{{ scope.row.prisonerNum }}</div>
+              <div style="color: #59c4ee" slot="reference">{{ scope.row.prisonerNum }}</div>
             </el-popover>
           </template>
         </el-table-column>
-        <el-table-column prop="prisonerType" label="服刑人员类型"  min-width="120px"></el-table-column>
-        <el-table-column prop="warningType"  label="预警事件类型"  min-width="120px"></el-table-column>
+        <el-table-column prop="prisonerType" label="服刑人员类型"  min-width="120px" align="center"></el-table-column>
+        <el-table-column prop="warningType"  label="预警事件类型"  min-width="120px" align="center"></el-table-column>
         <el-table-column prop="warningArea"  label="预警所在区域"  min-width="170px"></el-table-column>
         <el-table-column label="预警视频" fixed="right" width="120px" align="center">
           <template slot-scope="scope">
-            <el-button @click="showVideo(scope.$index, scope.row)" size="mini" type="text">点击查看</el-button>
+            <el-button style="padding: 0px 15px;" @click="showVideo(scope.$index, scope.row)" size="mini" type="text">
+              <img :src="images.video" style="display: inline-block; line-height: 20px; vertical-align: middle;">
+              <span style="display: inline-block; line-height: 20px; vertical-align: middle;">查看</span>
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -108,15 +113,21 @@
 </template>
 
 <script>
+  import video from '@/assets/video.png';
+
   export default {
     name: 'posunusual',
     data() {
       return {
         params: {
-          period: '',
+          startTime: '',
+          endTime: '',
           warningType: "",
           prisonerType: "",
           prisonerName: ""
+        },
+        images: {
+          video: video
         },
         pagination: {
           pageSize: 10,
@@ -135,7 +146,8 @@
       },
       clear: function () {
         this.params = {
-          period: '',
+          startTime: '',
+          endTime: '',
           warningType: "",
           prisonerType: "",
           prisonerName: ""
@@ -195,5 +207,13 @@
 
   .puu-item-popover {
     font-size: 12px;
+  }
+
+  .el-pagination {
+    text-align: right;
+  }
+
+  .puu-params-label {
+    font-size: 14px;
   }
 </style>

@@ -17,18 +17,18 @@
       <el-main class="pn-main">
         <el-container class="pn-main-container">
           <el-header style="height: 40px; line-height: 40px; vertical-align: middle; border-bottom: none;">
-              <span>服刑人员:</span>
+              <span style="font-size: 14px;">服刑人员:</span>
               <el-input size="small" class="pn-main-header-input" v-model="parameter.name" placeholder="请输入服刑人员姓名或编号" clearable></el-input>
-              <el-button size="small" type="primary" @click="doQuery()">查询</el-button>
+              <el-button size="mini" type="primary" @click="doQuery()">查询</el-button>
           </el-header>
           <el-container>
             <el-main class="pn-main-main">
               <section class="pn-main-main-top">
                 <el-card class="box-card">
-                  <div slot="header"><span style="color: red;">未到人员列表({{ topTableData.length }}人)</span></div>
-                  <el-table :data="topTableData" stripe style="width: 100%" height="210">
-                    <el-table-column prop="number"      label="编号"              min-width="100px"></el-table-column>
-                    <el-table-column label="姓名"        min-width="100px">
+                  <div slot="header" class="pn-card-label">未到人员列表(<span style="color: red;">{{ topTableData.length }}人</span>)</div>
+                  <el-table :data="topTableData" stripe style="width: 100%" height="175">
+                    <el-table-column prop="number"      label="编号"              min-width="100px" align="center"></el-table-column>
+                    <el-table-column label="姓名"        min-width="100px" align="center">
                       <template slot-scope="scope">
                         <span class="btn" @click="showItem(scope.$index, scope.row)">{{ scope.row.name }}</span>
                       </template>
@@ -36,9 +36,12 @@
                     <el-table-column prop="warningType" label="预警事件类型"       min-width="120px"></el-table-column>
                     <el-table-column prop="lastArea"    label="最后一次被定位区域"  min-width="230px"></el-table-column>
                     <el-table-column prop="lastTime"    label="最后一次被定位时间"  min-width="200px"></el-table-column>
-                    <el-table-column label="视频" width="100px" fixed="right">
+                    <el-table-column label="视频" width="100px" fixed="right" align="center">
                       <template slot-scope="scope">
-                        <el-button class="btn" @click="showVideo('topTableData', scope.$index, scope.row)" type="text" size="mini">查看</el-button>
+                        <el-button class="btn" @click="showVideo('topTableData', scope.$index, scope.row)" type="text" size="mini">
+                          <img :src="images.video" style="display: inline-block; line-height: 20px; vertical-align: middle;">
+                          <span style="display: inline-block; line-height: 20px; vertical-align: middle;">查看</span>
+                        </el-button>
                       </template>
                     </el-table-column>
                   </el-table>
@@ -49,10 +52,10 @@
               </section>
               <section class="pn-main-main-bottom">
                 <el-card class="box-card">
-                  <div slot="header"><span>已到人员列表({{ bottomTableData.length }}人)</span></div>
-                  <el-table :data="bottomTableData" stripe style="width: 100%" height="315">
-                    <el-table-column prop="number" label="编号"     min-width="100px"></el-table-column>
-                    <el-table-column label="姓名"  min-width="100px">
+                  <div slot="header" class="pn-card-label"><span>已到人员列表({{ bottomTableData.length }}人)</span></div>
+                  <el-table :data="bottomTableData" stripe style="width: 100%" height="350">
+                    <el-table-column prop="number" label="编号"     min-width="100px" align="center"></el-table-column>
+                    <el-table-column label="姓名"  min-width="100px" align="center">
                       <template slot-scope="scope">
                         <span class="btn" @click="showItem(scope.$index, scope.row)">{{ scope.row.name }}</span>
                       </template>
@@ -60,9 +63,12 @@
                     <el-table-column prop="area"   label="当前区域" min-width="230px"></el-table-column>
                     <el-table-column prop="time"   label="识别时间" min-width="200px"></el-table-column>
                     <el-table-column prop="func"   label="识别方法" min-width="100px"></el-table-column>
-                    <el-table-column label="视频" width="100px" fixed="right">
+                    <el-table-column label="视频" width="100px" fixed="right" align="center">
                       <template slot-scope="scope">
-                        <el-button class="btn" @click="showVideo('bottomTableData', scope.$index, scope.row)" type="text" size="mini">查看</el-button>
+                        <el-button class="btn" @click="showVideo('bottomTableData', scope.$index, scope.row)" type="text" size="mini">
+                          <img :src="images.video" style="display: inline-block; line-height: 20px; vertical-align: middle;">
+                          <span style="display: inline-block; line-height: 20px; vertical-align: middle;">查看</span>
+                        </el-button>
                       </template>
                     </el-table-column>
                   </el-table>
@@ -75,7 +81,7 @@
             <el-aside class="pn-main-aside" style="width: 400px" v-if="pnMainAside">
               <el-card class="box-card">
                 <div slot="header">
-                  <span>监控视频</span>
+                  <span class="pn-card-label">监控视频</span>
                   <el-button style="float: right; padding: 3px 0" type="text" @click="closeVideo()">关闭</el-button>
                 </div>
                 <div>
@@ -93,6 +99,7 @@
 <script>
   import right from '@/assets/right.gif';
   import left from '@/assets/left.gif';
+  import video from '@/assets/video.png';
 
   export default {
     data() {
@@ -102,7 +109,8 @@
         pnMainAside: false,
         images: {
           right: right,
-          left: left
+          left: left,
+          video: video
         },
         parameter: {
           name: ''
@@ -173,7 +181,7 @@
   }
 </script>
 
-<style>
+<style scoped>
   .pn-container {
     height: 850px;
   }
@@ -219,10 +227,6 @@
     margin-bottom: 10px;
   }
 
-  .pn-main-main-top th {
-    color: red;
-  }
-
   .pn-main-main-top td {
     color: red;
   }
@@ -242,5 +246,22 @@
     justify-content: space-between;
     font-size: 14px;
     padding-right: 8px;
+  }
+
+  .el-pagination {
+    text-align: right;
+  }
+
+  .pn-card-label {
+    color: #08B8EF  
+  }
+
+  .el-table td, .el-table th {
+    padding: 5px 0px;
+  }
+</style>
+<style>
+  #pointname .pn-main-main-top td {
+    color: red;
   }
 </style>
