@@ -10,8 +10,8 @@
       </el-aside>
       <el-aside class="pn-center" style="width: 5px;">
         <div style="position: absolute; top:50%">
-          <img v-if="pnAside" @click="pnAside=false" src="@/assets/right.gif">
-          <img v-if="!pnAside" @click="pnAside=true" src="@/assets/left.gif">
+          <img v-if="pnAside" @click="pnAside=false" :src="images.right">
+          <img v-if="!pnAside" @click="pnAside=true" :src="images.left">
         </div>
       </el-aside>
       <el-main class="pn-main">
@@ -91,12 +91,19 @@
 </template>
 
 <script>
+  import right from '@/assets/right.gif';
+  import left from '@/assets/left.gif';
+
   export default {
     data() {
       return {
         message: "人员点名",
         pnAside: true,
         pnMainAside: false,
+        images: {
+          right: right,
+          left: left
+        },
         parameter: {
           name: ''
         },
