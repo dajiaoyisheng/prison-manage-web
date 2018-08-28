@@ -14,7 +14,7 @@
           <img v-if="!pnAside" @click="pnAside=true" :src="images.left">
         </div>
       </el-aside>
-      <el-main class="pn-main">
+      <el-main v-if="pnMain" class="pn-main">
         <el-container class="pn-main-container">
           <el-header style="height: 40px; line-height: 40px; vertical-align: middle; border-bottom: none;">
               <span style="font-size: 14px;">服刑人员:</span>
@@ -106,6 +106,7 @@
       return {
         message: "人员点名",
         pnAside: true,
+        pnMain: false,
         pnMainAside: false,
         images: {
           right: right,
@@ -132,7 +133,7 @@
     },
     methods: {
       handleNodeClick: function(data) {
-        alert("获取下级节点");
+        this.pnMain = true;
       },
       doQuery: function() {
         alert("服刑人员:" + this.parameter.name);
@@ -261,6 +262,14 @@
   }
 </style>
 <style>
+  #pointname .el-table th {
+    padding: 5px 0px;
+  }
+
+  #pointname .el-table td {
+    padding: 5px 0px;
+  }
+
   #pointname .pn-main-main-top td {
     color: red;
   }

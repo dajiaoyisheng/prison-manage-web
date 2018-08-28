@@ -182,7 +182,6 @@
                         _this.pagination.totalRows = respnose.data.totalRows;
                     }).catch(function (error) {
                     }).then(function () {
-                        console.log(error);
                     });
                 })
                 .catch(_ => {});
@@ -201,7 +200,6 @@
                 _this.dateTypes = respnose.data;
             }).catch(function (error) {
             }).then(function () {
-                console.log(error);
             });
 
             // 获取区间字典
@@ -209,7 +207,6 @@
                 _this.areas = respnose.data;
             }).catch(function (error) {
             }).then(function () {
-                console.log(error);
             });
 
             // 获取动作字典
@@ -217,7 +214,6 @@
                 _this.options = respnose.data;
             }).catch(function (error) {
             }).then(function () {
-                console.log(error);
             });
 
             // 获取日常作息时间列表
@@ -226,7 +222,6 @@
                 _this.pagination.totalRows = respnose.data.totalRows;
             }).catch(function (error) {
             }).then(function () {
-                console.log(error);
             });
         },
         components: {
@@ -272,5 +267,11 @@
     .cal-main-params .pp-input {
         width: 9.5%;
         margin: 0px 15px 0px 5px;
+    }
+</style>
+
+<style>
+    #calendarmanagement .el-dialog__body {
+        padding: 10px 20px;
     }
 </style>

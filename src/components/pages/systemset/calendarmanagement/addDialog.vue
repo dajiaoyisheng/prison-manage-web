@@ -1,39 +1,57 @@
 <template>
     <div id="addDialog">
         <el-form :label-position="labelPosition" label-width="100px" :model="form" :rules="rules" ref="form" class="demo-form">
-            <el-form-item label="开始时间" prop="startTime">
-                <el-time-picker v-model="form.startTime"></el-time-picker>
-            </el-form-item>
-            <el-form-item label="结束时间" prop="endTime">
-                <el-time-picker v-model="form.endTime"></el-time-picker>
-            </el-form-item>
-            <el-form-item label="时长" prop="timeLen">
-                <el-input-number style="width: 220px; margin-right:10px;" v-model="form.timeLen" :precision="2" :step="0.1" :min="0" :max="24"></el-input-number>小时
-            </el-form-item>
-            <el-form-item label="事项" prop="item">
-                <el-input style="width: 220px;" v-model="form.item" clearable></el-input>
-            </el-form-item>
-            <el-form-item label="动作" prop="option">
-                <el-select v-model="form.option">
-                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item label="日期类型" prop="dateType">
-                <el-checkbox-group v-model="form.dateType">
-                    <el-checkbox v-for="item in dateTypes" :key="item" :label="item.value" name="dateType">{{ item.label }}</el-checkbox>
-                </el-checkbox-group>
-            </el-form-item>
-            <el-form-item label="区域" prop="area">
-                <el-checkbox-group v-model="form.area">
-                    <el-checkbox v-for="item in areas" :key="item" :label="item.value" name="area">{{ item.label }}</el-checkbox>
-                </el-checkbox-group>
-            </el-form-item>
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="开始时间" prop="startTime">
+                        <el-time-picker v-model="form.startTime"></el-time-picker>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="结束时间" prop="endTime">
+                        <el-time-picker v-model="form.endTime"></el-time-picker>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="动作" prop="option">
+                        <el-select v-model="form.option">
+                            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="事项" prop="item">
+                        <el-input style="width: 220px;" v-model="form.item" clearable></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-form-item label="时长" prop="timeLen">
+                    <el-input-number style="width: 220px; margin-right:10px;" v-model="form.timeLen" :precision="2" :step="0.1" :min="0" :max="24"></el-input-number>小时
+                </el-form-item>
+            </el-row>
+            <el-row>
+                <el-form-item label="日期类型" prop="dateType">
+                    <el-checkbox-group v-model="form.dateType">
+                        <el-checkbox v-for="item in dateTypes" :key="item" :label="item.value" name="dateType">{{ item.label }}</el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
+            </el-row>
+            <el-row>
+                <el-form-item label="区域" prop="area">
+                    <el-checkbox-group v-model="form.area">
+                        <el-checkbox v-for="item in areas" :key="item" :label="item.value" name="area">{{ item.label }}</el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
+            </el-row>
             <el-form-item label="适用范围">
                 <el-transfer v-model="value1" :data="data"></el-transfer>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="submitForm('form')">立即创建</el-button>
-                <el-button @click="resetForm('form')">重置</el-button>
+                <el-button size="small" @click="submitForm('form')" type="primary">保存</el-button>
+                <el-button size="small" @click="resetForm('form')">重置</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -43,7 +61,7 @@
     export default {
         data() {
             return {
-                labelPosition: "left",
+                labelPosition: "right",
                 form: {
                     startTime: '',
                     endTime: '',
@@ -99,5 +117,7 @@
 </script>
 
 <style>
-
+    #addDialog .el-row {
+        margin-bottom: 0px;
+    }
 </style>

@@ -154,6 +154,12 @@ div.content-wrap {
   text-align: right;
 }
 
+/* 行内块级元素 */
+
+.inbl {
+  display: inline-block
+}
+
 /* 垂直方向居中 begin*/
 
 /* 相对具有定位属性的父级 */
@@ -419,6 +425,7 @@ th {
   background-color: #59c4ee;
   color: #fff;
 } */
+
 .search-btn {
   background-color: #59c4ee;
   color: #fff;
@@ -466,3 +473,31 @@ th {
 }
 
 /* 下拉框位置end */
+
+/* 框上的文字begin */
+
+.line-word {
+  position: relative;
+  /* text-align: center; */
+  background-color: #fff;
+}
+
+.line-word::before {
+  content: attr(title);
+  position: absolute;
+  left: 5%;
+  top: -0.7em;
+  padding: 0 10px;
+  z-index: 99;
+}
+
+.line-word>span {
+  position: absolute;
+  left: 5%;
+  top: -0.07em;
+  width: 3em;
+  background-color: #fff;
+  height: 1px;
+}
+
+/* 框上的文字end */

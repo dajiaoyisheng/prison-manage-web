@@ -467,7 +467,7 @@
     position: absolute;
     left: 50%;
     left: 5%;
-    top: -0.4%;
+    top: -1.4%;
     width: 6em;
     background-color: #fff;
     height: 1px;
