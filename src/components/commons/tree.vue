@@ -18,8 +18,8 @@ export default {
       }
     },
     methods: {
-      handleNodeClick(data) {
-        this.$emit('handle-node-click', data);
+      handleNodeClick(data, checked, indeterminate) {
+        this.$emit('handle-node-click', data, checked, indeterminate);
       }
     }
   };

@@ -31,7 +31,7 @@
             </el-table-column>
             <el-table-column label="操作" width="80px" align="center">
                 <template slot-scope="scope">
-                    <el-button @click.native.prevent="deleteRow(scope.$index, scope.row)" type="text" size="small">移除</el-button>
+                    <el-button @click.native.prevent="deleteRow(scope.$index, scope.row)" type="text" size="small">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>

@@ -13,6 +13,7 @@ import posunsualData from './data/posunusual';
 import pManageDatas from './data/pManageDatas';
 import calendarData from './data/calendar';
 import pointnameData from './data/pointname';
+import prewarningstatsData from './data/prewarningstats';
 
 export default {
     /**
@@ -213,6 +214,24 @@ export default {
             return new Promise((resolve, reject) => {
                 setTimeout(() => {
                     defaultResData.data = pointnameData;
+                    resolve([200, defaultResData])
+                }, 1000);
+            });
+        });
+
+        mock.onGet('/getPrewarningstatsDatas').reply(config => {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    defaultResData.data = prewarningstatsData;
+                    resolve([200, defaultResData])
+                }, 1000);
+            });
+        });
+
+        mock.onGet('/getPrisonDatas').reply(config => {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    defaultResData.data = prewarningstatsData.areas;
                     resolve([200, defaultResData])
                 }, 1000);
             });

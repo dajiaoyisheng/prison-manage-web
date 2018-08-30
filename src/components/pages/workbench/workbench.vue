@@ -30,7 +30,7 @@
               <li v-for="item in areasDetail" :key="item.area">
                 <span>{{item.area}}：</span>
                 <!-- <span class="num-color">{{item.pNumItem}}</span> -->
-                <router-link class="num-color" to="/systemset/prisonmanagement">{{item.pNumItem}}</router-link>
+                <router-link class="num-color" to="/personnelposition">{{item.pNumItem}}</router-link>
                 <span>人</span>
               </li>
             </ul>
@@ -44,7 +44,7 @@
         </div>
         <div class="bench-item">
           <template>
-            <ve-pie :data="benchChartPieData" width="100%" height="100%" :judge-width="true" :settings="pieSettings"></ve-pie>
+            <ve-pie :data="benchChartPieData" width="100%" height="100%" :judge-width="true" :extend="pieSettings"></ve-pie>
           </template>
         </div>
       </el-col>
@@ -58,7 +58,8 @@
         </div>
         <div class="bench-item">
           <template>
-            <ve-bar :data="benchChartbarData" height="100%" width="100%" :settings="chartSettings" :judge-width="true"></ve-bar>
+            <!-- <ve-bar :data="benchChartbarData" height="100%" width="100%" :settings="chartSettings" :judge-width="true"></ve-bar> -->
+            <ve-histogram :data="chartData" height="100%" width="100%" :extend="histogramExtend"></ve-histogram>
           </template>
         </div>
       </el-col>
@@ -90,40 +91,58 @@
   export default {
     name: 'workbench',
     data() {
-        // this.pieSettings= {
-        //   legend: {
-        //     orient: 'vertical',
-        //     x: 'left',
-        //     data:['直达','营销广告']
-        //   },
-        // };
       return {
         personnum: '',
         areasDetail: [],
         benchChartPieData: [],
         benchChartbarData: [],
+        histogramExtend: {
+          legend: {
+            right: "5%",
+          },
+          series: {
+            label: {
+              show: true,
+              position: "top"
+            },
+            barMaxWidth: 30,
+            barGap: 0
+          }
+        },
+        chartData: {
+          columns: ['行为', '个数', '人数'],
+          rows: [{
+              '行为': '定位异常',
+              '个数': 193,
+              '人数': 93
+            },
+            {
+              '行为': '定位异常',
+              '个数': 350,
+              '人数': 230
+            },
+            {
+              '行为': '定位异常',
+              '个数': 23,
+              '人数': 3
+            }
+          ]
+        },
+
         pieSettings: {
           legend: {
             orient: 'vertical',
-            x: 'left',
-            data:['直达','营销广告']
+            top: "middle",
+            right: "5%",
+
           },
-        },
-        chartSettings: {
-          labelMap: {
-            'PV': '访问用户',
-            'Order': '下单用户'
-          },
-          // legendName: {
-          //   '访问用户': '访问用户 total: 10000'
-          // }
+          // pie 圆心位置
+          series: {
+            center: ['30%', '50%'],
+          }
         },
         prisonersStutas: [],
         value1: true,
-        formData: {
-          id: '21',
-          name: 'cjd'
-        },
         benchChartPie: {}
       }
     },
@@ -154,7 +173,34 @@
       this.$ajxj.get('/getBenchChartPie')
         .then(function (res) {
           console.log(res.data);
-          
+          res.data = {
+            columns: ['日期', '访问用户'],
+            rows: [{
+                '日期': '1/1',
+                '访问用户': 1393
+              },
+              {
+                '日期': '1/2',
+                '访问用户': 3530
+              },
+              {
+                '日期': '1/3',
+                '访问用户': 2923
+              },
+              {
+                '日期': '1/4',
+                '访问用户': 1723
+              },
+              {
+                '日期': '1/5',
+                '访问用户': 3792
+              },
+              {
+                '日期': '1/6',
+                '访问用户': 4593
+              }
+            ]
+          }
           _this.benchChartPieData = res.data
         }).catch(function (error) {
           console.log(error);
@@ -209,6 +255,7 @@
     border-bottom-left-radius: 3px;
     border-bottom-right-radius: 3px;
     position: relative;
+    padding: 10px 10%;
   }
 
   .bench-item-left {

@@ -1,18 +1,22 @@
 <template>
   <div id="prewarningstats" class="w1200">
-      <el-row>
-        <el-col :span="6" :offset="18">
-          <el-tabs v-model="activeTab" @tab-click="handleClick">
+      <el-row style="margin-bottom: 0px; padding-left: 20px;">
+        <el-col :span="6">
+          <el-tabs v-model="parameter.activeTab" @tab-click="queryStatistics">
             <el-tab-pane label="今天"   name="today"></el-tab-pane>
             <el-tab-pane label="本周"   name="week"></el-tab-pane>
             <el-tab-pane label="本月"   name="month"></el-tab-pane>
             <el-tab-pane label="本季"   name="quarter"></el-tab-pane>
             <el-tab-pane label="本年"   name="year"></el-tab-pane>
-            <el-tab-pane label="自定义" name="other">
-              <span>时间：</span>
-              <el-date-picker v-model="value1" type="date" placeholder="选择日期"></el-date-picker>
-            </el-tab-pane>
+            <el-tab-pane label="自定义" name="other"></el-tab-pane>
           </el-tabs>
+        </el-col>
+        <el-col :span="9" v-if="parameter.activeTab == 'other'" style="line-height: 50px;">
+          <span style="font-size: 14px;">时间：</span>
+          <el-date-picker style="width: 35%;" size="small" v-model="parameter.startTime" type="date" placeholder="选择日期"></el-date-picker>
+          <span>-</span>
+          <el-date-picker style="width: 35%;" size="small" v-model="parameter.endTime" type="date" placeholder="选择日期"></el-date-picker>
+          <el-button size="mini" type="primary" @click="doQuery()">查询</el-button>
         </el-col>
       </el-row>
       <el-rolw>
@@ -68,7 +72,7 @@
             </div>
             <div>
               <template>
-                <ve-bar :data="chartData" :settings="chartSettings" height="270px" :legend-visible="false"></ve-bar>
+                <ve-bar height="270px" :legend-visible="false" :extend="option1" :xAxis="option1.xAxis"></ve-bar>
               </template>
             </div>
           </el-card>
@@ -77,14 +81,12 @@
           <el-card class="box-card pws-card">
             <div slot="header" class="clearfix">
               <span>预警区域排名TOP5（按预警数）</span>
-              <el-select size="mini" style="float: right; padding: 3px 0" v-model="value" placeholder="请选择">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              <el-select size="mini" style="float: right; padding: 3px 0" v-model="parameter.area" placeholder="请选择" @change="queryAreaOrder()">
+                <el-option v-for="item in areas" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
             </div>
             <div>
-              <template>
-                <ve-bar :data="chartData" :settings="chartSettings" height="270px" :legend-visible="false"></ve-bar>
-              </template>
+              <ve-bar height="270px" :legend-visible="false" :extend="option2" :xAxis="option2.xAxis"></ve-bar>
             </div>
           </el-card>
         </el-col>
@@ -98,93 +100,133 @@
     data() {
       return {
         message: '预警统计',
-        activeTab: 'today',
-        tableData: [{
-            warningEvent: '服刑人员进入警戒区域',
-            warningTimes: '18',
-            warningCount: '25'
-          }, {
-            warningEvent: '服刑人员入错监舍',
-            warningTimes: '15',
-            warningCount: '14'
-          }, {
-            warningEvent: '特定区域长时间滞留',
-            warningTimes: '11',
-            warningCount: '11'
-          }, {
-            warningEvent: '未在指定时段进入特定区域',
-            warningTimes: '5',
-            warningCount: '12'
-          }, {
-            warningEvent: '未在指定时段进入特定区域',
-            warningTimes: '5',
-            warningCount: '12'
-        }],
-        list: [
-          {
-            name: '张三',
-            times: '10'
-          },
-          {
-            name: '张三',
-            times: '10'
-          },
-          {
-            name: '张三',
-            times: '10'
-          },
-          {
-            name: '张三',
-            times: '10'
-          },
-          {
-            name: '张三',
-            times: '10'
-          },
-          {
-            name: '张三',
-            times: '10'
-          },
-          {
-            name: '张三',
-            times: '10'
-          },
-          {
-            name: '张三',
-            times: '10'
-          },
-          {
-            name: '张三',
-            times: '10'
-          },
-          {
-            name: '张三',
-            times: '10'
-          }
-        ],
-        chartData: {
-          columns: ['区域', '预警次数'],
-          rows: [
-            { '区域': '监区一', '预警次数': 1393 },
-            { '区域': '监区二', '预警次数': 3530 },
-            { '区域': '监区三', '预警次数': 2923 },
-            { '区域': '监区四', '预警次数': 1723 },
-            { '区域': '监区五', '预警次数': 3792 }
-          ]
+        parameter: {
+          activeTab: 'today',
+          startTime: '',
+          endTime: '',
+          area: '1'
         },
-        chartSettings: {
-          dataOrder: {
-            label: '预警次数',
-            order: 'desc'
+        tableData: [],
+        list: [],
+        areas: [],
+        option1: {
+          grid: {
+            top:'2%', right:'5%', bottom:'5%', left:'2%'
+          },
+          xAxis: [{
+            show: false,
+            splitLine: {
+          　  show:false
+          　}
+          }],
+          yAxis: {
+            data: []
+          },
+          series: [{
+            name: '预警次数',
+            type: 'bar',
+            barWidth: '60%',
+            data: [],
+            itemStyle: {
+              normal: {
+                label: {
+                  show: true,
+                  position: 'right',
+                  textStyle: {
+                    color: 'black'
+                  }
+                },
+                color: function (params) {
+                  var colorList = ['#ff4c79','#00ce94','#2cc2e9', '#ff983b', '#7870fb'];
+                  return colorList[params.dataIndex];
+                }
+              },
+            },
+          }],
+          settings: {
+            dataOrder: {
+              label: '预警次数',
+              order: 'desc'
+            }
+          }
+        },
+        option2: {
+          grid: {
+            top:'2%', right:'5%', bottom:'5%', left:'2%'
+          },
+          xAxis: [{
+            show: false,
+            splitLine: {
+          　  show:false
+          　}
+          }],
+          yAxis: {
+            data: []
+          },
+          series: [{
+            name: '预警次数',
+            type: 'bar',
+            barWidth: '60%',
+            data: [],
+            itemStyle: {
+              normal: {
+                label: {
+                  show: true,
+                  position: 'right',
+                  textStyle: {
+                    color: 'black'
+                  }
+                },
+                color: function (params) {
+                  var colorList = ['#ff4c79','#00ce94','#2cc2e9', '#ff983b', '#7870fb'];
+                  return colorList[params.dataIndex];
+                }
+              },
+            },
+          }],
+          settings: {
+            dataOrder: {
+              label: '预警次数',
+              order: 'desc'
+            }
           }
         }
       }
     },
     methods: {
-
+      doQuery: function() {
+        var _this = this;
+        this.$ajxj.get('/getPrewarningstatsDatas').then(function (respnose) {
+          _this.list = respnose.data.list;
+          _this.tableData = respnose.data.tableData;
+          _this.option1.series[0].data = respnose.data.option1.xAxisData;
+          _this.option1.yAxis.data = respnose.data.option1.yAxisData;
+          _this.option2.series[0].data = respnose.data.option2.xAxisData;
+          _this.option2.yAxis.data = respnose.data.option2.yAxisData;
+        }).catch(function (error) {
+        }).then(function () {
+        });
+      },
+      queryStatistics: function() {
+        if (this.parameter.activeTab != 'other') {
+          this.doQuery();
+        }
+      },
+      queryAreaOrder: function() {
+        alert("查询预警区域排名");
+      }
     },
     mounted() {
-      
+      // 获取区间字典
+      var _this = this;
+      this.$ajxj.get('/getPrisonDatas').then(function (respnose) {
+          _this.areas = respnose.data;
+      }).catch(function (error) {
+      }).then(function () {
+      });
+
+      // 获取预警统计数据
+      this.queryStatistics();
     }
   }
 </script>

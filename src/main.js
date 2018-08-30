@@ -16,10 +16,12 @@ import VueLoading from 'vue-loading-template';
 Vue.use(VueLoading);
 import {
     VePie,
-    VeBar
+    VeBar,
+    VeHistogram
 } from 'v-charts/lib';
 Vue.component(VePie.name, VePie);
 Vue.component(VeBar.name, VeBar);
+Vue.component(VeHistogram.name, VeHistogram);
 
 import Mock from './mock';
 if (process.env.NODE_ENV === 'development') {

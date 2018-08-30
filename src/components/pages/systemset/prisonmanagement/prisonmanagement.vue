@@ -24,18 +24,20 @@
       <div class="h clearfix">
         <div class="aside-r-h-l fl inbl clearfix">
           <div class="l fl">
-            <img :src="images.exportgroup" alt="">
-            <img :src="images.importgroup" alt="">
+            <img :src="images.exportgroup" alt="导出">
+            <el-upload style="display: inline-block;" ref="upload" action="" :on-change="handleFileListChange" :file-list="fileList" :auto-upload="false" :show-file-list="false">
+              <img :src="images.importgroup" alt="导入平面图">
+            </el-upload>
             <img :src="images.save" alt="">
           </div>
           <div class="r fr clearfix">
             <img :src="images.del" alt="">
             <img :src="images.cancel" alt="">
             <img :src="images.renew" alt="">
-            <img :src="images.div" alt="">
+            <img :src="images.div" @click="draw()" alt="">
             <img :src="images.label" alt="">
             <img :src="images.camera" alt="">
-            <img :src="images.textA" alt="">
+            <img :src="images.textA" id="strokeColor" alt="">
           </div>
         </div>
         <div class="aside-r-h-r fr text-center">
@@ -47,11 +49,19 @@
       <div class="main">
         <div class="l fl inbl">
           <p class="h-line">摄像头设置</p>
+          <div>
+              <!-- 摄像头 -->
+              摄像头1
+          </div>
+          <div ref="canvasContainer" class="actionImage">
+              <!-- 画图区域 -->
+              <canvas ref="canvas" id="canvas"></canvas>
+          </div>
         </div>
         <div class="r fr inbl">
           <div class="t line-word" title="对象">
             <span></span>
-
+            <v-tree :tree-data="PrisonareaObjtree" v-on:handle-node-click="handleNodeClick"></v-tree>
           </div>
 
           <div class="d line-word" title="属性">
@@ -98,6 +108,8 @@
   import exportgroup from '@/assets/exportgroup.png';
   import importgroup from '@/assets/importgroup.png';
 
+  import Draw from '@/draw/action';
+
   export default {
     components: {
       vTree
@@ -117,9 +129,19 @@
           review: review,
           textA: textA,
           exportgroup: exportgroup,
-          importgroup: importgroup,
+          importgroup: importgroup
         },
+        drawObj: null,
+        lineWidth: 1,
+        strokeStyle: "#ff0000",
+        shapeType: "rect",
+        fileList: [],
         Prisonareatree: [],
+        PrisonareaObjtree:[{
+          id: 1,
+          label: '杭州某某监狱',
+          icon: 'el-icon-menu'
+        }],
         message: '监区管理'
       }
     },
@@ -139,12 +161,38 @@
         });
     },
     methods: {
-      handleNodeClick(data) {
-        console.log(data);
+      handleNodeClick(data, checked, indeterminate) {
+        console.log(checked);
+      },
+      submitUpload() {
+        this.$refs.upload.submit();
+      },
+      handleFileListChange(file, fileList) {
+        let _this = this;
+        //创建一个reader
+        let reader = new FileReader();
+        //将图片转成base64格式
+        reader.readAsDataURL(file.raw);
+        reader.onload = function (event) {
+          var base64txt = event.target.result;
+          _this.$refs.canvasContainer.style.backgroundImage = "url("+base64txt+")";;
+        };
+
+      },
+      draw() {
+        this.startDraw();
+      },
+      startDraw() {
+        this.drawObj.setDrawState(true);
+        this.drawObj.setShape(this.lineWidth, this.strokeStyle, this.shapeType);
+        this.drawObj.init();
       }
     },
     mounted() {
-
+      var canvasContainerRect = this.$refs.canvasContainer.getBoundingClientRect();
+      this.$refs.canvas.width = canvasContainerRect.width;
+      this.$refs.canvas.height = canvasContainerRect.height;
+      this.drawObj = new Draw('canvas');
     }
   }
 
@@ -162,11 +210,11 @@
   }
 
   .aside-l {
-    width: 15%;
+    width: 18%;
   }
 
   .aside-r {
-    width: 85%;
+    width: 82%;
   }
 
   .aside-l-h {
@@ -218,6 +266,12 @@
 
   .main {
     padding: 20px 2% 5%;
+  }
+
+  .main .actionImage {
+    min-height: 500px;
+    background: #fff;
+    width: 100%;
   }
 
   .h-line:after {
