@@ -1,9 +1,6 @@
 /* 公共样式 */
-
 /* reset.css begin */
-
 /*! minireset.css v0.0.3 | MIT License | github.com/jgthms/minireset.css */
-
 html,
 body,
 p,
@@ -70,6 +67,7 @@ Helvetica,
 "微软雅黑",
 Arial,
 sans-serif;
+
 *,
 *:before,
 *:after {
@@ -107,7 +105,6 @@ a {
 }
 
 /* reset.css end */
-
 .nav-wrap {
   background-color: rgb(47, 50, 60);
   height: 60px;
@@ -133,15 +130,12 @@ div.content-wrap {
   width: 100%;
   margin: 0 auto;
 } */
-
 /* 当屏幕宽度小于1200px */
-
 /* @media only screen and (max-width: 1200px) {
   .content-wrap {
     width: 90%;
   }
 } */
-
 .fl {
   float: left;
 }
@@ -155,17 +149,13 @@ div.content-wrap {
 }
 
 /* 行内块级元素 */
-
 .inbl {
   display: inline-block
 }
 
 /* 垂直方向居中 begin*/
-
 /* 相对具有定位属性的父级 */
-
 /* Vertical centering */
-
 .v-c {
   position: absolute;
   top: 50%;
@@ -173,7 +163,6 @@ div.content-wrap {
 }
 
 /* Horizontally centered */
-
 .h-c {
   position: absolute;
   left: 50%;
@@ -189,7 +178,6 @@ div.content-wrap {
 }
 
 /* 垂直方向居中 end */
-
 .clearfix:after {
   clear: both;
   content: '.';
@@ -200,7 +188,6 @@ div.content-wrap {
 }
 
 /* 横线 begin */
-
 .h-line {
   display: block;
   /*设置为块级元素会独占一行形成上下居中的效果*/
@@ -222,13 +209,11 @@ div.content-wrap {
 }
 
 /* 横线 end */
-
 .num-color {
   color: #0a74bb;
 }
 
 /* 表格begin */
-
 table {
   width: 100%;
   color: #606266;
@@ -294,7 +279,6 @@ th {
 }
 
 /* 表格最后一列可操作项 */
-
 .operating span {
   color: #59c4ee;
   cursor: pointer;
@@ -302,9 +286,11 @@ th {
 }
 
 /* 表格end */
+.pointer {
+  cursor: pointer;
+}
 
 /* 选项卡begin */
-
 .el-tabs__header {
   margin: 15px 0 15px;
 }
@@ -345,16 +331,12 @@ th {
 }
 
 /* 选项卡end */
-
 /*  */
-
 /* .el-input__inner{
   height: 30px;
   line-height: 30px;
 } */
-
 /* 分页begin */
-
 .el-pagination-wrap {
   width: 100%;
   text-align: right;
@@ -386,55 +368,44 @@ th {
 .el-pager li {}
 
 /* 分页end */
-
 .pp-r-t .el-select,
 .pp-r-t .pp-input {
   width: 12%;
 }
 
 /* 时间筛选器begin */
-
 .q-v-t .el-date-editor.el-input,
 .q-v-t .el-date-editor.el-input__inner {
   width: 36%;
 }
 
 /* 时间筛选器end */
-
 /* 筛选条件begin */
-
 .filter-wrap {
   height: 70px;
   line-height: 70px;
 }
 
 /* 筛选条件end */
-
 /* el行外下边距begin */
-
 .el-row {
   margin-bottom: 20px;
 }
 
 /* el行外下边距end */
-
 /* 搜索按钮颜色begin */
-
 /* .el-input-group__append,
 .el-input-group__prepend {
   background-color: #59c4ee;
   color: #fff;
 } */
-
 .search-btn {
   background-color: #59c4ee;
   color: #fff;
 }
 
 /* 搜索按钮颜色end */
-
 /* 内容begin */
-
 .w1200 {
   width: 1200px;
   margin: 0 auto;
@@ -461,21 +432,17 @@ th {
 }
 
 /* 内容end */
-
 .return-btn {
   background: #e8e8e8;
 }
 
 /* 下拉框位置beging */
-
 .el-popper[x-placement^=bottom] {
   margin-top: -12px;
 }
 
 /* 下拉框位置end */
-
 /* 框上的文字begin */
-
 .line-word {
   position: relative;
   /* text-align: center; */

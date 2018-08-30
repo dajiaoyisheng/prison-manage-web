@@ -1,101 +1,148 @@
 <template>
   <div class="workbench-wrap w1200">
-    <!-- 异常位置预警 应该自动提示,触发条件?-->
-    <!-- <section>
-      <el-button plain @click="open2">
-        不会自动关闭
-      </el-button>
-    </section> -->
-    <el-row type="flex" class="row-bg" justify="end">
-      <el-col :span="3">
+    <!-- <el-row type="flex" class="row-bg" justify="end">
+       <el-col class="itemWrap" :span="3">
         <span>视频分析引擎</span>
         <el-switch v-model="value1" active-color="#13ce66" inactive-color="#ff4949">
         </el-switch>
       </el-col>
-    </el-row>
+    </el-row> -->
     <!-- 犯人总数 -->
-    <el-row :gutter="20">
-      <el-col :span="12">
-        <div class="bench-item-header">
-          <img src="" alt="">
-          <span>犯人总数</span>
-        </div>
-        <div class="bench-item">
-          <div class="bench-item-left v-c">
-            <span class="num-big num-color">{{personnum}}</span>
-            <span>人</span>
+    <!-- <el-row :gutter="30"> -->
+    <section class="contentWrap clearfix">
+      <section class="l fl">
+        <section class="item">
+          <div class="bench-item-header">
+            <img src="" alt="">
+            <span>犯人总数</span>
           </div>
-          <div class="bench-item-right v-c">
-            <ul>
-              <li v-for="item in areasDetail" :key="item.area">
-                <span>{{item.area}}：</span>
-                <!-- <span class="num-color">{{item.pNumItem}}</span> -->
-                <router-link class="num-color" to="/personnelposition">{{item.pNumItem}}</router-link>
-                <span>人</span>
-              </li>
-            </ul>
+          <div class="bench-item">
+            <div class="bench-item-left v-c">
+              <span class="num-big num-color">{{personnum}}</span>
+              <span>人</span>
+            </div>
+            <div class="bench-item-right v-c">
+              <ul>
+                <li v-for="item in areasDetail" :key="item.area">
+                  <span>{{item.area}}：</span>
+                  <router-link class="num-color" to="/personnelposition">{{item.pNumItem}}</router-link>
+                  <span>人</span>
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
-      </el-col>
-      <el-col :span="12">
-        <div class="bench-item-header">
-          <img src="" alt="">
-          <span>人员分类</span>
-        </div>
-        <div class="bench-item">
-          <template>
-            <ve-pie :data="benchChartPieData" width="100%" height="100%" :judge-width="true" :extend="pieSettings"></ve-pie>
-          </template>
-        </div>
-      </el-col>
-    </el-row>
+        </section>
+        <section class="item">
+          <div class="bench-item-header">
+            <img src="" alt="">
+            <span>预警事件分类</span>
+          </div>
+          <div class="bench-item">
+            <template>
+              <ve-histogram :data="chartData" height="100%" width="100%" :extend="histogramExtend"></ve-histogram>
+            </template>
+          </div>
+        </section>
+        <section class="item item-pics">
+          <div class="picS" v-for="item in picItems" :key="item.des">
+            <img :src="item.pic" alt="" @click="displayBImg(item.pic)">
+          </div>
+          <div class="el-pagination-wrap">
+            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+              :current-page.sync="currentPage3" :page-size="10" layout="prev, pager, next, jumper" :total="this.page">
+            </el-pagination>
+          </div>
+        </section>
+      </section>
+      <!-- 右侧 -->
+      <section class="r fr">
+        <section class="item">
+          <div class="bench-item-header">
+            <img src="" alt="">
+            <span>人员分类</span>
+          </div>
+          <div class="bench-item">
+            <template>
+              <ve-pie :data="benchChartPieData" width="100%" height="100%" :judge-width="true" :extend="pieSettings"></ve-pie>
+            </template>
+          </div>
+        </section>
+        <section class="item">
+          <div class="bench-item-header">
+            <img src="" alt="">
+            <span>人员状态</span>
+          </div>
+          <div class="bench-item">
+            <div class="bench-item-left v-c">
+              <span class="num-big num-color">{{personnum}}</span>
+              <span>人</span>
+            </div>
+            <div class="bench-item-right v-c">
+              <ul>
+                <li v-for="item in prisonersStutas" :key="item.area">
+                  <span>{{item.area}}：</span>
+                  <span class="num-color">{{item.pNumItem}}</span>
+                  <span>人</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+        <section class="item item-displayPic">
+          <div class="curDisplayPic">
+            <img :src="imgBlock" alt="">
+          </div>
+        </section>
+      </section>
+    </section>
+    <!-- </el-row> -->
     <!-- 预警事件分类 -->
-    <el-row :gutter="20">
-      <el-col :span="12">
-        <div class="bench-item-header">
-          <img src="" alt="">
-          <span>预警事件分类</span>
-        </div>
-        <div class="bench-item">
-          <template>
-            <!-- <ve-bar :data="benchChartbarData" height="100%" width="100%" :settings="chartSettings" :judge-width="true"></ve-bar> -->
-            <ve-histogram :data="chartData" height="100%" width="100%" :extend="histogramExtend"></ve-histogram>
-          </template>
-        </div>
-      </el-col>
-      <el-col :span="12">
-        <div class="bench-item-header">
-          <img src="" alt="">
-          <span>人员状态</span>
-        </div>
-        <div class="bench-item">
-          <div class="bench-item-left v-c">
-            <span class="num-big num-color">{{personnum}}</span>
-            <span>人</span>
-          </div>
-          <div class="bench-item-right v-c">
-            <ul>
-              <li v-for="item in prisonersStutas" :key="item.area">
-                <span>{{item.area}}：</span>
-                <span class="num-color">{{item.pNumItem}}</span>
-                <span>人</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </el-col>
-    </el-row>
+
+    <!-- 预警事件分类 -->
+
   </div>
 </template>
 <script>
+  import ppp from '@/assets/pp-p.png';
+  import logo from '@/assets/logo.png';
   export default {
     name: 'workbench',
     data() {
       return {
+        // ppp: ppp,
+        // logo: logo,
+        imgBlock: '',
+        picItems: [{
+            pic: ppp,
+            des: "1"
+          },
+          {
+            pic: logo,
+            des: "2"
+          },
+          {
+            pic: ppp,
+            des: "3"
+          },
+          {
+            pic: ppp,
+            des: "4"
+          },
+          {
+            pic: ppp,
+            des: "5"
+          },
+          {
+            pic: ppp,
+            des: "6"
+          }
+        ],
         personnum: '',
         areasDetail: [],
         benchChartPieData: [],
         benchChartbarData: [],
+        currentPage3: 1,
+        page: 1,
         histogramExtend: {
           legend: {
             right: "5%",
@@ -225,33 +272,97 @@
       //   "width:1200px;margin:0 auto;transition:width 0.5s;";
     },
     methods: {
-      open2() {
-        this.$notify({
-          title: '异常位置预警',
-          message: '这是一条不会自动关闭的消息',
-          duration: 0
-        });
-      }
+      displayBImg(curPic) {
+        console.log(curPic);
+        this.imgBlock = curPic
+      },
+            handleCurrentChange(val) {
+        this.getTableData(val);
+        console.log(`当前页: ${val}`);
+      },
+            handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
     }
   }
 
 </script>
 
 <style>
+  .contentWrap {
+    margin-top: 20px;
+  }
+
+  .contentWrap .l,
+  .contentWrap .r {
+    width: 49%;
+  }
+
+  .contentWrap .l .item,
+  .contentWrap .r .item {
+    margin-bottom: 20px;
+    box-shadow: 0 2px 16px #e9ebed, 0 0 1px #e9ebed, 0 0 1px #e9ebed;
+  }
+
+  .item-pics,
+  .item-displayPic {
+    height: 736px;
+  }
+
+  .item-pics {
+    padding: 20px 3%;
+  }
+
+  .picS {
+    width: 48%;
+    height: 213px;
+    margin-bottom: 10px;
+    border: 1px solid #e0e3ec;
+    display: inline-block;
+  }
+
+  .picS:nth-child(odd) {
+    float: left;
+  }
+
+  .picS:nth-child(even) {
+    float: right;
+  }
+
+  .picS img {
+    width: 100%;
+    height: 100%;
+  }
+
+
+
+
+
+
+
+
+  .itemWrap {
+    width: 50%;
+    /* box-shadow: 0px 2px 10px #e9ebed, 0 2px 10px #e9ebed, 0 2px 10px #e9ebed; */
+    box-shadow: 0 2px 16px #e9ebed, 0 0 1px #e9ebed, 0 0 1px #e9ebed;
+  }
+
   .bench-item-header {
     height: 30px;
     line-height: 30px;
-    background-color: #a0abb5;
+    background-color: #fcfcfc;
     font-size: 12px;
-    color: #fff;
+    /* color: #fff; */
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
   }
 
   .bench-item {
     height: 310px;
-    border: 1px solid #e6e6e6;
-    border-top: none;
+
+    /* border: 1px solid #e6e6e6; */
+    border-top: 1px solid #e6e6e6;
+    ;
     border-bottom-left-radius: 3px;
     border-bottom-right-radius: 3px;
     position: relative;
@@ -285,6 +396,15 @@
 
   .bench-item-right ul li:nth-child(even) {
     float: right;
+  }
+
+
+
+
+
+  .curDisplayPic img {
+    width: 100%;
+    height: 100%;
   }
 
 </style>
