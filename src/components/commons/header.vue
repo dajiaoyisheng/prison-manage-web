@@ -107,7 +107,7 @@
   .el-menu--horizontal>.el-menu-item a {
     color: rgba(255, 255, 255, 1);
   }
-  .nav-input {
+  .nav-wrap .nav-input {
     width: 10%;
     height: 60px;
     line-height: 60px;

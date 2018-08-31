@@ -38,7 +38,7 @@
   }
 
 </script>
-<style>
+<style scoped>
   .notify {
     display: inline-block;
     display: none;

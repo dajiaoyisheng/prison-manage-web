@@ -407,6 +407,9 @@ th {
 }
 
 /* 搜索按钮颜色end */
+.el-input {
+  width: none;
+}
 /* 内容begin */
 .w1200 {
   width: 1200px;
