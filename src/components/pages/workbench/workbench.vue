@@ -47,10 +47,12 @@
           <div class="picS" v-for="item in picItems" :key="item.des">
             <img :src="item.pic" alt="" @click="displayBImg(item.pic)">
           </div>
-          <div class="el-pagination-wrap">
-            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
-              :current-page.sync="currentPage3" :page-size="10" layout="prev, pager, next, jumper" :total="this.page">
-            </el-pagination>
+          <div class="page">
+            <div class="el-pagination-wrap">
+              <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                :current-page.sync="currentPage3" :page-size="10" layout="prev, pager, next, jumper" :total="this.page">
+              </el-pagination>
+            </div>
           </div>
         </section>
       </section>
@@ -311,6 +313,7 @@
 
   .item-pics {
     padding: 20px 3%;
+    position: relative;
   }
 
   .picS {
@@ -327,6 +330,14 @@
 
   .picS:nth-child(even) {
     float: right;
+  }
+  /* 分页 */
+  .item-pics .page {
+    width: 100%;
+    float: none;
+    position: absolute;
+    bottom: 0;
+    left: 0;
   }
 
   .picS img {
