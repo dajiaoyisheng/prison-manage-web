@@ -1,0 +1,146 @@
+/* section,.el-input {
+    display: inline-block;
+  } */
+
+.pposition-l {
+    width: 15%;
+    display: inline-block;
+}
+
+.pposition-l .pp-td-w {
+    width: 20%;
+    background-color: #fff;
+}
+
+.pposition-r {
+    width: 85%;
+    display: inline-block;
+    float: right;
+}
+
+tr {
+    cursor: pointer;
+}
+
+
+/* td {
+    width: 33%;
+  } */
+
+.pp-r-t {
+    height: 40px;
+    line-height: 40px;
+    background-color: #f6f9fa;
+    padding: 0 1%;
+}
+
+.pp-r-t .el-select,
+.pp-r-t .pp-input {
+    width: 12%;
+}
+
+.pp-r-d-l-l .el-select {
+    width: 52%;
+}
+
+.pp-r-d {
+    /* width: 25%; */
+    background-color: #f5f5f5;
+    padding: 20px 1%;
+}
+
+.pp-r-d-l {
+    width: 40%;
+    display: inline-block;
+}
+
+.pp-r-d-l .el-input {
+    width: 52%;
+    margin-bottom: 14px;
+}
+
+.pp-r-d-l .div-select .el-input {
+    width: 100%;
+}
+
+.pp-r-d-l .el-input:nth-child(12),
+.pp-r-d-l .el-input:nth-child(13),
+.pp-r-d-l .el-input:nth-child(14),
+.pp-r-d-l .el-input:nth-child(15),
+{
+    width: 100%
+}
+
+.pp-r-d-l-l,
+.pp-r-d-l-r {
+    width: 50%;
+    display: inline-block
+}
+
+.pp-r-d-l-r .imgWrap {
+    width: 95%;
+    border: 1px solid #dcdcdc;
+    position: relative;
+    text-align: center;
+    background-color: #fff;
+    padding-top: 15px;
+}
+
+.imgWrap>span {
+    position: absolute;
+    left: 50%;
+    left: 5%;
+    top: -0.4%;
+    width: 6em;
+    background-color: #fff;
+    height: 1px;
+}
+
+.imgWrap>span.pp-photo {
+    width: 3em;
+}
+
+.imgWrap::before {
+    content: attr(title);
+    position: absolute;
+    left: 5%;
+    top: -0.7em;
+    padding: 0 10px;
+    z-index: 99;
+}
+
+.imgWrap:nth-child(2) {
+    margin-top: 20px;
+}
+
+.pp-r-d-l-r .imgWrap>div {
+    width: 45%;
+    display: inline-block;
+}
+
+
+/* .pp-r-d-l-r .imgWrap>span {
+    position: absolute;
+    top: -10px;
+    left: 3%;
+  } */
+
+.pp-r-d-l-r .imgWrap>div>span {
+    display: inline-block;
+}
+
+p.h-line {
+    margin-bottom: 17px;
+    color: #0a74bb;
+}
+
+.pp-r-d .pp-r-d-l .pp-r-d-l-l div span:nth-child(1) {
+    display: inline-block;
+    width: 34%;
+    text-align: right;
+}
+
+.pp-r-d-r {
+    width: 60%;
+    float: right;
+}
