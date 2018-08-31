@@ -19,7 +19,7 @@
           <el-header style="height: 40px; line-height: 40px; vertical-align: middle; border-bottom: none;">
               <span style="font-size: 14px;">服刑人员:</span>
               <el-input size="small" class="pn-main-header-input" v-model="parameter.name" placeholder="请输入服刑人员姓名或编号" clearable></el-input>
-              <el-button size="mini" type="primary" @click="doQuery()">查询</el-button>
+              <el-button size="mini" class="search-btn" @click="doQuery()">查询</el-button>
           </el-header>
           <el-container>
             <el-main class="pn-main-main">

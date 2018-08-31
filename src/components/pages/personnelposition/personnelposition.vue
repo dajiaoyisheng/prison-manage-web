@@ -1,7 +1,7 @@
 <template>
   <div class="pp-wrap">
     <!-- 左 -->
-    <section class="pposition-l">
+    <section class="pposition-l fl">
       <table>
         <thead>
           <tr>
@@ -227,59 +227,59 @@
               </el-table-column>
             </el-table>
             <div class="el-pagination-wrap">
-              <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="currentPage3"
-                :page-size="10" layout="prev, pager, next, jumper" :total="this.page">
+              <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                :current-page.sync="currentPage3" :page-size="10" layout="prev, pager, next, jumper" :total="this.page">
               </el-pagination>
             </div>
           </section>
         </section>
         <section class="pp-r-d-r pp-r-d-r-d">
           <p class="h-line">
-          <!-- <p class="h-line"></p> -->
-          <el-tabs v-model="activeName" @tab-click="handleClick" class="pos-res">
-            <el-tab-pane label="当前活动区域" name="first">当前活动区域</el-tab-pane>
-            <el-tab-pane label="历史活动区域" name="second">
-              <section class="filter-wrap">
-                <span class="block">
-                  <span class="demonstration">时间</span>
-                  <el-date-picker size="mini" v-model="value7" type="datetime" placeholder="选择开始时间">
-                  </el-date-picker>
-                  <span>-</span>
-                  <el-date-picker size="mini" v-model="value7" type="datetime" placeholder="选择结束时间">
-                  </el-date-picker>
-                </span>
-              </section>
-              <section class="el-table-wrap clearfix">
-                <el-table :data="pPTableData" stripe style="width: 100%">
-                  <el-table-column prop="starttime" label="进时间">
-                  </el-table-column>
-                  <el-table-column prop="endtime" label="出时间">
-                  </el-table-column>
-                  <el-table-column prop="during" label="区域">
-                  </el-table-column>
-                  <el-table-column prop="tyle" label="停留时间">
-                  </el-table-column>
-                  <el-table-column label="监控视频">
-                    <template slot-scope="scope">
-                      <div class="operating">
-                        <span @click="handleEdit(scope.$index, scope.row)">视频</span>
-                      </div>
-                    </template>
-                  </el-table-column>
-                </el-table>
-                <div class="el-pagination-wrap">
-                  <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="currentPage3"
-                    :page-size="10" layout="prev, pager, next, jumper" :total="this.page">
-                  </el-pagination>
-                </div>
-                <!-- 视频 -->
-                <video width="320" height="240" controls="controls">
-                  <source src="movie.ogg" type="video/ogg">
-                  <source src="movie.mp4" type="video/mp4"> Your browser does not support the video tag.
-                </video>
-              </section>
-            </el-tab-pane>
-          </el-tabs>
+            <!-- <p class="h-line"></p> -->
+            <el-tabs v-model="activeName" @tab-click="handleClick" class="pos-res">
+              <el-tab-pane label="当前活动区域" name="first">当前活动区域</el-tab-pane>
+              <el-tab-pane label="历史活动区域" name="second">
+                <section class="filter-wrap">
+                  <span class="block">
+                    <span class="demonstration">时间</span>
+                    <el-date-picker size="mini" v-model="value7" type="datetime" placeholder="选择开始时间">
+                    </el-date-picker>
+                    <span>-</span>
+                    <el-date-picker size="mini" v-model="value7" type="datetime" placeholder="选择结束时间">
+                    </el-date-picker>
+                  </span>
+                </section>
+                <section class="el-table-wrap clearfix">
+                  <el-table :data="pPTableData" stripe style="width: 100%">
+                    <el-table-column prop="starttime" label="进时间">
+                    </el-table-column>
+                    <el-table-column prop="endtime" label="出时间">
+                    </el-table-column>
+                    <el-table-column prop="during" label="区域">
+                    </el-table-column>
+                    <el-table-column prop="tyle" label="停留时间">
+                    </el-table-column>
+                    <el-table-column label="监控视频">
+                      <template slot-scope="scope">
+                        <div class="operating">
+                          <span @click="handleEdit(scope.$index, scope.row)">视频</span>
+                        </div>
+                      </template>
+                    </el-table-column>
+                  </el-table>
+                  <div class="el-pagination-wrap">
+                    <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                      :current-page.sync="currentPage3" :page-size="10" layout="prev, pager, next, jumper" :total="this.page">
+                    </el-pagination>
+                  </div>
+                  <!-- 视频 -->
+                  <video width="320" height="240" controls="controls">
+                    <source src="movie.ogg" type="video/ogg">
+                    <source src="movie.mp4" type="video/mp4"> Your browser does not support the video tag.
+                  </video>
+                </section>
+              </el-tab-pane>
+            </el-tabs>
           </p>
         </section>
       </section>
@@ -332,10 +332,10 @@
         }).then(function () {});
       this.getTableData();
     },
-    mounted:function(){
+    mounted: function () {
       // console.log(document.getElementsByClassName("pp-wrap")[0]);
       // document.getElementsByClassName("pp-wrap")[0].style.width = document.body.clientWidth;
-      
+
     },
     methods: {
       getTableData(p) {
@@ -370,7 +370,12 @@
 </script>
 <style scoped>
   .pposition-l {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    height: 100%;
     width: 15%;
+    background: #fff;
     display: inline-block;
   }
 
@@ -384,25 +389,32 @@
     display: inline-block;
     float: right;
   }
-/* 选项卡begin */
-.el-tabs__header {
-  display: inline-block;
-  position: relative;
-  margin: 0;
-}
-.el-tabs__header:after {
-  display: block;
-  content: '';
-  position: absolute;
-  top: 51%;
-  background: #e9ebf0;
-  width: 250%;
-  height: 1px;
-  left: 105%;
-}
-/* 选项卡end */
-  tr {
+
+  /* 选项卡begin */
+  .el-tabs__header {
+    display: inline-block;
+    position: relative;
+    margin: 0;
+  }
+
+  .el-tabs__header:after {
+    display: block;
+    content: '';
+    position: absolute;
+    top: 51%;
+    background: #e9ebf0;
+    width: 250%;
+    height: 1px;
+    left: 105%;
+  }
+
+  /* 选项卡end */
+  .el-tabs__nav {
     cursor: pointer;
+  }
+
+  table thead tr {
+    height: 48px;
   }
 
   /* td {
@@ -410,15 +422,16 @@
   } */
 
   .pp-r-t {
-    height: 40px;
-    line-height: 40px;
+    height: 48px;
+    line-height: 48px;
     background-color: #fff;
     padding: 0 1%;
   }
 
-  .pp-r-d-l-l .el-select {
+  /* .pp-r-d-l-l .el-select {
     width: 52%;
-  }
+    margin-bottom: 14px;
+  } */
 
   .pp-r-d {
     /* width: 25%; */
@@ -431,6 +444,7 @@
     display: inline-block;
   }
 
+  .pp-r-d-l-l .el-select,
   .pp-r-d-l .el-input {
     width: 52%;
     margin-bottom: 14px;
@@ -509,14 +523,17 @@
     margin-bottom: 17px;
     color: #59c4ee;
   }
-  .pos-res{
+
+  .pos-res {
     position: relative;
   }
+
   /* 选项卡后面的横线 */
   .pp-r-d-r-d p.h-line::after {
     top: 1%;
     width: 68%;
   }
+
   .pp-r-d .pp-r-d-l .pp-r-d-l-l div span:nth-child(1) {
     display: inline-block;
     width: 34%;

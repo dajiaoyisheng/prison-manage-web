@@ -90,7 +90,7 @@
             </div>
           </div>
         </section>
-        <section class="item item-displayPic">
+        <section class="item item-displayPic-r">
           <div class="curDisplayPic">
             <img :src="imgBlock" alt="">
           </div>
@@ -278,11 +278,11 @@
         console.log(curPic);
         this.imgBlock = curPic
       },
-            handleCurrentChange(val) {
+      handleCurrentChange(val) {
         this.getTableData(val);
         console.log(`当前页: ${val}`);
       },
-            handleSizeChange(val) {
+      handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
       },
     }
@@ -290,7 +290,7 @@
 
 </script>
 
-<style>
+<style scoped>
   .contentWrap {
     margin-top: 20px;
   }
@@ -308,12 +308,14 @@
 
   .item-pics,
   .item-displayPic {
-    height: 736px;
+    height: 665px;
+    background: #fff;
   }
 
   .item-pics {
     padding: 20px 3%;
     position: relative;
+    background: #fff;
   }
 
   .picS {
@@ -331,6 +333,7 @@
   .picS:nth-child(even) {
     float: right;
   }
+
   /* 分页 */
   .item-pics .page {
     width: 100%;
@@ -338,6 +341,14 @@
     position: absolute;
     bottom: 0;
     left: 0;
+  }
+
+  .el-pagination-wrap {
+    padding: 9px 0;
+  }
+
+  .item-pics .page .el-pagination {
+    padding: 2px 3%;
   }
 
   .picS img {
@@ -368,6 +379,8 @@
     border-top-right-radius: 3px;
   }
 
+
+
   .bench-item {
     height: 310px;
 
@@ -378,6 +391,7 @@
     border-bottom-right-radius: 3px;
     position: relative;
     padding: 10px 10%;
+    background: #fff;
   }
 
   .bench-item-left {
@@ -412,6 +426,10 @@
 
 
 
+  .item-displayPic-r {
+    height: 705px;
+    background: #fff;
+  }
 
   .curDisplayPic img {
     width: 100%;

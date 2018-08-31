@@ -52,10 +52,12 @@ textarea {
 }
 
 html {
+  height: 100%;
   box-sizing: border-box;
 }
 
 body {
+  height: 100%;
   background: #f3f6f8;
 }
 
@@ -468,3 +470,14 @@ th {
 }
 
 /* 框上的文字end */
+
+/* 某块容器头部 */
+.item-header {
+  height: 30px;
+  line-height: 30px;
+  background-color: #fcfcfc;
+  font-size: 12px;
+  /* color: #fff; */
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}

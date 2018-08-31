@@ -102,6 +102,15 @@ export default {
             });
         });
 
+        // mock.onGet('/getTvMonitor').reply(config => {
+        //     return new Promise((resolve, reject) => {
+        //         setTimeout(() => {
+        //             defaultResData.data = prisonarea;
+        //             resolve([200, defaultResData])
+        //         }, 1000);
+        //     });
+        // });
+
         mock.onGet('/getServerInfo').reply(config => {
             return new Promise((resolve, reject) => {
                 setTimeout(() => {
