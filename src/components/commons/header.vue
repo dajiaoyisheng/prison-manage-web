@@ -3,8 +3,18 @@
   <!-- nav -->
   <div>
     <nav class="nav-wrap">
-      <el-menu :default-active="$route.path" router class="nav-ul" mode="horizontal" @select="handleSelect" background-color="#2f323c"
-        text-color="#a0abb5" active-text-color="#fff">
+      <el-menu :default-active="$route.path" router class="nav-ul" mode="horizontal" @select="handleSelect"
+        background-color="#2f323c" text-color="#a0abb5" active-text-color="#fff">
+
+
+
+        <!-- <el-menu-item> -->
+        <div class="logoWrap">
+          <img class="logo" :src="logo" alt="">
+          <span>久其智能监狱管理系统</span>
+        </div>
+        <!-- </el-menu-item> -->
+
         <el-menu-item index="/workbench">
           <router-link to="/workbench">工作台</router-link>
         </el-menu-item>
@@ -63,11 +73,12 @@
 </template>
 
 <script>
-  // import state from '@/vuex/store'
+  import logo from '@/assets/logo.png'
   export default {
     name: 'Header',
     data() {
       return {
+        logo: logo,
         activeIndex: '1',
         input: '',
       };
@@ -95,6 +106,24 @@
 </script>
 
 <style socped>
+  .logoWrap {
+    /* display: inline-block; */
+    float: left;
+    line-height: 60px;
+    margin-right: 5%;
+  }
+  .logoWrap img{
+    vertical-align: middle;
+  }
+  .logoWrap span {
+    color: rgba(255, 255, 255, 1);
+  }
+
+  .logo {
+    width: 20px;
+    height: 20px;
+  }
+
   .el-menu>li>a {
     width: 48px;
     height: 16px;
@@ -107,9 +136,11 @@
   .el-menu--horizontal>.el-menu-item a {
     color: rgba(255, 255, 255, 1);
   }
+
   .nav-wrap .nav-input {
     width: 10%;
     height: 60px;
     line-height: 60px;
   }
+
 </style>
