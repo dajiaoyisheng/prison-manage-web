@@ -186,8 +186,6 @@
         pStatus: [],
         benchChartPieData: [],
         benchChartbarData: [],
-        currentPage3: 1,
-        page: 1,
         histogramExtend: {
           legend: {
             right: "5%",

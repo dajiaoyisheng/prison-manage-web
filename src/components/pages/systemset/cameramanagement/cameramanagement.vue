@@ -91,11 +91,6 @@
           prisonerName: "",
           period: [new Date(), new Date()]
         },
-        pagination: {
-          pageSize: 10,
-          currentPage: 1,
-          totalRows: 100
-        },
         prisonerInfo: {},
         warningTypes: [],
         prisonerTypes: [],
@@ -149,9 +144,9 @@
           path: "/personnelposition"
         });
       },
-      getCameraList: function () {
+      getCameraList: function (page) {
         var _this = this;
-        this.$ajxj.get('/getCameraList').then(function (respnose) {
+        this.$ajxj.get('/getCameraList',{page:page}).then(function (respnose) {
           _this.prisonerInfo = respnose.data;
         }).catch(function (error) {}).then(function (error) {
           console.log(error);
