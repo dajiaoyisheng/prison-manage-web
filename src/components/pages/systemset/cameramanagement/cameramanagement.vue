@@ -63,9 +63,10 @@
           <el-table-column prop="warningArea" label="备注"></el-table-column>
         </el-table>
         <div class="el-pagination-wrap text-center">
-          <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="pagination.currentPage"
+          <!-- <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="pagination.currentPage"
             :page-size="10" layout="prev, pager, next, jumper" :total="pagination.totalRows">
-          </el-pagination>
+          </el-pagination> -->
+          <table-pagination :total="count" @change="pageChange"></table-pagination>
         </div>
       </section>
     </section>
@@ -74,10 +75,15 @@
 </template>
 
 <script>
+  import tablePagination from '@/components/commons/tablePage.vue';
   export default {
     name: 'posunusual',
+    components: {
+      tablePagination
+    },
     data() {
       return {
+        count: 0, //总记录数
         message: "定位异常预警",
         params: {
           warningType: "0",
@@ -124,15 +130,12 @@
       }
     },
     methods: {
+      pageChange(page) {
+        this.currentPage = page
+        this.getTableDatas(page)
+      },
       filter() {
 
-      },
-      handleCurrentChange(val) {
-        this.getTableData(val);
-        console.log(`当前页: ${val}`);
-      },
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
       },
       clear: function () {
         this.params.period = [new Date(), new Date()];
@@ -140,17 +143,15 @@
         this.params.prisonerType = "";
         this.params.prisonerName = "";
       },
-      changeCurrent: function () {
-        alert("当前第" + this.pagination.currentPage + "页");
-      },
+
       showVideo: function (index, row) {
         this.$router.push({
           path: "/personnelposition"
         });
       },
-      showPrisoner: function () {
+      getCameraList: function () {
         var _this = this;
-        this.$ajxj.get('/getPrisonerInfo').then(function (respnose) {
+        this.$ajxj.get('/getCameraList').then(function (respnose) {
           _this.prisonerInfo = respnose.data;
         }).catch(function (error) {}).then(function (error) {
           console.log(error);

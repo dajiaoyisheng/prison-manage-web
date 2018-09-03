@@ -161,9 +161,9 @@
           path: "/personnelposition"
         });
       },
-      showPrisoner: function () {
+      showPrisoner: function (page) {
         var _this = this;
-        this.$ajxj.get('/getPrisonerInfo').then(function (respnose) {
+        this.$ajxj.get('/getPrisonerInfo',{page:page}).then(function (respnose) {
           _this.prisonerInfo = respnose.data;
         }).catch(function (error) {}).then(function (error) {
           console.log(error);
@@ -172,19 +172,6 @@
     },
     mounted() {
       var _this = this;
-
-      // 获取预警事件类型字典
-      this.$ajxj.get('/getWarningTypes').then(function (respnose) {
-        _this.warningTypes = respnose.data;
-      }).catch(function (error) {}).then(function (error) {
-        console.log(error);
-      });
-      // 获取服刑人员类型字典
-      this.$ajxj.get('/getPrisonerTypes').then(function (respnose) {
-        _this.prisonerTypes = respnose.data;
-      }).catch(function (error) {}).then(function (error) {
-        console.log(error);
-      });
       // 获取表格数据
       this.$ajxj.post('/getPosunusualItems').then(function (respnose) {
         _this.ppuTableDatas = respnose.data.items;

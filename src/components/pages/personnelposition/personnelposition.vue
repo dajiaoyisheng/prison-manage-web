@@ -227,9 +227,7 @@
               </el-table-column>
             </el-table>
             <div class="el-pagination-wrap">
-              <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                :current-page.sync="currentPage3" :page-size="10" layout="prev, pager, next, jumper" :total="this.page">
-              </el-pagination>
+              <table-pagination :page-index="currentPage" :total="count" :page-size="pageSize" @change="pageChange"></table-pagination>
             </div>
           </section>
         </section>
@@ -268,9 +266,10 @@
                     </el-table-column>
                   </el-table>
                   <div class="el-pagination-wrap">
-                    <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                    <!-- <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
                       :current-page.sync="currentPage3" :page-size="10" layout="prev, pager, next, jumper" :total="this.page">
-                    </el-pagination>
+                    </el-pagination> -->
+                    <table-pagination :page-index="currentPage" :total="count" :page-size="pageSize" @change="pageChange"></table-pagination>
                   </div>
                   <!-- 视频 -->
                   <video width="320" height="240" controls="controls">
@@ -288,13 +287,22 @@
 </template>
 
 <script>
+  import tablePagination from '@/components/commons/tablePage.vue';
   export default {
     name: 'personnelposition',
+    components: {
+      tablePagination
+    },
     data() {
       return {
         input: '',
         loading: false,
         pPositionData: [],
+
+        pageSize: 10, //每页显示20条数据
+        currentPage: 1, //当前页码
+        count: 0, //总记录数
+        
         pPTableData: [],
         options: [{
           value: '选项1',
@@ -338,13 +346,20 @@
 
     },
     methods: {
+      //从page组件传递过来的当前page
+      pageChange(page) {
+        this.currentPage = page
+        this.getTableData(page)
+      },
       getTableData(p) {
         var _this = this
         this.$ajxj.post('/pPTableData', {
             page: p || 1
           })
           .then(function (res) {
-            // _this.loading = false;
+            _this.count = res.data.total;
+            console.log('res.data', res.data)
+
             _this.pPTableData = res.data.data
             _this.page = res.data.total
           }).catch(function (error) {}).then(function () {});
@@ -357,7 +372,6 @@
         console.log(`当前页: ${val}`);
       },
       handleEdit(index, row) {
-        // window.location.href = row.tv;
         console.log(index, row);
         window.open(row.tv)
       },
@@ -386,7 +400,6 @@
 
   .pposition-r {
     width: 85%;
-    display: inline-block;
     float: right;
   }
 
@@ -417,10 +430,6 @@
     height: 48px;
   }
 
-  /* td {
-    width: 33%;
-  } */
-
   .pp-r-t {
     height: 48px;
     line-height: 48px;
@@ -428,13 +437,7 @@
     padding: 0 1%;
   }
 
-  /* .pp-r-d-l-l .el-select {
-    width: 52%;
-    margin-bottom: 14px;
-  } */
-
   .pp-r-d {
-    /* width: 25%; */
     background-color: #f3f6f8;
     padding: 20px 1%;
   }
@@ -509,19 +512,12 @@
     display: inline-block;
   }
 
-  /* .pp-r-d-l-r .imgWrap>span {
-    position: absolute;
-    top: -10px;
-    left: 3%;
-  } */
-
   .pp-r-d-l-r .imgWrap>div>span {
     display: inline-block;
   }
 
   p.h-line {
     margin-bottom: 17px;
-    color: #59c4ee;
   }
 
   .pos-res {

@@ -49,9 +49,7 @@
           </div>
           <div class="page">
             <div class="el-pagination-wrap">
-              <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                :current-page.sync="currentPage3" :page-size="10" layout="prev, pager, next, jumper" :total="this.page">
-              </el-pagination>
+              <pagination :page-index="currentPage" :total="count" :page-size="pageSize" @change="pageChange"></pagination>
             </div>
           </div>
         </section>
@@ -74,20 +72,54 @@
             <img src="" alt="">
             <span>人员状态</span>
           </div>
-          <div class="bench-item">
-            <div class="bench-item-left v-c">
-              <span class="num-big num-color">{{personnum}}</span>
-              <span>人</span>
-            </div>
-            <div class="bench-item-right v-c">
-              <ul>
-                <li v-for="item in prisonersStutas" :key="item.area">
-                  <span>{{item.area}}：</span>
-                  <span class="num-color">{{item.pNumItem}}</span>
-                  <span>人</span>
-                </li>
-              </ul>
-            </div>
+          <div class="bench-item p-status-wrap">
+            <ul class="p-status clearfix">
+              <!-- <li v-for="item in areasDetail" :key="item.area">
+                <span>{{item.area}}：</span>
+                <router-link class="num-color" to="/personnelposition">{{item.pNumItem}}</router-link>
+                <span>人</span>
+              </li> -->
+              <li>
+                <span>在押人员:</span>
+                <router-link class="num-color" to="/personnelposition">123</router-link>
+                <span>人</span>
+              </li>
+              <li>
+                <span>提回重审:</span>
+                <router-link class="num-color" to="/personnelposition">123</router-link>
+                <span>人</span>
+              </li>
+              <li>
+                <span>保外就医:</span>
+                <router-link class="num-color" to="/personnelposition">123</router-link>
+                <span>人</span>
+              </li>
+              <li>
+                <span>出监就诊:</span>
+                <router-link class="num-color" to="/personnelposition">123</router-link>
+                <span>人</span>
+              </li>
+              <li>
+                <span>监外执行:</span>
+                <router-link class="num-color" to="/personnelposition">123</router-link>
+                <span>人</span>
+              </li>
+              <li>
+                <span>监内住院:</span>
+                <router-link class="num-color" to="/personnelposition">123</router-link>
+                <span>人</span>
+              </li>
+              <li>
+                <span>离监探亲:</span>
+                <router-link class="num-color" to="/personnelposition">123</router-link>
+                <span>人</span>
+              </li>
+              <li>
+                <span>监外住院:</span>
+                <router-link class="num-color" to="/personnelposition">123</router-link>
+                <span>人</span>
+              </li>
+            </ul>
           </div>
         </section>
         <section class="item item-displayPic-r">
@@ -107,8 +139,13 @@
 <script>
   import ppp from '@/assets/pp-p.png';
   import logo from '@/assets/logo.png';
+
+  import pagination from '@/components/commons/pagination.vue';
   export default {
     name: 'workbench',
+    components: {
+      pagination
+    },
     data() {
       return {
         // ppp: ppp,
@@ -139,8 +176,14 @@
             des: "6"
           }
         ],
+        pageSize: 10, //每页显示20条数据
+        currentPage: 1, //当前页码
+        count: 0, //总记录数
+        items: [],
+
         personnum: '',
         areasDetail: [],
+        pStatus: [],
         benchChartPieData: [],
         benchChartbarData: [],
         currentPage3: 1,
@@ -212,12 +255,24 @@
           _this.personnum = eval(temArray.join('+'))
         })
         .catch(function (error) {
-          // handle error
           console.log(error);
         })
-        .then(function () {
-          // always executed
-        });
+        .then(function () {});
+      // 人员状态
+      // this.$ajxj.get('/getPStatus')
+      //   .then(function (res) {
+      //     _this.pStatus = res.data.data
+      //     let temArray = [];
+      //     _this.pStatus.map(function (val) {
+      //       temArray.push(val.pNumItem)
+      //     })
+      //     _this.personnum = eval(temArray.join('+'))
+      //   })
+      //   .catch(function (error) {
+      //     console.log(error);
+      //   })
+      //   .then(function () {
+      //   });
       // 人员分类
       this.$ajxj.get('/getBenchChartPie')
         .then(function (res) {
@@ -270,10 +325,13 @@
         }).then(function () {});
     },
     mounted: function () {
-      // document.getElementsByClassName("workbench-wrap")[0].style.cssText =
-      //   "width:1200px;margin:0 auto;transition:width 0.5s;";
+      //请求第一页数据
+      this.getList()
     },
     methods: {
+      listen: function (page) {
+        this.msg = '你点击了' + page + '页'
+      },
       displayBImg(curPic) {
         console.log(curPic);
         this.imgBlock = curPic
@@ -285,6 +343,29 @@
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
       },
+      //获取数据
+      getList() {
+        var _this = this;
+        // ?pageSize=${this.pageSize}&currentPage=${this.currentPage}
+        this.$ajxj.post(`/pPTableData`, {
+            pageSize: 10,
+            currentPage: _this.currentPage
+          })
+          .then(function (res) {
+            _this.count = 124;
+            _this.items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+          .then(function () {});
+      },
+
+      //从page组件传递过来的当前page
+      pageChange(page) {
+        this.currentPage = page
+        this.getList()
+      }
     }
   }
 
@@ -356,16 +437,8 @@
     height: 100%;
   }
 
-
-
-
-
-
-
-
   .itemWrap {
     width: 50%;
-    /* box-shadow: 0px 2px 10px #e9ebed, 0 2px 10px #e9ebed, 0 2px 10px #e9ebed; */
     box-shadow: 0 2px 16px #e9ebed, 0 0 1px #e9ebed, 0 0 1px #e9ebed;
   }
 
@@ -374,19 +447,14 @@
     line-height: 30px;
     background-color: #fcfcfc;
     font-size: 12px;
-    /* color: #fff; */
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
   }
 
 
-
   .bench-item {
     height: 310px;
-
-    /* border: 1px solid #e6e6e6; */
     border-top: 1px solid #e6e6e6;
-    ;
     border-bottom-left-radius: 3px;
     border-bottom-right-radius: 3px;
     position: relative;
@@ -403,11 +471,23 @@
   }
 
   .bench-item-right {
+    display: table;
+
+  }
+
+  .bench-item-right ul {
+    display: table-cell;
+    vertical-align: middle;
+  }
+
+
+  .bench-item-right {
     width: 60%;
     height: 191px;
     border: 1px solid #e6e6e6;
     right: 4%;
     padding: 21px 5%;
+    text-align: center;
   }
 
   .bench-item-right ul li {
@@ -423,9 +503,6 @@
     float: right;
   }
 
-
-
-
   .item-displayPic-r {
     height: 705px;
     background: #fff;
@@ -434,6 +511,43 @@
   .curDisplayPic img {
     width: 100%;
     height: 100%;
+  }
+
+  .p-status-wrap {
+    display: table;
+  }
+
+  ul.p-status {
+    display: table-cell;
+    vertical-align: middle;
+    /* padding: 50px 5%; */
+  }
+
+  ul.p-status li {
+    float: left;
+    width: 49%;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+
+
+  }
+
+  ul.p-status li:nth-child(odd) {
+    border-bottom: 1px solid #e0e3ec;
+    border-right: 1px solid #e0e3ec;
+  }
+
+  ul.p-status li:nth-child(7) {
+    border-bottom: none;
+  }
+
+  ul.p-status li:nth-child(even) {
+    border-bottom: 1px solid #e0e3ec;
+  }
+
+  ul.p-status li:last-child {
+    border-bottom: none;
   }
 
 </style>

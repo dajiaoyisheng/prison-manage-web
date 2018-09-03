@@ -59,9 +59,10 @@
           </el-table-column>
         </el-table>
         <div class="el-pagination-wrap fr">
-          <el-pagination background layout="prev, pager, next, jumper" @current-change="changeCurrent()" :page-size="pagination.pageSize"
+          <!-- <el-pagination background layout="prev, pager, next, jumper" @current-change="changeCurrent()" :page-size="pagination.pageSize"
             :total="pagination.totalRows" :current-page.sync="pagination.currentPage">
-          </el-pagination>
+          </el-pagination> -->
+          <table-pagination :page-index="currentPage" :total="count" :page-size="pageSize" @change="pageChange"></table-pagination>
         </div>
       </section>
     </section>
@@ -70,10 +71,18 @@
 
 <script>
   import review from '@/assets/review.png';
+  import tablePagination from '@/components/commons/tablePage.vue';
   export default {
     name: 'violation',
+    components: {
+      tablePagination
+    },
     data() {
       return {
+        pageSize: 10, //每页显示20条数据
+        currentPage: 1, //当前页码
+        count: 0, //总记录数
+        
         ppuTableDatas: [],
         images: {
           review: review
@@ -128,6 +137,10 @@
       this.getTableDatas();
     },
     methods: {
+      pageChange(page) {
+        this.currentPage = page
+        this.getTableDatas(page)
+      },
       // 获取表格数据
       getTableDatas(page) {
         let _this = this;
@@ -138,10 +151,11 @@
           "warningType": this.parame.warningType,
           "prisonerName": this.parame.prisonerName,
         }
-        this.$ajxj.post('/getPosunusualItems', this.parame).then(function (respnose) {
-          console.log('respnose',respnose);
-          _this.ppuTableDatas = respnose.data.items;
-          _this.pagination.totalRows = respnose.data.totalRows;
+        this.$ajxj.post('/getPosunusualItems', this.parame).then(function (res) {
+          console.log('res', res);
+          _this.count = res.data.totalRows;
+          _this.ppuTableDatas = res.data.items;
+          _this.pagination.totalRows = res.data.totalRows;
         }).catch(function (error) {
           console.log(error);
         }).then(function (error) {
@@ -151,8 +165,8 @@
       // 获取警告类型
       getWarningType() {
         let _this = this;
-        this.$ajxj.post('/getPosunusualItems').then(function (respnose) {
-          respnose.data = [{
+        this.$ajxj.post('/getPosunusualItems').then(function (res) {
+          res.data = [{
             value: '选项1',
             label: '黄金糕'
           }, {
@@ -168,7 +182,7 @@
             value: '选项5',
             label: '北京烤鸭'
           }];
-          _this.warningType = respnose.data;
+          _this.warningType = res.data;
         }).catch(function (error) {
           console.log(error);
         }).then(function (error) {

@@ -1,10 +1,9 @@
 <template>
   <div>
-    <ul class="paging-ul">
+    <ul class="mo-paging">
       <!-- prev -->
-      <li :class="['paging-item', 'paging-item--prev', {'paging-item--disabled' : index === 1}]" @click="prev">
-        <img :src="prevPage" alt="">
-      </li>
+      <li :class="['paging-item', 'paging-item--prev', {'paging-item--disabled' : index === 1}]" @click="prev"><img
+          :src="prevPage" alt=""></li>
 
       <!-- first -->
       <li :class="['paging-item', 'paging-item--first', {'paging-item--disabled' : index === 1}]" v-if="showPrevMore" @click="first">1</li>
@@ -21,13 +20,10 @@
       <!-- <li :class="['paging-item', 'paging-item--last', {'paging-item--disabled' : index === pages}]" @click="last">last</li> -->
 
       <!-- next -->
-      <li :class="['paging-item', 'paging-item--next', {'paging-item--disabled' : index === pages}]" @click="next">
-        <img :src="nextPage" alt="">
-      </li>
-      <li class="gotoPage">
-        <!-- <el-input v-model="input" placeholder="请输入内容" size="mini"></el-input> -->
-        <input class="paging-item-input" v-model="gotoPage" @keyup.enter="go(gotoPage)" type="text">
-        <span @click="go(gotoPage)">确定</span>
+      <li :class="['paging-item', 'paging-item--next', {'paging-item--disabled' : index === pages}]" @click="next"><img
+          :src="nextPage" alt=""></li>
+      <li :class="['paging-item']">
+        共{{ pages }}页
       </li>
     </ul>
   </div>
@@ -36,8 +32,7 @@
   import prevPage from '@/assets/prev.png';
   import nextPage from '@/assets/next.png';
   export default {
-    name: 'tablePagination',
-
+    name: 'pagination',
     data() {
       return {
         index: this.pageIndex, //当前页码
@@ -46,8 +41,7 @@
         showPrevMore: false,
         showNextMore: false,
         nextPage: nextPage,
-        prevPage: prevPage,
-        gotoPage: null
+        prevPage: prevPage
       }
     },
     //通过props来接受从父组件传递过来的值
@@ -100,13 +94,10 @@
         }
       },
       go(page) {
-        page = Number(page);
-        console.log(page)
         if (this.index !== page) {
           this.index = page
           //父组件通过change方法来接受当前的页码
-          this.$emit('change', this.index);
-          this.gotoPage = null;
+          this.$emit('change', this.index)
         }
       }
     },
@@ -167,62 +158,17 @@
 
 </script>
 <style scoped>
-  .paging-ul {
+  .mo-paging {
     display: inline-block;
     padding: 0;
     margin: 1rem 0;
     font-size: 0;
     list-style: none;
     user-select: none;
+
   }
 
-  .paging-ul .paging-item {
-    display: inline;
-    font-size: 14px;
-    position: relative;
-    padding: 6px 12px;
-    line-height: 1.42857143;
-    text-decoration: none;
-    background-color: #fff;
-    margin-left: -1px;
-    cursor: pointer;
-  }
-
-  .paging-ul .paging-item:first-child {
-    margin-left: 0;
-  }
-
-  .paging-ul .paging-item:hover {
-    background-color: #f0f0f0;
-    color: #0275d8;
-  }
-
-  .paging-ul .paging-item.paging-item--disabled,
-  .paging-ul .paging-item.paging-item--more {
-    background-color: #fff;
-    color: #505050;
-  }
-
-  /* //禁用 */
-  .paging-ul .paging-item.paging-item--disabled {
-    cursor: not-allowed;
-    opacity: .75;
-  }
-
-  .paging-ul .paging-item.paging-item--more,
-  .paging-ul .paging-item.paging-item--current {
-    cursor: default;
-  }
-
-  /* //选中 */
-  .paging-ul .paging-item.paging-item--current {
-    /* background-color: #0275d8; */
-    color: #0275d8;
-    position: relative;
-    z-index: 1;
-    /* border-color: #0275d8; */
-  }
-  li.gotoPage{
+  .mo-paging .paging-item {
     display: inline;
     font-size: 14px;
     position: relative;
@@ -233,27 +179,42 @@
     background-color: #fff;
     margin-left: -1px;
     cursor: pointer;
+    /* color: #0275d8; */
   }
-  .paging-item-input {
-    height: 32px;
-    line-height: 32px;
-    -webkit-appearance: none;
+
+  .mo-paging .paging-item:first-child {
+    margin-left: 0;
+  }
+
+  .mo-paging .paging-item:hover {
+    background-color: #f0f0f0;
+    color: #0275d8;
+  }
+
+  .mo-paging .paging-item.paging-item--disabled,
+  .mo-paging .paging-item.paging-item--more {
     background-color: #fff;
-    background-image: none;
-    border-radius: 4px;
-    border: 1px solid #dcdfe6;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    color: #606266;
-    display: inline-block;
-    font-size: inherit;
-    /* height: 40px; */
-    /* line-height: 40px; */
-    outline: 0;
-    padding: 0 10px;
-    -webkit-transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
-    transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
-    width: 45px;
+    color: #505050;
+  }
+
+  /* //禁用 */
+  .mo-paging .paging-item.paging-item--disabled {
+    cursor: not-allowed;
+    opacity: .75;
+  }
+
+  .mo-paging .paging-item.paging-item--more,
+  .mo-paging .paging-item.paging-item--current {
+    cursor: default;
+  }
+
+  /* //选中 */
+  .mo-paging .paging-item.paging-item--current {
+    /* background-color: #0275d8; */
+    color: #0275d8;
+    position: relative;
+    z-index: 1;
+    /* border-color: #0275d8; */
   }
 
 </style>

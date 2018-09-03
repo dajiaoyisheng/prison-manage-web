@@ -5,9 +5,7 @@
     <nav class="nav-wrap">
       <el-menu :default-active="$route.path" router class="nav-ul" mode="horizontal" @select="handleSelect"
         background-color="#2f323c" text-color="#a0abb5" active-text-color="#fff">
-
-
-
+        
         <!-- <el-menu-item> -->
         <div class="logoWrap">
           <img class="logo" :src="logo" alt="">

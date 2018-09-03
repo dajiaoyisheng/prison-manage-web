@@ -1,7 +1,7 @@
 <template>
   <div class="w1200">
     <p class="contentInfo">服刑人员信息管理</p>
-    <section class="contentMain">
+    <section class="contentMain clearfixs">
       <section class="pm-t puu-params">
         <el-row :gutter="20" type="flex">
           <el-col :span="3">
@@ -9,8 +9,9 @@
             <span>增加</span>
           </el-col>
           <el-col :span="3">
-            <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove"
-              :before-remove="beforeRemove" :limit="1" :on-exceed="handleExceed" :file-list="fileList" :show-file-list="false">
+            <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview"
+              :on-remove="handleRemove" :before-remove="beforeRemove" :limit="1" :on-exceed="handleExceed" :file-list="fileList"
+              :show-file-list="false">
               <img :src="images.importgroup" alt="">
               <span>批量导入</span>
             </el-upload>
@@ -65,11 +66,10 @@
             </template>
           </el-table-column>
         </el-table>
-        <div class="el-pagination-wrap fr">
-          <el-pagination background layout="prev, pager, next, jumper" @current-change="changeCurrent" :total="pagination.totalRows">
-          </el-pagination>
-        </div>
       </section>
+        <div class="el-pagination-wrap">
+          <table-pagination :total="count" @change="pageChange"></table-pagination>
+        </div>
     </section>
     <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
       <span>这是一段信息</span>
@@ -82,6 +82,8 @@
 </template>
 
 <script>
+  import tablePagination from '@/components/commons/tablePage.vue';
+
   import add from '@/assets/add.png';
   import del from '@/assets/del.png';
   import edit from '@/assets/edit.png';
@@ -91,8 +93,12 @@
 
   export default {
     name: 'violation',
+    components: {
+      tablePagination
+    },
     data() {
       return {
+        count: 0, //总记录数
         images: {
           add: add,
           del: del,
@@ -127,6 +133,10 @@
       this.getTableDatas();
     },
     methods: {
+      pageChange(page) {
+        this.currentPage = page
+        this.getTableDatas(page)
+      },
       // 获取表格数据
       getTableDatas(page) {
         let _this = this;
@@ -134,9 +144,10 @@
           "page": page || 1,
           words: this.words
         }
-        this.$ajxj.post('/getPManageDatas', this.parame).then(function (respnose) {
-          _this.tableData = respnose.data.items;
-          _this.pagination.totalRows = respnose.data.totalRows;
+        this.$ajxj.post('/getPManageDatas', this.parame).then(function (res) {
+          console.log(res.data.totalRows);
+          _this.count = res.data.totalRows;
+          _this.tableData = res.data.items;
         }).catch(function (error) {
           console.log(error);
         }).then(function (error) {

@@ -342,7 +342,7 @@ th {
 .el-pagination-wrap {
   width: 100%;
   text-align: right;
-  padding: 20px 0;
+  /* padding: 20px 0; */
   background-color: #fff;
 }
 
