@@ -1,37 +1,39 @@
 <template>
   <div id="posunusual">
-    <el-row style="margin: 10px 10px;">
-      <el-col :span="6">
-        <span>
-          <span class="puu-params-label">时间:</span>
-          <el-date-picker style="width: 40%" size="small" v-model="params.startTime" type="datetime" placeholder="选择开始时间"></el-date-picker>
-          <span>-</span>
-          <el-date-picker style="width: 40%" size="small" v-model="params.endTime" type="datetime" placeholder="选择结束时间"></el-date-picker>
-        </span>
-      </el-col>
-      <el-col :span="5">
-        <span class="puu-params-label">预警事件类型:</span>
-        <el-select size="small" v-model="params.warningType" placeholder="请选择">
-          <el-option v-for="item in warningTypes" :key="item.value" :label="item.label" :value="item.value"></el-option>
-        </el-select>
-      </el-col>
-      <el-col :span="5">
-        <span class="puu-params-label">服刑人员类型:</span>
-        <el-select size="small" v-model="params.prisonerType" placeholder="请选择">
-          <el-option v-for="item in prisonerTypes" :key="item.value" :label="item.label" :value="item.value"></el-option>
-        </el-select>
-      </el-col>
-      <el-col :span="6">
-        <span class="puu-params-label">服刑人员姓名/编号:</span>
-        <el-input size="small" class="puu-input" v-model="params.prisonerName" placeholder="请输入" clearable></el-input>
-      </el-col>
-      <el-col :span="1">
-        <el-button size="mini" type="primary" @click="doQuery()">查询</el-button>
-      </el-col>
-      <el-col :span="1">
-        <el-button size="mini" type="primary" @click="clear()">清空</el-button>
-      </el-col>
-    </el-row>
+    <section class="puu-params">
+      <el-row style="margin: 0px 10px;">
+        <el-col :span="6">
+          <span>
+            <span class="puu-params-label">时间:</span>
+            <el-date-picker style="width: 40%" size="small" v-model="params.startTime" type="datetime" placeholder="选择开始时间"></el-date-picker>
+            <span>-</span>
+            <el-date-picker style="width: 40%" size="small" v-model="params.endTime" type="datetime" placeholder="选择结束时间"></el-date-picker>
+          </span>
+        </el-col>
+        <el-col :span="5">
+          <span class="puu-params-label">预警事件类型:</span>
+          <el-select size="small" v-model="params.warningType" placeholder="请选择">
+            <el-option v-for="item in warningTypes" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="5">
+          <span class="puu-params-label">服刑人员类型:</span>
+          <el-select size="small" v-model="params.prisonerType" placeholder="请选择">
+            <el-option v-for="item in prisonerTypes" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="6">
+          <span class="puu-params-label">服刑人员姓名/编号:</span>
+          <el-input size="small" class="puu-input" v-model="params.prisonerName" placeholder="请输入" clearable></el-input>
+        </el-col>
+        <el-col :span="1">
+          <el-button size="mini" type="primary" class="search-btn" @click="doQuery()">查询</el-button>
+        </el-col>
+        <el-col :span="1">
+          <el-button size="mini" type="primary" class="search-btn" @click="clear()">清空</el-button>
+        </el-col>
+      </el-row>
+    </section>
     <section class="puu-items">
       <el-table :data="ppuTableDatas" stripe style="width: 100%;" height="780">
         <el-table-column prop="startTime"    label="预警开始时间" min-width="170px"></el-table-column>
@@ -202,5 +204,20 @@
 
   .puu-params-label {
     font-size: 14px;
+  }
+
+  .puu-params {
+    background-color: #f3f6f8;
+    position: fixed;
+    top: 60px;
+    z-index: 666;
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+  }
+
+  .puu-items {
+    position: absolute;
+    top: 120px;
   }
 </style>

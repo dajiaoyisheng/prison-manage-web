@@ -190,6 +190,7 @@
   .pn-aside {
     padding: 10px;
     border: 1px solid #C0C4CC;
+    background-color: white;
   }
 
   .pn-center {

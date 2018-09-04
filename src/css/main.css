@@ -278,6 +278,8 @@ th {
 
 .el-table-wrap {
   border: 1px solid #dcdcdc;
+  position: absolute;
+  top: 70px;
 }
 
 /* 表格最后一列可操作项 */
@@ -386,6 +388,10 @@ th {
 .filter-wrap {
   height: 70px;
   line-height: 70px;
+  max-width: 1200px;
+  position: fixed;
+  z-index: 999;
+  background: #f3f6f8;
 }
 
 /* 筛选条件end */
@@ -410,10 +416,12 @@ th {
 .el-input {
   width: none;
 }
+
 /* 内容begin */
 .w1200 {
   width: 1200px;
   margin: 0 auto;
+  position: relative;
 }
 
 .contentMain {
@@ -473,7 +481,6 @@ th {
 }
 
 /* 框上的文字end */
-
 /* 某块容器头部 */
 .item-header {
   height: 30px;

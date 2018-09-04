@@ -113,6 +113,12 @@
           grid: {
             top:'2%', right:'5%', bottom:'5%', left:'2%'
           },
+          tooltip : {
+              trigger: 'axis',
+              axisPointer : {
+                  type : 'shadow'
+              }
+          },
           xAxis: [{
             show: false,
             splitLine: {
@@ -153,6 +159,12 @@
         option2: {
           grid: {
             top:'2%', right:'5%', bottom:'5%', left:'2%'
+          },
+          tooltip : {
+              trigger: 'axis',
+              axisPointer : {
+                  type : 'shadow'
+              }
           },
           xAxis: [{
             show: false,

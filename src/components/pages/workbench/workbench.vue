@@ -18,7 +18,8 @@
           </div>
           <div class="bench-item">
             <div class="bench-item-left v-c">
-              <span class="num-big num-color">{{personnum}}</span>
+              <!-- <span class="num-big num-color">{{personnum}}</span> -->
+              <router-link class="num-big num-color" to="/personnelposition">{{personnum}}</router-link>
               <span>人</span>
             </div>
             <div class="bench-item-right v-c">
@@ -44,8 +45,8 @@
           </div>
         </section>
         <section class="item item-pics">
-          <div class="picS" v-for="item in picItems" :key="item.des">
-            <img :src="item.pic" alt="" @click="displayBImg(item.pic)">
+          <div class="picS" v-for="item in picItems" :key="item.des" @click="displayBImg(item.pic,$event)">
+            <img :src="item.pic" alt="">
           </div>
           <div class="page">
             <div class="el-pagination-wrap">
@@ -74,11 +75,6 @@
           </div>
           <div class="bench-item p-status-wrap">
             <ul class="p-status clearfix">
-              <!-- <li v-for="item in areasDetail" :key="item.area">
-                <span>{{item.area}}：</span>
-                <router-link class="num-color" to="/personnelposition">{{item.pNumItem}}</router-link>
-                <span>人</span>
-              </li> -->
               <li>
                 <span>在押人员:</span>
                 <router-link class="num-color" to="/personnelposition">123</router-link>
@@ -137,8 +133,8 @@
   </div>
 </template>
 <script>
-  import ppp from '@/assets/pp-p.png';
-  import logo from '@/assets/logo.png';
+  import area1 from '@/assets/area1.png';
+  import area2 from '@/assets/area2.png';
 
   import pagination from '@/components/commons/pagination.vue';
   export default {
@@ -148,34 +144,33 @@
     },
     data() {
       return {
-        // ppp: ppp,
-        // logo: logo,
-        imgBlock: '',
+
         picItems: [{
-            pic: ppp,
+            pic: area1,
             des: "1"
           },
           {
-            pic: logo,
+            pic: area2,
             des: "2"
           },
           {
-            pic: ppp,
+            pic: area2,
             des: "3"
           },
           {
-            pic: ppp,
+            pic: area1,
             des: "4"
           },
           {
-            pic: ppp,
+            pic: area1,
             des: "5"
           },
           {
-            pic: ppp,
+            pic: area2,
             des: "6"
           }
         ],
+        imgBlock: '',
         pageSize: 10, //每页显示20条数据
         currentPage: 1, //当前页码
         count: 0, //总记录数
@@ -199,25 +194,106 @@
             barGap: 0
           }
         },
+
         chartData: {
-          columns: ['行为', '个数', '人数'],
+          columns: ['日期', '个数', '人数'],
           rows: [{
-              '行为': '定位异常',
+              '日期': '定位异常',
               '个数': 193,
-              '人数': 93
+              '人数': 1093,
             },
             {
-              '行为': '定位异常',
-              '个数': 350,
-              '人数': 230
+              '日期': '作息异常',
+              '个数': 330,
+              '人数': 3230,
             },
             {
-              '行为': '定位异常',
-              '个数': 23,
-              '人数': 3
+              '日期': '违规预警',
+              '个数': 293,
+              '人数': 2623,
             }
           ]
         },
+
+        histogramExtend: {
+          color: ['#00c6dd', '#5867c2'],
+          tooltip: {
+            enterable: true, // 鼠标是否可进入tooltip
+            position: ['20%', '20%'],
+            trigger: 'axis',
+            axisPointer: { // 坐标轴指示器，坐标轴触发有效
+              type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+            },
+            formatter: function (params) {
+              console.log('params', params)
+              var barItem1 = params[0] || params;
+              var barItem2 = params[1] || params;
+              if (barItem1.componentType == 'series') {
+
+                var content =
+                  // '<div style="height: 200px; width: 200px; text-align: center;"><div style="height: 30px; width: 100%; border-bottom: 1px solid wheat;"><span>分类</span><span>分类</span><span>分类</span></div></div>';
+                  `<div class="tooltip-wrap">
+                    <div class="tooltip-left fl">
+                      <div class="tooltip-header">分类</div>
+                      <div>宿舍睡觉时段床上无人</div>
+                      <div>未在指定时段待在特定区域</div>
+                      <div>特定区域长时间逗留</div>
+                    </div>
+
+                    <div class="tooltip-right fr">
+                      <div class="tooltip-header">
+                        <span>${barItem2.seriesName}</span>
+                        <span>${barItem1.seriesName}</span>
+                      </div>
+
+                      <div>
+                        <a class="fontcolor text-decoration" href="/#/querystats/violation">${barItem1.data}</a>
+                        <a class="fontcolor text-decoration" href="/#/querystats/violation">${barItem2.data}</a>
+                      </div>
+                      <div>
+                        <a class="fontcolor text-decoration" href="/#/querystats/violation">${barItem1.data}</a>
+                        <a class="fontcolor text-decoration" href="/#/querystats/violation">${barItem2.data}</a>
+                      </div>
+                      <div>
+                        <a class="fontcolor text-decoration" href="/#/querystats/violation">${barItem1.data}</a>
+                        <a class="fontcolor text-decoration" href="/#/querystats/violation">${barItem2.data}</a>
+                      </div>
+                    </div>
+                    <span style="clear: both;content: '.';display: block;width: 0;height: 0;visibility: hidden;"></span>
+                  </div>`;
+                return content;
+              }
+            }
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+          },
+          xAxis: [{
+            type: 'category',
+            axisTick: {
+              alignWithLabel: true
+            }
+          }],
+          yAxis: [{
+            type: 'value'
+          }],
+          series: {
+            label: {
+              show: true,
+              position: "top"
+            },
+            barMaxWidth: 30,
+            barGap: 0,
+            type: 'bar',
+          },
+          legend: {
+            right: "5%",
+          }
+        },
+
 
         pieSettings: {
           legend: {
@@ -239,8 +315,6 @@
     created: function () {
       // http://localhost:8080/#/workbench?name=cjd
       // console.log(this.$route.query.name);// cjd
-      // console.log(this);// cjd
-
       var _this = this;
       // 犯人总数
       this.$ajxj.get('/getPrisonersData')
@@ -257,24 +331,9 @@
         })
         .then(function () {});
       // 人员状态
-      // this.$ajxj.get('/getPStatus')
-      //   .then(function (res) {
-      //     _this.pStatus = res.data.data
-      //     let temArray = [];
-      //     _this.pStatus.map(function (val) {
-      //       temArray.push(val.pNumItem)
-      //     })
-      //     _this.personnum = eval(temArray.join('+'))
-      //   })
-      //   .catch(function (error) {
-      //     console.log(error);
-      //   })
-      //   .then(function () {
-      //   });
       // 人员分类
       this.$ajxj.get('/getBenchChartPie')
         .then(function (res) {
-          console.log(res.data);
           res.data = {
             columns: ['日期', '访问用户'],
             rows: [{
@@ -323,6 +382,8 @@
         }).then(function () {});
     },
     mounted: function () {
+      this.imgBlock = this.picItems[0].pic;
+      document.getElementsByClassName("picS")[0].classList.add("curImageLayer");
       //请求第一页数据
       this.getList()
     },
@@ -330,9 +391,21 @@
       listen: function (page) {
         this.msg = '你点击了' + page + '页'
       },
-      displayBImg(curPic) {
-        console.log(curPic);
-        this.imgBlock = curPic
+      displayBImg(curPic, e) {
+        let curNode = e.currentTarget;
+        let nodeList = [];
+        let firstChild = curNode.parentNode.firstChild;
+        for (; firstChild; firstChild = firstChild.nextSibling) {
+          if (firstChild.nodeType === 1 && firstChild !== curNode) {
+            nodeList.push(firstChild);
+          }
+        }
+        nodeList.map(function (val) {
+          val.classList.remove("curImageLayer");
+        });
+
+        curNode.classList.add("curImageLayer");
+        this.imgBlock = curPic;
       },
       handleCurrentChange(val) {
         this.getTableData(val);
@@ -387,7 +460,7 @@
 
   .item-pics,
   .item-displayPic {
-    height: 665px;
+    height: 720px;
     background: #fff;
   }
 
@@ -403,6 +476,10 @@
     margin-bottom: 10px;
     border: 1px solid #e0e3ec;
     display: inline-block;
+    position: relative;
+
+    overflow: hidden;
+    cursor: pointer;
   }
 
   .picS:nth-child(odd) {
@@ -412,6 +489,25 @@
   .picS:nth-child(even) {
     float: right;
   }
+
+  .curImageLayer:after {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    content: attr(data-text);
+    transition: all 1s ease;
+    transform: translateY(0);
+    /* color: #FFF; */
+    cursor: not-allowed;
+  }
+
+  /* .curImageLayer:hover:after {
+    transform: translateY(0);
+  } */
 
   /* 分页 */
   .item-pics .page {
@@ -502,13 +598,14 @@
   }
 
   .item-displayPic-r {
-    height: 705px;
+    height: 760px;
     background: #fff;
   }
 
   .curDisplayPic img {
     width: 100%;
     height: 100%;
+    margin-top: 110px;
   }
 
   .p-status-wrap {
@@ -546,6 +643,38 @@
 
   ul.p-status li:last-child {
     border-bottom: none;
+  }
+
+</style>
+// tooltip样式
+<style>
+  .tooltip-wrap {
+    width: 260px;
+    height: 100px;
+  }
+
+  .tooltip-left {
+    display: inline-block;
+    border-right: 1px solid #fff;
+    width: 70%;
+  }
+
+  .tooltip-header {
+    border-bottom: 1px solid #fff;
+  }
+
+  .tooltip-right {
+    display: inline-block;
+    float: right;
+    width: 29%;
+  }
+
+  .fontcolor {
+    color: #fff;
+  }
+
+  .text-decoration {
+    text-decoration: underline;
   }
 
 </style>
