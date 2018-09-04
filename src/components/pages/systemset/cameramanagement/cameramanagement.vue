@@ -42,13 +42,13 @@
 
       </section>
       <section class="el-table-wrap">
-        <el-table :data="ppuTableDatas" stripe style="width: 100%;">
+        <el-table :data="prisonerInfo" stripe style="width: 100%;">
           <el-table-column prop="startTime" label="监区"></el-table-column>
           <el-table-column prop="endTime" label="楼宇"></el-table-column>
           <el-table-column prop="timeLen" label="楼层"></el-table-column>
           <el-table-column prop="prisonerType" label="房间/过道"></el-table-column>
           <el-table-column prop="warningType" label="摄像头编号"></el-table-column>
-          <el-table-column prop="warningArea" label="摄像头名称"></el-table-column>
+          <el-table-column prop="prisonerName" label="摄像头名称"></el-table-column>
           <el-table-column prop="warningArea" label="摄像头类型"></el-table-column>
           <el-table-column prop="warningArea" label="所在区域"></el-table-column>
           <el-table-column prop="warningArea" label="坐标位置"></el-table-column>
@@ -91,43 +91,16 @@
           prisonerName: "",
           period: [new Date(), new Date()]
         },
-        prisonerInfo: {},
-        warningTypes: [],
+        prisonerInfo: [],
+        warningTypes:[],
         prisonerTypes: [],
         ppuTableDatas: [],
-        pickerOptions: {
-          shortcuts: [{
-            text: '最近一周',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近一个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近三个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit('pick', [start, end]);
-            }
-          }]
-        }
       }
     },
     methods: {
       pageChange(page) {
         this.currentPage = page
-        this.getTableDatas(page)
+        this.getCameraList(page)
       },
       filter() {
 
@@ -146,36 +119,18 @@
       },
       getCameraList: function (page) {
         var _this = this;
-        this.$ajxj.get('/getCameraList',{page:page}).then(function (respnose) {
-          _this.prisonerInfo = respnose.data;
+        this.$ajxj.post('/getCameraList',{page:page}).then(function (res) {
+          console.log('res',res);
+          
+          _this.prisonerInfo = res.data.items;
+          _this.count = res.data.totalRows
         }).catch(function (error) {}).then(function (error) {
           console.log(error);
         });
       }
     },
     mounted() {
-      // 获取预警事件类型字典
-      var _this = this;
-      this.$ajxj.get('/getWarningTypes').then(function (respnose) {
-        _this.warningTypes = respnose.data;
-      }).catch(function (error) {}).then(function (error) {
-        console.log(error);
-      });
-
-      // 获取服刑人员类型字典
-      this.$ajxj.get('/getPrisonerTypes').then(function (respnose) {
-        _this.prisonerTypes = respnose.data;
-      }).catch(function (error) {}).then(function (error) {
-        console.log(error);
-      });
-
-      // 获取表格数据
-      this.$ajxj.get('/getPosunusualItems').then(function (respnose) {
-        _this.ppuTableDatas = respnose.data.items;
-        _this.pagination.totalRows = respnose.data.totalRows;
-      }).catch(function (error) {}).then(function (error) {
-        console.log(error);
-      });
+      this.getCameraList();
     }
   }
 

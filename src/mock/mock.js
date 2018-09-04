@@ -10,6 +10,7 @@ import sysOptionsData from './data/sysoptions';
 import prisonarea from './data/prisonarea';
 import { serverInfoData } from './data/serverinfo';
 import posunsualData from './data/posunusual';
+import cameraData from './data/camera';
 import pManageDatas from './data/pManageDatas';
 import calendarData from './data/calendar';
 import pointnameData from './data/pointname';
@@ -142,6 +143,15 @@ export default {
             return new Promise((resolve, reject) => {
                 setTimeout(() => {
                     defaultResData.data = posunsualData.ppuTableDatas;
+                    resolve([200, defaultResData])
+                }, 1000);
+            });
+        });
+
+        mock.onPost('/getCameraList').reply(config => {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    defaultResData.data = cameraData;
                     resolve([200, defaultResData])
                 }, 1000);
             });
