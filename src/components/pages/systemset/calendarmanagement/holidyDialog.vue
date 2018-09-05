@@ -1,171 +1,3 @@
-<<<<<<< .mine
-<template>
-    <div id="holidyDialog">
-        <el-row style="line-height: 30px;">
-            <el-col :span="5" :offset="19">
-                <el-button title="增加行" type="text" icon="el-icon-circle-plus-outline" size="mini" @click="addRow()">增加行</el-button>
-                <el-button title="保存" type="text" icon="el-icon-message" size="mini" @click="save()">保存</el-button>
-            </el-col>
-        </el-row>
-        <el-table :data="tableData" border stripe style="width: 100%" height="500">
-            <el-table-column label="名称" align="center">
-                <template slot-scope="scope">
-                    <el-input size="small" v-model="scope.row.name" clearable></el-input>
-                </template>
-            </el-table-column>
-            <el-table-column label="开始日期" width="180px" align="center">
-                <template slot-scope="scope">
-                    <el-date-picker style="width: 150px" size="small" v-model="scope.row.startDate" type="date" placeholder="选择日期"></el-date-picker>
-                </template>
-            </el-table-column>
-            <el-table-column label="结束日期" width="180px" align="center">
-                <template slot-scope="scope">
-                    <el-date-picker style="width: 150px" size="small" v-model="scope.row.endDate" type="date" placeholder="选择日期"></el-date-picker>
-                </template>
-            </el-table-column>
-            <el-table-column label="日期类型" width="120px" align="center">
-                <template slot-scope="scope">
-                    <el-select size="small" v-model="scope.row.dateType" placeholder="请选择">
-                        <el-option v-for="item in dateTypes" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                    </el-select>
-                </template>
-            </el-table-column>
-            <el-table-column label="操作" width="80px" align="center">
-                <template slot-scope="scope">
-                    <el-button @click.native.prevent="deleteRow(scope.$index, scope.row)" type="text" size="small">删除</el-button>
-                </template>
-            </el-table-column>
-        </el-table>
-    </div>
-</template>
-
-<script>
-    export default {
-        data() {
-            return {
-                message: "节假日管理",
-                tableData: []
-            }
-        },
-        methods: {
-            initTableData: function() {
-                var _this = this;
-                this.$ajxj.get('/getHolidayDates').then(function (respnose) {
-                    _this.tableData = respnose.data;
-                }).catch(function (error) {
-                }).then(function () {
-                    console.log(error);
-                });
-            },
-            addRow: function() {
-                var newRow = {
-                    name: '',
-                    startTime: "",
-                    endTime: "",
-                    dateType: ""
-                }
-                this.tableData.unshift(newRow);
-            },
-            deleteRow: function(index, row) {
-                this.tableData.splice(index, 1);
-            },
-            save: function() {
-                alert("成功保存:" + this.tableData.length + "条");
-            }
-        },
-        mounted() {
-            this.initTableData();
-        },
-        props: ['dateTypes']
-    }
-</script>
-
-||||||| .r177
-<template>
-    <div id="holidyDialog">
-        <el-row style="line-height: 30px;">
-            <el-col :span="5" :offset="19">
-                <el-button title="增加行" type="text" icon="el-icon-circle-plus-outline" size="mini" @click="addRow()">增加行</el-button>
-                <el-button title="保存" type="text" icon="el-icon-message" size="mini" @click="save()">保存</el-button>
-            </el-col>
-        </el-row>
-        <el-table :data="tableData" border stripe style="width: 100%" height="500">
-            <el-table-column label="名称" align="center">
-                <template slot-scope="scope">
-                    <el-input size="small" v-model="scope.row.name" clearable></el-input>
-                </template>
-            </el-table-column>
-            <el-table-column label="开始日期" width="180px" align="center">
-                <template slot-scope="scope">
-                    <el-date-picker style="width: 150px" size="small" v-model="scope.row.startDate" type="date" placeholder="选择日期"></el-date-picker>
-                </template>
-            </el-table-column>
-            <el-table-column label="结束日期" width="180px" align="center">
-                <template slot-scope="scope">
-                    <el-date-picker style="width: 150px" size="small" v-model="scope.row.endDate" type="date" placeholder="选择日期"></el-date-picker>
-                </template>
-            </el-table-column>
-            <el-table-column label="日期类型" width="120px" align="center">
-                <template slot-scope="scope">
-                    <el-select size="small" v-model="scope.row.dateType" placeholder="请选择">
-                        <el-option v-for="item in dateTypes" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                    </el-select>
-                </template>
-            </el-table-column>
-            <el-table-column label="操作" width="80px" align="center">
-                <template slot-scope="scope">
-                    <el-button @click.native.prevent="deleteRow(scope.$index, scope.row)" type="text" size="small">删除</el-button>
-                </template>
-            </el-table-column>
-        </el-table>
-    </div>
-</template>
-
-<script>
-    export default {
-        data() {
-            return {
-                message: "节假日管理",
-                tableData: []
-            }
-        },
-        methods: {
-            initTableData: function() {
-                var _this = this;
-                this.$ajxj.get('/getHolidayDates').then(function (respnose) {
-                    _this.tableData = respnose.data;
-                }).catch(function (error) {
-                }).then(function () {
-                    console.log(error);
-                });
-            },
-            addRow: function() {
-                var newRow = {
-                    name: '',
-                    startTime: "",
-                    endTime: "",
-                    dateType: ""
-                }
-                this.tableData.unshift(newRow);
-            },
-            deleteRow: function(index, row) {
-                this.tableData.splice(index, 1);
-            },
-            save: function() {
-                alert("成功保存:" + this.tableData.length + "条");
-            }
-        },
-        mounted() {
-            this.initTableData();
-        },
-        props: ['dateTypes']
-    }
-</script>
-
-<style>
-
-</style>
-=======
 <template>
     <div id="holidyDialog">
         <div id="tip">
@@ -196,7 +28,7 @@
         </div>
         <!-- 操作 -->
         <div class="action">
-          <span>添加</span>
+          <span @click="addRow">添加</span>
         </div>
         <!-- 表格 -->
         <div class="events-table">
@@ -216,25 +48,33 @@
             <table>
               <tbody>
                 <tr v-for="(event, index) in showEvents">
-                  <td>
-                    <el-input v-model="event.title" v-if="event.seen" @blur="loseFcous(index, event)" > </el-input>
+                  <td @click="cellClick(index, 'title')">
+                    <el-input v-model="event.title" autofocus="true" placeholder="输入名称" v-if="seen==('title'+index)" @blur="seen=null" ></el-input>
                     <span style="margin-left: 10px" v-else>{{ event.title }}</span>
                   </td>
-                  <td>
-                    <el-input v-model="event.beginDate" v-if="event.seen" @blur="loseFcous(index, event)" > </el-input>
+                  <td @click="cellClick(index, 'beginDate')">
+                    <el-date-picker v-model="event.beginDate" type="date" placeholder="选择开始时间" v-if="seen==('beginDate'+index)" @blur="seen=null" format="yyyy/MM/dd" value-format="yyyy/MM/dd"></el-date-picker>
                     <span style="margin-left: 10px" v-else>{{ event.beginDate }}</span>
                   </td>
-                  <td>
-                    <el-input v-model="event.endDate" v-if="event.seen" @blur="loseFcous(index, event)" > </el-input>
+                  <td @click="cellClick(index, 'endDate')">
+                    <el-date-picker v-model="event.endDate" type="date" placeholder="选择结束时间" v-if="seen==('endDate'+index)" @blur="seen=null" format="yyyy/MM/dd" value-format="yyyy/MM/dd"></el-date-picker>
                     <span style="margin-left: 10px" v-else>{{ event.endDate }}</span>
                   </td>
                   <td>
-
+                    <el-select v-model="event.type" placeholder="请选择日期类型">
+                      <el-option :label="'节假日'" :value="2"></el-option>
+                      <el-option :label="'非工作日'" :value="1"></el-option>
+                    </el-select>
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
+      </div>
+      <!-- 底部按钮 -->
+      <div id="buttons">
+        <button class="ok">确定</button>
+        <button class="can">取消</button>
       </div>
     </div>
 </template>
@@ -242,33 +82,30 @@
 <script>
     import Vue from 'Vue';
     import holiday from './2018Holiday.js';
-    import { isBeginEndDate } from "../../../commons/vue-event-calendar/tools.js";
+    import { isBeginEndDate, dateTimeFormatter } from "../../../commons/vue-event-calendar/tools.js";
     export default {
         data() {
             return {
+                seen: null,
                 message: "节假日管理",
                 tableData: [],
                 demoEvents: holiday,
                 feedbackDay: {},
                 clickDate: null,
-                clickDateEvent: {}
+                clickDateEvent: {},
             }
         },
         computed: {
           showEvents () {
             if (!this.clickDate || !this.clickDayEvent) {
-              return holiday;
+              return this.demoEvents;
             }
-            return isBeginEndDate(this.clickDate, this.clickDayEvent.beginDate, this.clickDayEvent.endDate) ? [this.clickDayEvent]:holiday;
+            return isBeginEndDate(this.clickDate, this.clickDayEvent.beginDate, this.clickDayEvent.endDate) ? [this.clickDayEvent]:this.demoEvents;
           }
         },
         methods: {
-            loseFcous(index, column) {
-              Vue.set(column, 'seen', false);
-            },
-            cellClick(row, column, cell) {
-              console.log(JSON.stringify(column.id), JSON.stringify(cell));
-              Vue.set(column, 'seen', true);
+            cellClick(index, key) {
+              this.seen = key + index;
             },
             getTypeText(type) {
               let map = {
@@ -276,9 +113,6 @@
                 '2': '节假日'
               }
               return map[type];
-            },
-            filterTag(value, row) {
-              return row.type == value;
             },
             handleItemClick(event) {
               this.feedbackDay = event;
@@ -301,12 +135,12 @@
             },
             addRow: function() {
                 var newRow = {
-                    title: '',
-                    beginDate: "",
-                    endDate: "",
-                    type: ""
+                    title: '名称',
+                    beginDate: dateTimeFormatter(new Date(), 'yyyy/MM/dd'),
+                    endDate: dateTimeFormatter(new Date(), 'yyyy/MM/dd'),
+                    type: 2
                 }
-                this.tableData.unshift(newRow);
+                this.demoEvents.unshift(newRow);
             },
             deleteRow: function(index, row) {
                 this.tableData.splice(index, 1);
@@ -444,8 +278,15 @@
       text-align: center;
     }
 
+    .events-table > .grid-body {
+      overflow-x: hidden;
+      width: 569px;
+      height: 200px;
+    }
+
     .events-table > .grid-body > table > tbody > tr{
       width:40px;
+      line-height: 42px;
     }
 
     .events-table > .grid-body > table > tbody > tr > td{
@@ -459,5 +300,41 @@
       text-align: center;
     }
 
+    .events-table > .grid-body > table > tbody > tr > td > .el-date-editor.el-input {
+      width: 132px;
+    }
+
+    .events-table > .grid-body > table > tbody > tr > td > .el-select{
+      width: 104px;
+    }
+
+    #buttons {
+      margin-top: 30px;
+      padding: 0;
+      line-height: 30px;
+      text-align: right;
+      width: 570px;
+    }
+
+    #buttons > button {
+      width: 80px;
+      height: 30px;
+      border-radius:2px;
+      font-size:14px;
+      font-family:PingFang-SC-Regular;
+      font-weight:400;
+      line-height:15px;
+    }
+
+    #buttons > .ok {
+      background: #59C4EE;
+      color:#FFFFFF;
+    }
+
+    #buttons > .can {
+      background: #FFFFFF;
+      color:#59C4EE;
+      border:1px solid #59C4EE;
+    }
+
 </style>
->>>>>>> .r179

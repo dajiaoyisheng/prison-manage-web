@@ -59,6 +59,7 @@ html {
 body {
   height: 100%;
   background: #f3f6f8;
+  font-family:"Microsoft Yahei";
 }
 
 font-family: "Helvetica Neue",
@@ -147,8 +148,9 @@ div.content-wrap {
 }
 
 .text-center {
-  text-align: right;
+  text-align: center;
 }
+
 
 /* 行内块级元素 */
 .inbl {

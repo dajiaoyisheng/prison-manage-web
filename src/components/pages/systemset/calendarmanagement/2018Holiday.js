@@ -15,46 +15,6 @@ let newHoliday = [{
     endDate: "2018/9/2",
     title: "双休日",
     type: 1
-}, {
-    beginDate: "2018/9/1",
-    endDate: "2018/9/2",
-    title: "双休日",
-    type: 1
-}, {
-    beginDate: "2018/9/1",
-    endDate: "2018/9/2",
-    title: "双休日",
-    type: 1
-}, {
-    beginDate: "2018/9/1",
-    endDate: "2018/9/2",
-    title: "双休日",
-    type: 1
-}, {
-    beginDate: "2018/9/1",
-    endDate: "2018/9/2",
-    title: "双休日",
-    type: 1
-}, {
-    beginDate: "2018/9/1",
-    endDate: "2018/9/2",
-    title: "双休日",
-    type: 1
-}, {
-    beginDate: "2018/9/1",
-    endDate: "2018/9/2",
-    title: "双休日",
-    type: 1
-}, {
-    beginDate: "2018/9/1",
-    endDate: "2018/9/2",
-    title: "双休日",
-    type: 1
-}, {
-    beginDate: "2018/9/1",
-    endDate: "2018/9/2",
-    title: "双休日",
-    type: 1
 }];
 
 export default newHoliday;

@@ -145,31 +145,21 @@
     },
     data() {
       this.pieExtend = {
-        // labelMap: {
-        //   level: '级别',
-        //   pNumber: '人数'
-        // },
+        tooltip: {
+          enterable: true,
+          trigger: 'item',
+          position: 'inside',
+          formatter: function (params) {
+            var pieItem1 = params[0] || params;
+            console.log('barItem1',pieItem1);
+            var content = `<div>${pieItem1.name}&nbsp;<a class="fontcolor text-decoration" href="/#/personnelposition">${pieItem1.value}</a>&nbsp;${pieItem1.percent}%</div>`;
+            return content;
+          }
+        },
         legend: {
           orient: 'vertical',
           top: "middle",
           right: "5%",
-          // data:this.data,
-          // formatter: function (name) {
-          // console.log('data', data);
-          //   var data = this.getSeries()[0].data; // 获取series中的data
-          //   var totalValue = data.reduce((acc, item) => { // 计算data中总数
-          //     acc += item.value;
-          //     return acc;
-          //   }, 0)
-          //   var targetValue; // 对应图例的值
-          //   data.map(item => {
-          //     if (item.name == name) {
-          //       targetValue = item.value; // 对相应的图例赋值
-          //     }
-          //   })
-          //   var p = (targetValue / totalValue * 100).toFixed(2); // 百分比
-          //   return name + ' ' + p + '%';
-          // },
         },
 
         // pie 圆心位置
@@ -325,6 +315,7 @@
           }
         },
         // 柱状图end
+
         chartSettingsPie: {
           labelMap: {
             level: '级别',
@@ -416,7 +407,7 @@
             }
           })
           // var p = (targetValue / totalValue * 100).toFixed(2); // 百分比
-          return name + targetValue;
+          return `${name} ${targetValue}`;
         };
         return options
       },

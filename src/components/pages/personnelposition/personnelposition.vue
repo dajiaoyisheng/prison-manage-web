@@ -235,7 +235,19 @@
           <p class="h-line">
             <!-- <p class="h-line"></p> -->
             <el-tabs v-model="activeName" @tab-click="handleClick" class="pos-res">
-              <el-tab-pane label="当前活动区域" name="first">当前活动区域</el-tab-pane>
+              <el-tab-pane label="当前活动区域" name="first">
+                <img :src="currentPos" alt="">
+                <!-- 视频 -->
+                <video width="320" height="240" controls="controls">
+                  <source src="movie.ogg" type="video/ogg">
+                  <source src="movie.mp4" type="video/mp4"> Your browser does not support the video tag.
+                </video>
+                <!-- 视频 -->
+                <video width="320" height="240" controls="controls">
+                  <source src="movie.ogg" type="video/ogg">
+                  <source src="movie.mp4" type="video/mp4"> Your browser does not support the video tag.
+                </video>
+              </el-tab-pane>
               <el-tab-pane label="历史活动区域" name="second">
                 <section class="filter-wrap">
                   <span class="block">
@@ -266,20 +278,15 @@
                     </el-table-column>
                   </el-table>
                   <div class="el-pagination-wrap">
-                    <!-- <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                      :current-page.sync="currentPage3" :page-size="10" layout="prev, pager, next, jumper" :total="this.page">
-                    </el-pagination> -->
                     <table-pagination :page-index="currentPage" :total="count" :page-size="pageSize" @change="pageChange"></table-pagination>
                   </div>
-                  <!-- 视频 -->
-                  <video width="320" height="240" controls="controls">
-                    <source src="movie.ogg" type="video/ogg">
-                    <source src="movie.mp4" type="video/mp4"> Your browser does not support the video tag.
-                  </video>
                 </section>
               </el-tab-pane>
             </el-tabs>
           </p>
+        </section>
+        <section>
+          <!-- 视频位置? -->
         </section>
       </section>
     </section>
@@ -287,6 +294,7 @@
 </template>
 
 <script>
+  import currentPos from '@/assets/currentPos.png';
   import tablePagination from '@/components/commons/tablePage.vue';
   export default {
     name: 'personnelposition',
@@ -295,6 +303,7 @@
     },
     data() {
       return {
+        currentPos: currentPos,
         input: '',
         loading: false,
         pPositionData: [],
@@ -302,7 +311,7 @@
         pageSize: 10, //每页显示20条数据
         currentPage: 1, //当前页码
         count: 0, //总记录数
-        
+
         pPTableData: [],
         options: [{
           value: '选项1',
@@ -391,6 +400,9 @@
     width: 15%;
     background: #fff;
     display: inline-block;
+    border-right: 1px solid #e0e3ec;
+    overflow: auto;
+    height: calc(100% - 60px);
   }
 
   .pposition-l .pp-td-w {

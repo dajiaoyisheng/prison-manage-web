@@ -1,25 +1,41 @@
 <template>
   <div>
     <section class="left-tree">
-      <v-tree :tree-data="Prisonareatree" v-on:handle-node-click="handleNodeClick"></v-tree>
+      <!-- <v-tree :tree-data="Prisonareatree" v-on:handle-node-click="handleNodeClick"></v-tree> -->
+      <el-tree :data="treeData" node-key="id" @node-click="handleNodeClick" default-expand-all :expand-on-click-node="false">
+        <span class="custom-tree-node" slot-scope="{ node, data }">
+          <span v-if="data.isWarning == false"><i :class="node.icon"></i>{{ node.label }}</span>
+          <span v-if="data.isWarning == true"><i><img :src="images.warning"></i>{{ node.label }}</span>
+        </span>
+      </el-tree>
     </section>
     <section class="right-main">
       <!-- 监狱 -->
-      <section v-show="isShowPrison" class="item prison">监狱</section>
+      <section v-show="isShowPrison" class="item prison area">
+        <h3 class="title text-center">杭州某某监狱</h3>
+        <img :src="images.area" alt="">
+      </section>
       <!-- 楼层 -->
       <section v-show="isShowfloor" class="item prison">楼层</section>
       <!-- 监区 -->
       <section v-show="isShowMonitorArea" class="item prison">监区</section>
       <!-- 监舍 -->
       <section v-show="isShowMonitorHouse" class="monitor-house clearfix">
-        <section class="center fl">中</section>
+        <!-- 监狱 -->
+        <section class="center fl">
+          <h3 class="title text-center">楼层</h3>
+          <img :src="images.floor" alt="">
+        </section>
+        <!-- <section class="center fl">
+
+        </section> -->
         <section class="right fr">
           <section class="house-floor">
             <p class="item-header">楼层</p>
             <div class="block">
               <el-carousel trigger="click" height="150px" :autoplay="false" indicator-position="none" arrow="always">
-                <el-carousel-item v-for="item in 4" :key="item">
-                  <h3>{{ item }}</h3>
+                <el-carousel-item v-for="item in floors" :key="item">
+                  <img :src="item" alt="">
                 </el-carousel-item>
               </el-carousel>
             </div>
@@ -70,6 +86,7 @@
     top: 60px;
     left: 0;
     height: 100%;
+    background: #fff;
   }
 
   .right-main {
@@ -83,9 +100,22 @@
     border: 1px solid #e0e3ec;
   }
 
+  .title {
+    height: 50px;
+    line-height: 50px;
+    font-size: 26px;
+  }
+  .area {
+    height: 1100px;
+    background: #fff;
+    border: 1px solid #e0e3ec;
+  }
+
   .right-main .monitor-house .center {
     display: inline-block;
     width: 73%;
+    height: 1100px;
+    background: #fff;
     border: 1px solid #e0e3ec;
   }
 
@@ -106,14 +136,34 @@
 
 </style>
 <script>
-  import vTree from '@/components/commons/tree.vue';
+  import right from '@/assets/right.gif';
+  import left from '@/assets/left.gif';
+  import video from '@/assets/video.png';
+  import warning from '@/assets/warning.png';
+
+  import area from '@/assets/area.png';
+
+  import floor from '@/assets/floor.png';
+  import floor1 from '@/assets/floor1.png';
+  // import floor1 from '@/assets/floor.png';
+
+  // import vTree from '@/components/commons/tree.vue';
   export default {
     name: 'tvmonitor',
-    components: {
-      vTree
-    },
+    // components: {
+    //   vTree
+    // },
     data() {
       return {
+        images: {
+          right: right,
+          left: left,
+          video: video,
+          warning: warning,
+          area: area,
+          floor: floor
+        },
+        floors: [floor, floor1],
         // 控制右侧显示隐藏
         isShowPrison: true,
         isShowfloor: false,
@@ -122,59 +172,20 @@
 
         Prisonareatree: [],
         pPositionData: [],
+        treeData: []
       }
     },
     created: function () {
       var _this = this;
-      // 犯人总数
       this.$ajxj.get('/getPrisonareatree')
         .then(function (res) {
-          res.data = [{
-            label: '第一监区',
-            children: [{
-              label: '一号监舍楼',
-              children: [{
-                label: '三级 1-1-1'
-              }]
-            }]
-          }, {
-            label: '第二监区',
-            children: [{
-              label: '二级 2-1',
-              children: [{
-                label: '三级 2-1-1'
-              }]
-            }, {
-              label: '二级 2-2',
-              children: [{
-                label: '三级 2-2-1'
-              }]
-            }]
-          }, {
-            label: '第三监区',
-            children: [{
-              label: '二级 3-1',
-              children: [{
-                label: '三级 3-1-1'
-              }]
-            }, {
-              label: '二级 3-2',
-              children: [{
-                label: '三级 3-2-1'
-              }]
-            }]
-          }]
-          _this.Prisonareatree = res.data;
-          console.log(res.data);
-
+          _this.treeData = res.data;
         })
         .catch(function (error) {
-          // handle error
           console.log(error);
         })
-        .then(function () {
-          // always executed
-        });
+        .then(function () {});
+
       this.$ajxj.get('/pPositionData')
         .then(function (res) {
           // _this.loading = false;
@@ -185,6 +196,9 @@
         }).then(function () {});
     },
     methods: {
+      // handleNodeClick: function (data) {
+      //   this.pnMain = true;
+      // },
       handleNodeClick(data, d1, d2) {
         this.isShowMonitorHouse = true;
         this.isShowPrison = false;
