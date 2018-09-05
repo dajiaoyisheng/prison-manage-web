@@ -210,7 +210,7 @@
   }
 
 </script>
-<style>
+<style scoped>
   /* .q-v-t {
     height: 70px;
     line-height: 70px;

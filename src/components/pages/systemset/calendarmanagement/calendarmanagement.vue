@@ -6,7 +6,7 @@
                     <el-col :span="22" class="cal-header-title"><span>日历管理</span></el-col>
                     <el-col :span="2" class="cal-header-toolbar">
                         <el-button type="primary" size="mini" @click="holidyDialog=true">节假日管理</el-button>
-                        <el-dialog title="节假日管理" :visible.sync="holidyDialog" width="750px" :before-close="holidyDialogClose">
+                        <el-dialog title="节假日管理" :visible.sync="holidyDialog" width="600px" :before-close="holidyDialogClose">
                             <v-holidyDialog :dateTypes='dateTypes' ref="holidyDialog"></v-holidyDialog>
                         </el-dialog>
                     </el-col>
@@ -267,11 +267,5 @@
     .cal-main-params .pp-input {
         width: 9.5%;
         margin: 0px 15px 0px 5px;
-    }
-</style>
-
-<style>
-    #calendarmanagement .el-dialog__body {
-        padding: 10px 20px;
     }
 </style>

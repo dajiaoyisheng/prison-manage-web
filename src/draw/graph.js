@@ -10,6 +10,7 @@ class Graph {
         shape = shape || {};
         this.x = pos.x;
         this.y = pos.y;
+        this.index = shape.index;
         this.points = shape.points || [];
         this.sides = shape.sides || 5;
         this.stars = shape.stars || 5;
@@ -79,11 +80,11 @@ class Graph {
     //绘制顶点
     drawPoints(ctx) {
         ctx.save();
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = '#999';
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = '#00BFF3';
         this.points.forEach(p => {
             ctx.beginPath();
-            ctx.arc(p.x, p.y, 5, 0, Math.PI * 2, false);
+            ctx.arc(p.x, p.y, 1, 0, Math.PI * 2, false);
             ctx.stroke();
         });
         ctx.restore();
@@ -106,11 +107,13 @@ class Graph {
         ctx.lineWidth = this.lineWidth;
         ctx.strokeStyle = this.strokeStyle;
         ctx.fillStyle = this.fillStyle;
+        ctx.globalCompositeOperation = "destination-out";
+        ctx.globalAlpha = 1; //设置不透明
         this.createPath(ctx);
-        ctx.stroke();
         if (this.isFill) { ctx.fill(); }
+        ctx.stroke();
         ctx.restore();
-    }
+    };
 
     toData() {
         return {

@@ -30,8 +30,8 @@ export default class Action {
             "control": true,
             "grid": true,
             "lineWidth": "1",
-            "strokeStyle": "#ff0000", //线颜色
-            "fillStyle": "#F6FCFE", //填充颜色
+            "strokeStyle": "#00BFF3", //线颜色
+            "fillStyle": "#FFFFFF", //填充颜色
             "type": "rect",
             "isFill": true
         }
@@ -68,7 +68,6 @@ export default class Action {
     factory(type, pos, shape) {
         switch (type) {
             case 'rect':
-                console.log(shape);
                 return new Rect(pos, shape);
             case 'round':
                 return new Round(pos, shape);
@@ -108,7 +107,8 @@ export default class Action {
     //绘制图形列表
     drawGraph() {
         this.ctx.clearRect(0, 0, this.W, this.H);
-        var showControl = this.shape.control;
+        this.drawMask();
+        let showControl = this.shape.control;
         this.shapes.forEach(shape => {
             shape.draw(this.ctx);
             if (showControl) {
@@ -122,6 +122,24 @@ export default class Action {
         }
     }
 
+    //绘制蒙版
+    drawMask() {
+        this.ctx.beginPath();
+        this.ctx.rect(0, 0, this.W, this.H);
+        this.ctx.globalAlpha = 0.4; //设置透明度
+        this.ctx.closePath();
+        this.ctx.fill();
+    };
+
+    //删除
+    delete() {
+        if (this.activeShape != null) {
+            let index = this.activeShape.index;
+            this.shapes.splice(index, 1);
+            this.drawGraph();
+            this.activeShape = null;
+        }
+    };
     //重做
     redo() {
 
@@ -159,6 +177,7 @@ export default class Action {
                 self.activeShape = null;
                 //新建图形
                 if (self.drawing) {
+                    self.shape.index = self.shapes.length;
                     self.activeShape = self.factory(self.shape.type, self.mouseStart, self.shape);
                     self.activeShape.lineWidth = self.shape.lineWidth;
                     self.activeShape.strokeStyle = self.shape.strokeStyle;
@@ -175,7 +194,6 @@ export default class Action {
                         }
                     }
                 }
-                // saveImageData();
                 self.canvas.addEventListener('mousemove', self.mouseMove, false);
                 self.canvas.addEventListener('mouseup', self.mouseUp, false);
             }, false);
@@ -185,19 +203,7 @@ export default class Action {
                 self.currPos = canvasFunc.WindowToCanvas(self.canvas, e.clientX, e.clientY);
             }, false);
 
-            // 删除图形
-            document.body.onkeydown = function(e) {
-                if (e.keyCode == 8) {
-                    for (var i = 0, len = this.shapes.length; i < len; i++) {
-                        if (this.shapes[i].isInPath(this.ctx, this.currPos) > -1) {
-                            this.shapes.splice(i--, 1);
-                            this.drawGraph();
-                            break;
-                        }
-                    }
-                }
-            };
             this.hasInit = true;
         }
     }
-}
+};

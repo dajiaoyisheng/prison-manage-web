@@ -278,8 +278,8 @@ th {
 
 .el-table-wrap {
   border: 1px solid #dcdcdc;
-  position: absolute;
-  top: 70px;
+  /* position: absolute;
+  top: 70px; */
 }
 
 /* 表格最后一列可操作项 */
@@ -389,8 +389,8 @@ th {
   height: 70px;
   line-height: 70px;
   max-width: 1200px;
-  position: fixed;
-  z-index: 999;
+  /* position: fixed;
+  z-index: 999; */
   background: #f3f6f8;
 }
 

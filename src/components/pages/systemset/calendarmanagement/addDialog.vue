@@ -116,7 +116,7 @@
     }
 </script>
 
-<style>
+<style scoped>
     #addDialog .el-row {
         margin-bottom: 0px;
     }

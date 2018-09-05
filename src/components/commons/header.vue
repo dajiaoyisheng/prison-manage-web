@@ -3,15 +3,14 @@
   <!-- nav -->
   <div>
     <nav class="nav-wrap">
+
       <el-menu :default-active="$route.path" router class="nav-ul" mode="horizontal" @select="handleSelect"
         background-color="#2f323c" text-color="#a0abb5" active-text-color="#fff">
-        
-        <!-- <el-menu-item> -->
+
         <div class="logoWrap">
           <img class="logo" :src="logo" alt="">
-          <span>久其智能监狱管理系统</span>
+          <img class="name" :src="name" alt="">
         </div>
-        <!-- </el-menu-item> -->
 
         <el-menu-item index="/workbench">
           <router-link to="/workbench">工作台</router-link>
@@ -72,11 +71,13 @@
 
 <script>
   import logo from '@/assets/logo.png'
+  import name from '@/assets/name.png'
   export default {
     name: 'Header',
     data() {
       return {
         logo: logo,
+        name: name,
         activeIndex: '1',
         input: '',
       };
@@ -110,9 +111,15 @@
     line-height: 60px;
     margin-right: 5%;
   }
-  .logoWrap img{
+
+  .logoWrap:focus {
+    outline: none;
+  }
+
+  .logoWrap img {
     vertical-align: middle;
   }
+
   .logoWrap span {
     color: rgba(255, 255, 255, 1);
   }

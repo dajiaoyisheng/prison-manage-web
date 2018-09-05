@@ -21,11 +21,15 @@ import {
 Vue.component(VePie.name, VePie);
 Vue.component(VeBar.name, VeBar);
 Vue.component(VeHistogram.name, VeHistogram);
+
+import vueEventCalendar from '@/components/commons/vue-event-calendar/index';
+Vue.use(vueEventCalendar)
+
 import Mock from './mock';
 
 import App from './App';
 // if (process.env.NODE_ENV === 'development') {
-    Mock.bootstrap();
+Mock.bootstrap();
 // }
 
 Vue.config.productionTip = false;

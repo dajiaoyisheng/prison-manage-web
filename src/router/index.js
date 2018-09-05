@@ -8,7 +8,7 @@ import pointname from '@/components/pages/pointname/pointname.vue'
 import posunusual from '@/components/pages/querystats/posunusual/posunusual.vue'
 import violation from '@/components/pages/querystats/violation/violation.vue'
 import prewarningstats from '@/components/pages/querystats/prewarningstats/prewarningstats.vue'
-import querystats from '@/components/pages/querystats/querystats.vue'
+// import querystats from '@/components/pages/querystats/querystats.vue'
 import prisonmanagement from '@/components/pages/systemset/prisonmanagement/prisonmanagement.vue'
 import prisonermanagement from '@/components/pages/systemset/prisonermanagement/prisonermanagement.vue'
 import operation from '@/components/pages/systemset/prisonermanagement/operation.vue'
@@ -66,11 +66,11 @@ const router = new Router({
                 name: 'prewarningstats',
                 component: prewarningstats
             },
-            {
-                path: '/querystats',
-                name: 'querystats',
-                component: querystats
-            },
+            // {
+            //     path: '/querystats',
+            //     name: 'querystats',
+            //     component: querystats
+            // },
             {
                 path: '/systemset/prisonmanagement',
                 name: 'prisonmanagement',
@@ -129,8 +129,8 @@ router.beforeEach((to, from, next) => {
         next()
     } else if (to.path === '/querystats/prewarningstats') {
         next()
-    } else if (to.path === '/querystats') {
-        next()
+    // } else if (to.path === '/querystats') {
+    //     next()
     } else if (to.path === '/systemset/prisonmanagement') {
         next()
     } else if (to.path === '/systemset/prisonermanagement') {
