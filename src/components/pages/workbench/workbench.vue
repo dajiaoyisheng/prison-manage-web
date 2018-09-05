@@ -40,7 +40,7 @@
           </div>
           <div class="bench-item">
             <template>
-              <ve-histogram :data="chartData" height="100%" width="100%" :extend="histogramExtend"></ve-histogram>
+              <ve-histogram :data="chartData" height="100%" width="100%" :extend="histogramExtend" :settings="chartSettings"></ve-histogram>
             </template>
           </div>
         </section>
@@ -64,7 +64,8 @@
           </div>
           <div class="bench-item">
             <template>
-              <ve-pie :data="benchChartPieData" width="100%" height="100%" :judge-width="true" :extend="pieSettings"></ve-pie>
+              <ve-pie :data="benchChartPieData" :settings="chartSettingsPie" width="100%" height="100%" :judge-width="true"
+                :extend="pieExtend" :after-config="afterConfig"></ve-pie>
             </template>
           </div>
         </section>
@@ -143,8 +144,43 @@
       pagination
     },
     data() {
-      return {
+      this.pieExtend = {
+        // labelMap: {
+        //   level: '级别',
+        //   pNumber: '人数'
+        // },
+        legend: {
+          orient: 'vertical',
+          top: "middle",
+          right: "5%",
+          // data:this.data,
+          // formatter: function (name) {
+          // console.log('data', data);
+          //   var data = this.getSeries()[0].data; // 获取series中的data
+          //   var totalValue = data.reduce((acc, item) => { // 计算data中总数
+          //     acc += item.value;
+          //     return acc;
+          //   }, 0)
+          //   var targetValue; // 对应图例的值
+          //   data.map(item => {
+          //     if (item.name == name) {
+          //       targetValue = item.value; // 对相应的图例赋值
+          //     }
+          //   })
+          //   var p = (targetValue / totalValue * 100).toFixed(2); // 百分比
+          //   return name + ' ' + p + '%';
+          // },
+        },
 
+        // pie 圆心位置
+        series: {
+          center: ['30%', '50%'],
+          label: {
+            show: false,
+          },
+        }
+      };
+      return {
         picItems: [{
             pic: area1,
             des: "1"
@@ -181,58 +217,54 @@
         pStatus: [],
         benchChartPieData: [],
         benchChartbarData: [],
-        histogramExtend: {
-          legend: {
-            right: "5%",
-          },
-          series: {
-            label: {
-              show: true,
-              position: "top"
-            },
-            barMaxWidth: 30,
-            barGap: 0
+        // 柱状图beging
+        // 配置
+        chartSettings: {
+          labelMap: {
+            action: '违规行为',
+            number: '个数',
+            pNumber: '人数'
           }
         },
-
+        // 数据
         chartData: {
-          columns: ['日期', '个数', '人数'],
+          columns: ['action', 'number', 'pNumber'],
           rows: [{
-              '日期': '定位异常',
-              '个数': 193,
-              '人数': 1093,
+              'action': '定位异常',
+              // '具体行为':['宿舍睡觉时段床上无人','未在指定时段待在特定区域','特定区域长时间逗留'],
+              'number': 193,
+              'pNumber': 1093,
             },
             {
-              '日期': '作息异常',
-              '个数': 330,
-              '人数': 3230,
+              'action': '作息异常',
+              'number': 330,
+              'pNumber': 3230,
             },
             {
-              '日期': '违规预警',
-              '个数': 293,
-              '人数': 2623,
+              'action': '违规预警',
+              'number': 293,
+              'pNumber': 2623,
             }
           ]
         },
-
+        // 配置
         histogramExtend: {
           color: ['#00c6dd', '#5867c2'],
           tooltip: {
             enterable: true, // 鼠标是否可进入tooltip
             position: ['20%', '20%'],
-            trigger: 'axis',
-            axisPointer: { // 坐标轴指示器，坐标轴触发有效
-              type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-            },
+            trigger: 'axis', // 触发方式
+            // axisPointer: { // 坐标轴指示器，坐标轴触发有效
+            //   type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+            // },
             formatter: function (params) {
-              console.log('params', params)
               var barItem1 = params[0] || params;
               var barItem2 = params[1] || params;
+              console.log('barItem1', barItem1)
+              console.log('barItem2', barItem2)
               if (barItem1.componentType == 'series') {
-
                 var content =
-                  // '<div style="height: 200px; width: 200px; text-align: center;"><div style="height: 30px; width: 100%; border-bottom: 1px solid wheat;"><span>分类</span><span>分类</span><span>分类</span></div></div>';
-                  `<div class="tooltip-wrap">
+                  `<div class="tooltip-wrap clearfixed">
                     <div class="tooltip-left fl">
                       <div class="tooltip-header">分类</div>
                       <div>宿舍睡觉时段床上无人</div>
@@ -259,7 +291,6 @@
                         <a class="fontcolor text-decoration" href="/#/querystats/violation">${barItem2.data}</a>
                       </div>
                     </div>
-                    <span style="clear: both;content: '.';display: block;width: 0;height: 0;visibility: hidden;"></span>
                   </div>`;
                 return content;
               }
@@ -293,20 +324,15 @@
             right: "5%",
           }
         },
-
-
-        pieSettings: {
-          legend: {
-            orient: 'vertical',
-            top: "middle",
-            right: "5%",
-
-          },
-          // pie 圆心位置
-          series: {
-            center: ['30%', '50%'],
+        // 柱状图end
+        chartSettingsPie: {
+          labelMap: {
+            level: '级别',
+            pNumber: '人数'
           }
         },
+
+
         prisonersStutas: [],
         value1: true,
         benchChartPie: {}
@@ -335,30 +361,22 @@
       this.$ajxj.get('/getBenchChartPie')
         .then(function (res) {
           res.data = {
-            columns: ['日期', '访问用户'],
+            columns: ['level', 'pNumber'],
             rows: [{
-                '日期': '1/1',
-                '访问用户': 1393
+                'level': '特严级',
+                'pNumber': 1393
               },
               {
-                '日期': '1/2',
-                '访问用户': 3530
+                'level': '严管级',
+                'pNumber': 3530
               },
               {
-                '日期': '1/3',
-                '访问用户': 2923
+                'level': '特宽级',
+                'pNumber': 2923
               },
               {
-                '日期': '1/4',
-                '访问用户': 1723
-              },
-              {
-                '日期': '1/5',
-                '访问用户': 3792
-              },
-              {
-                '日期': '1/6',
-                '访问用户': 4593
+                'level': '普通级',
+                'pNumber': 1723
               }
             ]
           }
@@ -388,6 +406,21 @@
       this.getList()
     },
     methods: {
+      afterConfig(options) {
+        options.legend.formatter = function (name) { // legend中的formatter传入一个name属性
+          var data = options.series[0].data; // 获取series中的data
+          var targetValue; // 对应图例的值
+          data.map(item => {
+            if (item.name == name) {
+              targetValue = item.value; // 对相应的图例赋值
+            }
+          })
+          // var p = (targetValue / totalValue * 100).toFixed(2); // 百分比
+          return name + targetValue;
+        };
+        return options
+      },
+
       listen: function (page) {
         this.msg = '你点击了' + page + '页'
       },
