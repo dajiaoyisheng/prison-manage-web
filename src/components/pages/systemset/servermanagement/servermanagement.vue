@@ -5,7 +5,7 @@
                 <el-row>
                     <el-col :span="23" class="sm-header-title"><span>服务地址管理</span></el-col>
                     <el-col :span="1" class="sm-header-toolbar">
-                        <el-button type="primary" size="mini" @click="saveServerInfo()">保存</el-button>
+                        <el-button type="primary" size="mini" class="search-btn" @click="saveServerInfo()">保存</el-button>
                     </el-col>
                 </el-row>
             </el-header>
@@ -16,25 +16,25 @@
                         <el-row class="item">
                             <el-col :span="6"><span>服务地址：</span></el-col>
                             <el-col :span="10">
-                                <el-input placeholder="请输入内容" v-model="serverItem.address" clearable></el-input>
+                                <el-input placeholder="请输入服务地址" v-model="serverItem.address" clearable></el-input>
                             </el-col>
                         </el-row>
                         <el-row class="item">
                             <el-col :span="6"><span>用户名：</span></el-col>
                             <el-col :span="10">
-                                <el-input placeholder="请输入内容" v-model="serverItem.username" clearable></el-input>
+                                <el-input placeholder="请输入用户名" v-model="serverItem.username" clearable></el-input>
                             </el-col>
                         </el-row>
                         <el-row class="item">
                             <el-col :span="6"><span>密码：</span></el-col>
                             <el-col :span="10">
-                                <el-input placeholder="请输入内容" v-model="serverItem.password" clearable></el-input>
+                                <el-input placeholder="请输入密码" v-model="serverItem.password" clearable></el-input>
                             </el-col>
                         </el-row>
                         <el-row class="item">
                             <el-col :span="6"><span>队列名：</span></el-col>
                             <el-col :span="10">
-                                <el-input placeholder="请输入内容" v-model="serverItem.queuename" clearable></el-input>
+                                <el-input placeholder="请输入队列名" v-model="serverItem.queuename" clearable></el-input>
                             </el-col>
                         </el-row>
                     </div>
@@ -50,24 +50,27 @@
                         </el-row>
                         <el-row class="item">
                             <el-col :span="6"><span>启动/关闭服务地址：</span></el-col>
-                            <el-col :span="10"><el-input placeholder="请输入内容" v-model="engineItem.address" clearable></el-input></el-col>
+                            <el-col :span="10"><el-input placeholder="请输入服务地址" v-model="engineItem.address" clearable></el-input></el-col>
                         </el-row> 
                     </div>
                 </el-card>
                 <el-card class="sm-main-item">
-                    <div slot="header" class="clearfix"><span>特殊作息来源服务地址</span></div>
+                    <div slot="header" class="clearfix">
+                        <span>特殊作息来源服务地址</span>
+                        <!-- <el-button style="float: right; padding: 3px 0" type="text" icon="el-icon-circle-plus-outline" @click="addServerInfo()">新增</el-button> -->
+                    </div>
                     <div class="sm-main-item-content" v-for="(item, key) in specialItems" :key="item" v-bind:class="{'active' : key!=0}">
                         <el-row class="item">
                             <el-col :span="6"><span>服务地址：</span></el-col>
-                            <el-col :span="10"><el-input placeholder="请输入内容" v-model="item.address" clearable></el-input></el-col>
+                            <el-col :span="10"><el-input placeholder="请输入服务地址" v-model="item.address" clearable></el-input></el-col>
                         </el-row>
                         <el-row class="item">
                             <el-col :span="6"><span>用户名：</span></el-col>
-                            <el-col :span="10"><el-input placeholder="请输入内容" v-model="item.username" clearable></el-input></el-col>
+                            <el-col :span="10"><el-input placeholder="请输入用户名" v-model="item.username" clearable></el-input></el-col>
                         </el-row>
                         <el-row class="item">
                             <el-col :span="6"><span>密码：</span></el-col>
-                            <el-col :span="10"><el-input placeholder="请输入内容" v-model="item.password" clearable></el-input></el-col>
+                            <el-col :span="10"><el-input placeholder="请输入密码" v-model="item.password" clearable></el-input></el-col>
                         </el-row>
                     </div>
                 </el-card>
@@ -109,6 +112,14 @@
                         this.engineItem.switch = true;
                     });
                 }
+            },
+            addServerInfo: function() {
+                var newServer = {
+                    address: '',
+                    username: '',
+                    password: ''
+                }
+                this.specialItems.unshift(newServer);
             }
         },
         mounted() {
@@ -139,6 +150,7 @@
 
     .el-main {
         height: 100%;
+        padding: 0px 10px;
     }
 
     .sm-main-item {

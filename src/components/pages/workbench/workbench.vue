@@ -1,24 +1,13 @@
 <template>
   <div class="workbench-wrap w1200">
-    <!-- <el-row type="flex" class="row-bg" justify="end">
-       <el-col class="itemWrap" :span="3">
-        <span>视频分析引擎</span>
-        <el-switch v-model="value1" active-color="#13ce66" inactive-color="#ff4949">
-        </el-switch>
-      </el-col>
-    </el-row> -->
-    <!-- 犯人总数 -->
-    <!-- <el-row :gutter="30"> -->
     <section class="contentWrap clearfix">
       <section class="l fl">
         <section class="item">
           <div class="bench-item-header">
-            <img src="" alt="">
             <span>犯人总数</span>
           </div>
           <div class="bench-item">
             <div class="bench-item-left v-c">
-              <!-- <span class="num-big num-color">{{personnum}}</span> -->
               <router-link class="num-big num-color" to="/personnelposition">{{personnum}}</router-link>
               <span>人</span>
             </div>
@@ -35,12 +24,11 @@
         </section>
         <section class="item">
           <div class="bench-item-header">
-            <img src="" alt="">
             <span>预警事件分类</span>
           </div>
           <div class="bench-item">
             <template>
-              <ve-histogram :data="chartData" height="100%" width="100%" :extend="histogramExtend" :settings="chartSettings"></ve-histogram>
+              <ve-histogram :data="benchChartbarData" height="100%" width="100%" :extend="histogramExtend" :settings="chartSettings"></ve-histogram>
             </template>
           </div>
         </section>
@@ -50,7 +38,7 @@
           </div>
           <div class="page">
             <div class="el-pagination-wrap">
-              <pagination :page-index="currentPage" :total="count" :page-size="pageSize" @change="pageChange"></pagination>
+              <pagination :page-index="currentPage" :total="count" @change="pageChange"></pagination>
             </div>
           </div>
         </section>
@@ -59,61 +47,24 @@
       <section class="r fr">
         <section class="item">
           <div class="bench-item-header">
-            <img src="" alt="">
             <span>人员分类</span>
           </div>
           <div class="bench-item">
             <template>
               <ve-pie :data="benchChartPieData" :settings="chartSettingsPie" width="100%" height="100%" :judge-width="true"
-                :extend="pieExtend" :after-config="afterConfig"></ve-pie>
+                :extend="pieExtend" :after-config="pieAfterConfig"></ve-pie>
             </template>
           </div>
         </section>
         <section class="item">
           <div class="bench-item-header">
-            <img src="" alt="">
             <span>人员状态</span>
           </div>
           <div class="bench-item p-status-wrap">
             <ul class="p-status clearfix">
-              <li>
-                <span>在押人员:</span>
-                <router-link class="num-color" to="/personnelposition">123</router-link>
-                <span>人</span>
-              </li>
-              <li>
-                <span>提回重审:</span>
-                <router-link class="num-color" to="/personnelposition">123</router-link>
-                <span>人</span>
-              </li>
-              <li>
-                <span>保外就医:</span>
-                <router-link class="num-color" to="/personnelposition">123</router-link>
-                <span>人</span>
-              </li>
-              <li>
-                <span>出监就诊:</span>
-                <router-link class="num-color" to="/personnelposition">123</router-link>
-                <span>人</span>
-              </li>
-              <li>
-                <span>监外执行:</span>
-                <router-link class="num-color" to="/personnelposition">123</router-link>
-                <span>人</span>
-              </li>
-              <li>
-                <span>监内住院:</span>
-                <router-link class="num-color" to="/personnelposition">123</router-link>
-                <span>人</span>
-              </li>
-              <li>
-                <span>离监探亲:</span>
-                <router-link class="num-color" to="/personnelposition">123</router-link>
-                <span>人</span>
-              </li>
-              <li>
-                <span>监外住院:</span>
-                <router-link class="num-color" to="/personnelposition">123</router-link>
+              <li v-for="item in pStatus" :key="item.status">
+                <span>{{item.status}}:</span>
+                <router-link class="num-color" to="/personnelposition">{{item.pNum}}</router-link>
                 <span>人</span>
               </li>
             </ul>
@@ -126,11 +77,6 @@
         </section>
       </section>
     </section>
-    <!-- </el-row> -->
-    <!-- 预警事件分类 -->
-
-    <!-- 预警事件分类 -->
-
   </div>
 </template>
 <script>
@@ -151,8 +97,8 @@
           position: 'inside',
           formatter: function (params) {
             var pieItem1 = params[0] || params;
-            console.log('barItem1',pieItem1);
-            var content = `<div>${pieItem1.name}&nbsp;<a class="fontcolor text-decoration" href="/#/personnelposition">${pieItem1.value}</a>&nbsp;${pieItem1.percent}%</div>`;
+            var content =
+              `<div>${pieItem1.name}&nbsp;<a class="fontcolor text-decoration" href="/#/personnelposition">${pieItem1.value}</a>&nbsp;${pieItem1.percent}%</div>`;
             return content;
           }
         },
@@ -197,16 +143,17 @@
           }
         ],
         imgBlock: '',
-        pageSize: 10, //每页显示20条数据
         currentPage: 1, //当前页码
         count: 0, //总记录数
         items: [],
-
+        // 接口数据
         personnum: '',
         areasDetail: [],
         pStatus: [],
         benchChartPieData: [],
         benchChartbarData: [],
+        preWarningDetil: [],
+
         // 柱状图beging
         // 配置
         chartSettings: {
@@ -216,114 +163,15 @@
             pNumber: '人数'
           }
         },
-        // 数据
-        chartData: {
-          columns: ['action', 'number', 'pNumber'],
-          rows: [{
-              'action': '定位异常',
-              // '具体行为':['宿舍睡觉时段床上无人','未在指定时段待在特定区域','特定区域长时间逗留'],
-              'number': 193,
-              'pNumber': 1093,
-            },
-            {
-              'action': '作息异常',
-              'number': 330,
-              'pNumber': 3230,
-            },
-            {
-              'action': '违规预警',
-              'number': 293,
-              'pNumber': 2623,
-            }
-          ]
-        },
         // 配置
-        histogramExtend: {
-          color: ['#00c6dd', '#5867c2'],
-          tooltip: {
-            enterable: true, // 鼠标是否可进入tooltip
-            position: ['20%', '20%'],
-            trigger: 'axis', // 触发方式
-            // axisPointer: { // 坐标轴指示器，坐标轴触发有效
-            //   type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-            // },
-            formatter: function (params) {
-              var barItem1 = params[0] || params;
-              var barItem2 = params[1] || params;
-              console.log('barItem1', barItem1)
-              console.log('barItem2', barItem2)
-              if (barItem1.componentType == 'series') {
-                var content =
-                  `<div class="tooltip-wrap clearfixed">
-                    <div class="tooltip-left fl">
-                      <div class="tooltip-header">分类</div>
-                      <div>宿舍睡觉时段床上无人</div>
-                      <div>未在指定时段待在特定区域</div>
-                      <div>特定区域长时间逗留</div>
-                    </div>
-
-                    <div class="tooltip-right fr">
-                      <div class="tooltip-header">
-                        <span>${barItem2.seriesName}</span>
-                        <span>${barItem1.seriesName}</span>
-                      </div>
-
-                      <div>
-                        <a class="fontcolor text-decoration" href="/#/querystats/violation">${barItem1.data}</a>
-                        <a class="fontcolor text-decoration" href="/#/querystats/violation">${barItem2.data}</a>
-                      </div>
-                      <div>
-                        <a class="fontcolor text-decoration" href="/#/querystats/violation">${barItem1.data}</a>
-                        <a class="fontcolor text-decoration" href="/#/querystats/violation">${barItem2.data}</a>
-                      </div>
-                      <div>
-                        <a class="fontcolor text-decoration" href="/#/querystats/violation">${barItem1.data}</a>
-                        <a class="fontcolor text-decoration" href="/#/querystats/violation">${barItem2.data}</a>
-                      </div>
-                    </div>
-                  </div>`;
-                return content;
-              }
-            }
-          },
-          grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
-          },
-          xAxis: [{
-            type: 'category',
-            axisTick: {
-              alignWithLabel: true
-            }
-          }],
-          yAxis: [{
-            type: 'value'
-          }],
-          series: {
-            label: {
-              show: true,
-              position: "top"
-            },
-            barMaxWidth: 30,
-            barGap: 0,
-            type: 'bar',
-          },
-          legend: {
-            right: "5%",
-          }
-        },
+        histogramExtend: {},
         // 柱状图end
-
         chartSettingsPie: {
           labelMap: {
             level: '级别',
             pNumber: '人数'
           }
         },
-
-
         prisonersStutas: [],
         value1: true,
         benchChartPie: {}
@@ -333,55 +181,9 @@
       // http://localhost:8080/#/workbench?name=cjd
       // console.log(this.$route.query.name);// cjd
       var _this = this;
-      // 犯人总数
-      this.$ajxj.get('/getPrisonersData')
-        .then(function (res) {
-          _this.areasDetail = res.data.data
-          let temArray = [];
-          _this.areasDetail.map(function (val) {
-            temArray.push(val.pNumItem)
-          })
-          _this.personnum = eval(temArray.join('+'))
-        })
-        .catch(function (error) {
-          console.log(error);
-        })
-        .then(function () {});
+
       // 人员状态
-      // 人员分类
-      this.$ajxj.get('/getBenchChartPie')
-        .then(function (res) {
-          res.data = {
-            columns: ['level', 'pNumber'],
-            rows: [{
-                'level': '特严级',
-                'pNumber': 1393
-              },
-              {
-                'level': '严管级',
-                'pNumber': 3530
-              },
-              {
-                'level': '特宽级',
-                'pNumber': 2923
-              },
-              {
-                'level': '普通级',
-                'pNumber': 1723
-              }
-            ]
-          }
-          _this.benchChartPieData = res.data
-        }).catch(function (error) {
-          console.log(error);
-        }).then(function () {});
-      // 预警事件分类
-      this.$ajxj.get('/getBenchChartbarData')
-        .then(function (res) {
-          _this.benchChartbarData = res.data
-        }).catch(function (error) {
-          console.log(error);
-        }).then(function () {});
+
       // 人员状态
       this.$ajxj.get('/prisonersStutas')
         .then(function (res) {
@@ -393,12 +195,134 @@
     mounted: function () {
       this.imgBlock = this.picItems[0].pic;
       document.getElementsByClassName("picS")[0].classList.add("curImageLayer");
-      //请求第一页数据
-      this.getList()
+      // 请求数据
+      this.getPSum();
+      this.getPClass();
+      this.getPStatus();
+      this.getPreWarningClass();
+      this.getList();
+      this.histogramExtend = {
+        color: ['#00c6dd', '#5867c2'],
+        tooltip: {
+          enterable: true, // 鼠标是否可进入tooltip
+          position: ['20%', '20%'],
+          trigger: 'axis', // 触发方式
+          // axisPointer: { // 坐标轴指示器，坐标轴触发有效
+          //   type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+          // },
+          formatter: (params) => {
+            var detil_str = '';
+            var detil_num_str = '';
+            var index = params[0].dataIndex;
+            var curDetil = this.benchChartbarData.rows[index];
+            curDetil.detils.map((item) => {
+              console.log('item',item);
+              detil_str = detil_str + `<div>${item.detil}</div>`;
+              detil_num_str = detil_num_str +
+                `<div>
+                    <a class="fontcolor text-decoration" href="/#/querystats/violation">${item.number}</a>
+                    <a class="fontcolor text-decoration" href="/#/querystats/violation">${item.pNumber}</a>
+                  </div>`;
+            });
+            var barItem1 = params[0] || params;
+            var barItem2 = params[1] || params;
+            // if (barItem1.componentType == 'series') {
+            var content =
+              `<div class="tooltip-wrap clearfixed">
+                    <div class="tooltip-left fl">
+                      <div class="tooltip-header">分类</div>
+                      ${detil_str}
+                    </div>
+
+                    <div class="tooltip-right fr">
+                      <div class="tooltip-header">
+                        <span>${barItem2.seriesName}</span>
+                        <span>${barItem1.seriesName}</span>
+                      </div>
+                      ${detil_num_str}
+                    </div>
+                  </div>`;
+            return content;
+            // }
+          }
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: [{
+          type: 'category',
+          axisTick: {
+            alignWithLabel: true
+          }
+        }],
+        yAxis: [{
+          type: 'value'
+        }],
+        series: {
+          label: {
+            show: true,
+            position: "top"
+          },
+          barMaxWidth: 30,
+          barGap: 0,
+          type: 'bar',
+        },
+        legend: {
+          right: "5%",
+        }
+      };
     },
     methods: {
-      afterConfig(options) {
-        options.legend.formatter = function (name) { // legend中的formatter传入一个name属性
+      // 犯人总数
+      getPSum() {
+        this.$ajxj.get('/getPrisonersData')
+          .then((res) => {
+            this.areasDetail = res.data.prisonsers;
+            this.personnum = res.data.personnum;
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+          .then(() => {});
+      },
+      // 人员分类
+      getPClass() {
+        this.$ajxj.get('/getBenchChartPie')
+          .then((res) => {
+            this.benchChartPieData = res.data
+          }).catch((error) => {
+            console.log(error);
+          }).then(() => {});
+      },
+      // 人员状态 pStatus
+      getPStatus() {
+        this.$ajxj.get('/getPStatus')
+          .then((res) => {
+            this.pStatus = res.data
+          }).catch((error) => {
+            console.log(error);
+          }).then(() => {});
+      },
+      // 预警事件分类
+      getPreWarningClass() {
+        this.$ajxj.get('/getBenchChartbarData')
+          .then((res) => {
+            console.log('预警事件分类', res);
+            this.benchChartbarData = res.data.barData;
+            this.preWarningDetil = res.data.detils;
+          }).catch((error) => {
+            console.log(error);
+          }).then(() => {});
+      },
+
+      // afterConfig 生成echarts配置进行额外的处理  Function   在数据转化为配置项结束后触发
+      pieAfterConfig(options) {
+        console.log('afterConfig-options', options);
+
+        options.legend.formatter = function (name) {
           var data = options.series[0].data; // 获取series中的data
           var targetValue; // 对应图例的值
           data.map(item => {
@@ -406,7 +330,6 @@
               targetValue = item.value; // 对相应的图例赋值
             }
           })
-          // var p = (targetValue / totalValue * 100).toFixed(2); // 百分比
           return `${name} ${targetValue}`;
         };
         return options
@@ -443,7 +366,6 @@
         var _this = this;
         // ?pageSize=${this.pageSize}&currentPage=${this.currentPage}
         this.$ajxj.post(`/pPTableData`, {
-            pageSize: 10,
             currentPage: _this.currentPage
           })
           .then(function (res) {
@@ -528,10 +450,6 @@
     /* color: #FFF; */
     cursor: not-allowed;
   }
-
-  /* .curImageLayer:hover:after {
-    transform: translateY(0);
-  } */
 
   /* 分页 */
   .item-pics .page {

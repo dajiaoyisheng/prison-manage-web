@@ -55,7 +55,7 @@
           </div>
           <div ref="canvasContainer" class="actionImage">
               <!-- 画图区域 -->
-              <canvas ref="canvas" id="canvas"></canvas>
+              <div ref="canvas" id="canvas"></div>
           </div>
         </div>
         <div class="r fr inbl">
@@ -177,7 +177,6 @@
           var base64txt = event.target.result;
           _this.$refs.canvasContainer.style.backgroundImage = "url("+base64txt+")";;
         };
-
       },
       draw() {
         this.startDraw();
@@ -190,9 +189,7 @@
     },
     mounted() {
       var canvasContainerRect = this.$refs.canvasContainer.getBoundingClientRect();
-      this.$refs.canvas.width = canvasContainerRect.width;
-      this.$refs.canvas.height = canvasContainerRect.height;
-      this.drawObj = new Draw('canvas');
+      this.drawObj = new Draw('canvas', canvasContainerRect.width, canvasContainerRect.height);
     }
   }
 
@@ -272,6 +269,9 @@
     min-height: 500px;
     background: #fff;
     width: 100%;
+    filter:"progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";
+    -moz-background-size:100% 100%;
+    background-size:100% 100%;
   }
 
   .h-line:after {

@@ -5,7 +5,7 @@
                 <el-row>
                     <el-col :span="23" class="som-header-title"><span>系统选项</span></el-col>
                     <el-col :span="1" class="som-header-toolbar">
-                        <el-button type="primary" size="mini" @click="saveSysOptions()">保存</el-button>
+                        <el-button type="primary" size="mini" class="search-btn" @click="saveSysOptions()">保存</el-button>
                     </el-col>
                 </el-row>
             </el-header>

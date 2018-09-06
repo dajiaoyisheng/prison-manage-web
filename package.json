@@ -18,6 +18,7 @@
     "echarts": "^4.1.0",
     "element-ui": "^2.4.5",
     "es6-promise": "^4.2.4",
+    "konva": "^2.3.0",
     "loading-svg": "^1.0.0",
     "v-charts": "^1.17.9",
     "vue": "^2.5.2",
