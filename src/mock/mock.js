@@ -2,7 +2,7 @@ import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 
 import PrisonersData from './data/prisoners';
-import pieData from './data/pie';
+import resPieData from './data/pie';
 import barData from './data/bar';
 import pPostionData from './data/pposition';
 import pPTableData from './data/pptabledata';
@@ -37,7 +37,7 @@ export default {
     mock.onGet('/getBenchChartPie').reply(config => {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
-          defaultResData.data = pieData;
+          defaultResData.data = resPieData;
           resolve([200, defaultResData])
         }, 1000);
       });

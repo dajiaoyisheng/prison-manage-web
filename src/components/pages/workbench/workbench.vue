@@ -117,6 +117,7 @@
         }
       };
       return {
+        // 需通过接口返回
         picItems: [{
             pic: area1,
             des: "1"
@@ -157,19 +158,21 @@
         // 柱状图beging
         // 配置
         chartSettings: {
+          // 需要接口返回
           labelMap: {
             action: '违规行为',
             number: '个数',
             pNumber: '人数'
           }
         },
-        // 配置
+        // 配置 为拿接口返回的数据,放到mounted里了
         histogramExtend: {},
         // 柱状图end
         chartSettingsPie: {
-          labelMap: {
-            level: '级别',
-            pNumber: '人数'
+          // 需通过接口返回
+          slabelMap: {
+          //   level: '级别',
+          //   pNumber: '人数'
           }
         },
         prisonersStutas: [],
@@ -178,29 +181,20 @@
       }
     },
     created: function () {
+      // this.$route.query.name 应该会用到
       // http://localhost:8080/#/workbench?name=cjd
       // console.log(this.$route.query.name);// cjd
-      var _this = this;
-
-      // 人员状态
-
-      // 人员状态
-      this.$ajxj.get('/prisonersStutas')
-        .then(function (res) {
-          _this.prisonersStutas = res.data.data
-        }).catch(function (error) {
-          console.log(error);
-        }).then(function () {});
     },
     mounted: function () {
       this.imgBlock = this.picItems[0].pic;
       document.getElementsByClassName("picS")[0].classList.add("curImageLayer");
-      // 请求数据
+      // 请求数据 也可在created中获取,暂时还不确定在哪更好
       this.getPSum();
       this.getPClass();
       this.getPStatus();
       this.getPreWarningClass();
       this.getList();
+
       this.histogramExtend = {
         color: ['#00c6dd', '#5867c2'],
         tooltip: {
@@ -216,7 +210,7 @@
             var index = params[0].dataIndex;
             var curDetil = this.benchChartbarData.rows[index];
             curDetil.detils.map((item) => {
-              console.log('item',item);
+              console.log('item', item);
               detil_str = detil_str + `<div>${item.detil}</div>`;
               detil_num_str = detil_num_str +
                 `<div>
@@ -233,7 +227,6 @@
                       <div class="tooltip-header">分类</div>
                       ${detil_str}
                     </div>
-
                     <div class="tooltip-right fr">
                       <div class="tooltip-header">
                         <span>${barItem2.seriesName}</span>
@@ -292,7 +285,10 @@
       getPClass() {
         this.$ajxj.get('/getBenchChartPie')
           .then((res) => {
-            this.benchChartPieData = res.data
+            this.benchChartPieData = res.data.pieData;
+            // 合并对像
+            // Object.assign(this.chartSettingsPie.labelMap, res.data.labelMap)
+            // this.chartSettingsPie.labelMap = res.data.labelMap;
           }).catch((error) => {
             console.log(error);
           }).then(() => {});
@@ -320,13 +316,11 @@
 
       // afterConfig 生成echarts配置进行额外的处理  Function   在数据转化为配置项结束后触发
       pieAfterConfig(options) {
-        console.log('afterConfig-options', options);
-
         options.legend.formatter = function (name) {
           var data = options.series[0].data; // 获取series中的data
           var targetValue; // 对应图例的值
           data.map(item => {
-            if (item.name == name) {
+            if (item.name === name) {
               targetValue = item.value; // 对相应的图例赋值
             }
           })
@@ -335,9 +329,6 @@
         return options
       },
 
-      listen: function (page) {
-        this.msg = '你点击了' + page + '页'
-      },
       displayBImg(curPic, e) {
         let curNode = e.currentTarget;
         let nodeList = [];
@@ -350,7 +341,6 @@
         nodeList.map(function (val) {
           val.classList.remove("curImageLayer");
         });
-
         curNode.classList.add("curImageLayer");
         this.imgBlock = curPic;
       },
@@ -485,6 +475,7 @@
     font-size: 12px;
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
+    padding-left: 2%;
   }
 
 
@@ -566,8 +557,6 @@
     height: 50px;
     line-height: 50px;
     text-align: center;
-
-
   }
 
   ul.p-status li:nth-child(odd) {
