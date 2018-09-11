@@ -6,8 +6,8 @@ import axios from './axios';
 Vue.prototype.$ajxj = axios;
 import 'es6-promise/auto'
 import store from './vuex/store'
-import Element from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+import Element from 'element-ui';
 Vue.use(Element);
 // main.css公共样式
 import './css/main.css';
@@ -31,7 +31,6 @@ import App from './App';
 // if (process.env.NODE_ENV === 'development') {
 Mock.bootstrap();
 // }
-
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
