@@ -269,5 +269,14 @@ export default {
         }, 1000);
       });
     });
+
+    mock.onGet('/getScopes').reply(config => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          defaultResData.data = calendarData.scopes;
+          resolve([200, defaultResData])
+        }, 1000);
+      });
+    });
   }
 }

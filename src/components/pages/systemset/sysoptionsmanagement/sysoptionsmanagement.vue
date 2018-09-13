@@ -11,14 +11,14 @@
             </el-header>
             <el-main>
                 <el-row>
-                    <el-col :span="5"><span>无法定位允许最长时间：</span></el-col>
-                    <el-col :span="10">
+                    <el-col :span="15">
+                        <span>无法定位允许最长时间：</span>
                         <el-input-number size="mini" v-model="optionMaxTime" controls-position="right" :min="1" :max="60"></el-input-number>分钟
                     </el-col>
                 </el-row>
                 <div>
-                    <el-col :span="5"><span>允许在卫生间中停留的最长时间：</span></el-col>
-                    <el-col :span="10">
+                    <el-col :span="15">
+                        <span>允许在卫生间中停留的最长时间：</span>
                         <el-input-number size="mini" v-model="stayMaxTime" controls-position="right" :min="1" :max="60"></el-input-number>分钟
                     </el-col>
                 </div>
@@ -59,12 +59,12 @@
 
 <style scoped>
     .el-header {
-        border-bottom: 1px solid #333;
         line-height: 60px;
     }
 
     .el-main {
         height: 100%;
+        padding: 0px 20px;
     }
 
     .el-row {
@@ -72,8 +72,8 @@
     }
 
     .som-header-title {
+        color: #59c4ee;
         font-size: 18px;
-        font-weight: bold;
     }
 
     .el-input-number {

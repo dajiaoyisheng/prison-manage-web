@@ -3,9 +3,9 @@
         <el-container>
             <el-header>
                 <el-row>
-                    <el-col :span="22" class="cal-header-title"><span>日历管理</span></el-col>
-                    <el-col :span="2" class="cal-header-toolbar">
-                        <el-button type="primary" size="mini" @click="holidyDialog=true">节假日管理</el-button>
+                    <el-col :span="21" class="cal-header-title"><span>日历管理</span></el-col>
+                    <el-col :span="3" class="cal-header-toolbar">
+                        <el-button type="primary" size="mini" class="search-btn" @click="holidyDialog=true">节假日管理</el-button>
                         <el-dialog title="节假日管理" :visible.sync="holidyDialog" width="600px" :before-close="holidyDialogClose">
                             <v-holidyDialog :dateTypes='dateTypes' ref="holidyDialog"></v-holidyDialog>
                         </el-dialog>
@@ -15,23 +15,23 @@
             <el-main>
                 <section class="cal-main-params">
                     <span>时间:</span>
-                    <el-time-picker style="width: 16.5%; margin: 0px 15px 0px 5px;" is-range v-model="params.period" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间"></el-time-picker>
+                    <el-time-picker size="mini" style="width: 16.5%; margin: 0px 15px 0px 5px;" is-range v-model="params.period" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间"></el-time-picker>
                     <span>日期类型:</span>
-                    <el-select size="small" v-model="params.dateType" placeholder="请选择">
+                    <el-select size="mini" v-model="params.dateType" placeholder="请选择">
                         <el-option v-for="item in dateTypes" :key="item.value" :label="item.label" :value="item.value"></el-option>
                     </el-select>
                     <span>区域:</span>
-                    <el-select size="small" v-model="params.area" placeholder="请选择">
+                    <el-select size="mini" v-model="params.area" placeholder="请选择">
                         <el-option v-for="item in areas" :key="item.value" :label="item.label" :value="item.value"></el-option>
                     </el-select>
                     <span>动作:</span>
-                    <el-select size="small" v-model="params.option" placeholder="请选择">
+                    <el-select size="mini" v-model="params.option" placeholder="请选择">
                         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
                     </el-select>
                     <span>服刑人员姓名/编号:</span>
-                    <el-input size="small" class="pp-input" v-model="params.prisonerName" placeholder="请输入" clearable></el-input>
-                    <el-button size="small" type="primary" @click="query()">查询</el-button>
-                    <el-button size="small" type="primary" @click="clear()">清空</el-button>
+                    <el-input size="mini" class="pp-input" v-model="params.prisonerName" placeholder="请输入姓名或编号" clearable></el-input>
+                    <el-button size="mini" type="primary" class="search-btn" @click="query()">查询</el-button>
+                    <el-button size="mini" type="primary" class="search-btn" @click="clear()">清空</el-button>
                 </section>
                 <section class="cal-main-content">
                     <el-tabs type="border-card" @tab-click="changeTabs">
@@ -40,7 +40,7 @@
                                 <el-col :span="2" :offset="22">
                                     <el-button title="增加作息" type="text" icon="el-icon-circle-plus-outline" size="mini" @click="addDialog=true">增加作息</el-button>
                                     <el-dialog title="增加作息" :visible.sync="addDialog" width="670px" :before-close="addDialogClose">
-                                        <v-addDialog :dateTypes="dateTypes" :options="options" :areas="areas" ref="addDialog"></v-addDialog>
+                                        <v-addDialog :dateTypes="dateTypes" :options="options" :areas="areas" :scopes="scopes" ref="addDialog"></v-addDialog>
                                     </el-dialog>
                                 </el-col>
                             </el-row>
@@ -57,7 +57,7 @@
                                 <el-table-column prop="scene"       label="适用范围"></el-table-column>
                                 <el-table-column label="操作" width="100">
                                     <template slot-scope="scope">
-                                        <el-button @click.native.prevent="deleteRow(scope.$index, scope.row)" type="text" size="small">删除</el-button>
+                                        <el-button icon="el-icon-delete" @click.native.prevent="deleteRow(scope.$index, scope.row)" type="text" size="small">删除</el-button>
                                     </template>
                                 </el-table-column>
                             </el-table>
@@ -115,6 +115,7 @@
                 dateTypes: [],
                 areas: [],
                 options: [],
+                scopes: [],
                 holidyDialog: false,
                 addDialog: false
             }
@@ -216,6 +217,13 @@
             }).then(function () {
             });
 
+            // 获取动作字典
+            this.$ajxj.get('/getScopes').then(function (respnose) {
+                _this.scopes = respnose.data;
+            }).catch(function (error) {
+            }).then(function () {
+            });
+
             // 获取日常作息时间列表
             this.$ajxj.get('/getDailyDates').then(function (respnose) {
                 _this.dailyDates = respnose.data.items;
@@ -233,7 +241,6 @@
 
 <style scoped>
     .el-header {
-        border-bottom: 1px solid #333;
         line-height: 60px;
     }
 
@@ -248,7 +255,7 @@
 
     .cal-header-title {
         font-size: 18px;
-        font-weight: bold;
+        color: #59c4ee;
     }
 
     .cal-main-params {
@@ -267,5 +274,32 @@
     .cal-main-params .pp-input {
         width: 9.5%;
         margin: 0px 15px 0px 5px;
+    }
+
+    .cal-header-toolbar {
+        padding-left: 40px;
+    }
+</style>
+
+<style>
+    #calendarmanagement .el-tabs__header {
+        padding: 0;
+        position: relative;
+    }
+
+    #calendarmanagement .el-tabs__item {
+        padding: 0 20px;
+        height: 40px;
+        box-sizing: border-box;
+        line-height: 40px;
+        display: inline-block;
+        list-style: none;
+        font-size: 14px;
+        font-weight: 500;
+        position: relative;
+    }
+
+    #calendarmanagement .el-dialog__body {
+        padding: 10px 20px;
     }
 </style>

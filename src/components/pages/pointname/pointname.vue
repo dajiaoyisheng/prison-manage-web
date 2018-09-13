@@ -8,12 +8,14 @@
         </span>
       </el-tree>
     </section>
+    <!--
     <section class="pn-center" :style="{'left': pnAsideLeft + 'px'}">
       <div style="position: absolute; top:50%"> 
         <img v-if="pnAside" @click="pnAside=false, pnAsideLeft=0, pnMainAsideLeft=7" :src="images.right">
         <img v-if="!pnAside" @click="pnAside=true, pnAsideLeft=250, pnMainAsideLeft=257" :src="images.left">
       </div>
     </section>
+    -->
     <section class="pn-right" :class="{'pn-right-show': !pnAside, 'pn-right-hidden': pnAside}">
       <section class="pn-right-header">
         <span style="font-size: 14px;">服刑人员:</span>

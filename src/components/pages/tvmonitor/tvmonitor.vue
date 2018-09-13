@@ -105,6 +105,7 @@
     line-height: 50px;
     font-size: 26px;
   }
+
   .area {
     height: 1100px;
     background: #fff;
@@ -195,10 +196,9 @@
           console.log(error);
         }).then(function () {});
     },
+    mounted: function () {
+    },
     methods: {
-      // handleNodeClick: function (data) {
-      //   this.pnMain = true;
-      // },
       handleNodeClick(data, d1, d2) {
         this.isShowMonitorHouse = true;
         this.isShowPrison = false;

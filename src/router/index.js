@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '../vuex/store'
 const content = () =>
   import('@/components/commons/content.vue')
 const workbench = () =>
@@ -123,43 +124,61 @@ const router = new Router({
     ]
   }]
 })
-// router.beforeEach((to, from, next) => {
-//   if (to.path === '/workbench') {
-//     next()
-//   } else if (to.path === '/tvmonitor') {
-//     next()
-//   } else if (to.path === '/personnelposition') {
-//     next()
-//   } else if (to.path === '/pointname') {
-//     next()
-//   } else if (to.path === '/querystats/posunusual') {
-//     next()
-//   } else if (to.path === '/querystats/violation') {
-//     next()
-//   } else if (to.path === '/querystats/prewarningstats') {
-//     next()
-//   } else if (to.path === '/systemset/prisonmanagement') {
-//     next()
-//   } else if (to.path === '/systemset/prisonermanagement') {
-//     next()
-//   } else if (to.path === '/systemset/prisonermanagement/operation') {
-//     next()
-//   } else if (to.path === '/systemset/cameramanagement') {
-//     next()
-//   } else if (to.path === '/systemset/servermanagement') {
-//     next()
-//   } else if (to.path === '/systemset/calendarmanagement') {
-//     next()
-//   } else if (to.path === '/systemset/sysoptionsmanagement') {
-//     next()
-//   } else if (to.path === '/systemset/systemmanagement') {
-//     next()
-//   } else if (localStorage.getItem('token')) {
-//     next()
-//   } else {
-//     next({
-//       path: '/workbench'
-//     })
-//   }
-// })
+
+
+
+router.beforeEach((to, from, next) => {
+  if (to.path === '/workbench') {
+    store.state.isFullNavWrap = false;
+    next()
+  } else if (to.path === '/tvmonitor') {
+    store.state.isFullNavWrap = true;
+    next()
+  } else if (to.path === '/personnelposition') {
+    store.state.isFullNavWrap = true;
+    next()
+  } else if (to.path === '/pointname') {
+    store.state.isFullNavWrap = true;
+    next()
+  } else if (to.path === '/querystats/posunusual') {
+    store.state.isFullNavWrap = false;
+    next()
+  } else if (to.path === '/querystats/violation') {
+    store.state.isFullNavWrap = false;
+    next()
+  } else if (to.path === '/querystats/prewarningstats') {
+    store.state.isFullNavWrap = false;
+    next()
+  } else if (to.path === '/systemset/prisonmanagement') {
+    store.state.isFullNavWrap = true;
+    next()
+  } else if (to.path === '/systemset/prisonermanagement') {
+    store.state.isFullNavWrap = false;
+    next()
+  } else if (to.path === '/systemset/prisonermanagement/operation') {
+    store.state.isFullNavWrap = true;
+    next()
+  } else if (to.path === '/systemset/cameramanagement') {
+    store.state.isFullNavWrap = true;
+    next()
+  } else if (to.path === '/systemset/servermanagement') {
+    store.state.isFullNavWrap = false;
+    next()
+  } else if (to.path === '/systemset/calendarmanagement') {
+    store.state.isFullNavWrap = false;
+    next()
+  } else if (to.path === '/systemset/sysoptionsmanagement') {
+    store.state.isFullNavWrap = false;
+    next()
+  } else if (to.path === '/systemset/systemmanagement') {
+    store.state.isFullNavWrap = true;
+    next()
+  } else if (localStorage.getItem('token')) {
+    next()
+  } else {
+    next({
+      path: '/workbench'
+    })
+  }
+})
 export default router

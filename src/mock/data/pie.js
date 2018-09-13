@@ -1,8 +1,4 @@
 import Mock from 'mockjs';
-// labelMap: {
-//   level: '级别',
-//   pNumber: '人数'
-// }
 let resPieData = {};
 let labelMap = {
     level: '级别',

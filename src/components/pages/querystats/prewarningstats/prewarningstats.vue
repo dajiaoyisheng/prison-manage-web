@@ -16,7 +16,7 @@
           <el-date-picker style="width: 35%;" size="small" v-model="parameter.startTime" type="date" placeholder="选择日期"></el-date-picker>
           <span>-</span>
           <el-date-picker style="width: 35%;" size="small" v-model="parameter.endTime" type="date" placeholder="选择日期"></el-date-picker>
-          <el-button size="mini" type="primary" @click="doQuery()">查询</el-button>
+          <el-button size="mini" type="primary" class="search-btn" @click="doQuery()">查询</el-button>
         </el-col>
       </el-row>
       <el-rolw>

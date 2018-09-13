@@ -350,9 +350,7 @@
       this.getTableData();
     },
     mounted: function () {
-      // console.log(document.getElementsByClassName("pp-wrap")[0]);
-      // document.getElementsByClassName("pp-wrap")[0].style.width = document.body.clientWidth;
-
+      // this.$store.state.setNavFull("full")
     },
     methods: {
       //从page组件传递过来的当前page

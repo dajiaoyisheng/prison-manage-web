@@ -59,7 +59,7 @@ html {
 body {
   height: 100%;
   background: #f3f6f8;
-  font-family:"Microsoft Yahei";
+  font-family: "Microsoft Yahei";
 }
 
 font-family: "Helvetica Neue",
@@ -108,7 +108,7 @@ a {
 }
 
 /* reset.css end */
-.nav-wrap {
+/* .nav-wrap {
   background-color: rgb(47, 50, 60);
   height: 60px;
   position: fixed;
@@ -117,10 +117,10 @@ a {
 }
 
 .nav-ul {
-  /* background-color: rgb(47, 50, 60); */
   margin: 0 auto;
   width: 1200px;
-}
+} */
+
 
 div.content-wrap {
   /* width: 1200px; */
@@ -411,7 +411,20 @@ th {
 } */
 .search-btn {
   background-color: #59c4ee;
+  border: 1px solid #59c4ee;
   color: #fff;
+}
+
+.search-btn:focus,
+.search-btn:hover {
+  color: #fff;
+  border-color: #59c4ee;
+  background-color: #59c4ee;
+}
+
+.el-input.is-active .el-input__inner,
+.el-input__inner:focus {
+  border-color: none;
 }
 
 /* 搜索按钮颜色end */

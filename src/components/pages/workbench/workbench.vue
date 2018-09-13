@@ -171,8 +171,8 @@
         chartSettingsPie: {
           // 需通过接口返回
           slabelMap: {
-          //   level: '级别',
-          //   pNumber: '人数'
+            //   level: '级别',
+            //   pNumber: '人数'
           }
         },
         prisonersStutas: [],
@@ -285,6 +285,7 @@
       getPClass() {
         this.$ajxj.get('/getBenchChartPie')
           .then((res) => {
+            console.log('piedata', res.data.pieData)
             this.benchChartPieData = res.data.pieData;
             // 合并对像
             // Object.assign(this.chartSettingsPie.labelMap, res.data.labelMap)

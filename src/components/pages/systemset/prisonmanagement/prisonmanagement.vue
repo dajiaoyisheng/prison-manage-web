@@ -2,7 +2,6 @@
   <div id="prisonmanagement">
     <!-- 左 -->
     <section class="aside-l fl inbl">
-
       <div class="h aside-l-h clearfix">
         <div class="l fl">
           <img :src="images.exportgroup" alt="">
@@ -15,8 +14,8 @@
         </div>
       </div>
 
-      <div>
-        <v-tree :tree-data="Prisonareatree" v-on:handle-node-click="handleNodeClick"></v-tree>
+      <div class="left-tree">
+        <v-tree ref="leftTree" :tree-data="Prisonareatree" v-on:handle-node-click="handleNodeClick"></v-tree>
       </div>
     </section>
     <!-- 中 -->
@@ -34,9 +33,9 @@
             <img :src="images.del" alt="">
             <img :src="images.cancel" alt="">
             <img :src="images.renew" alt="">
-            <img :src="images.div" @click="draw()" alt="">
+            <img :src="images.div" @click="draw()" alt="矩形">
             <img :src="images.label" alt="">
-            <img :src="images.camera" alt="">
+            <img :src="images.camera" @click="drawCamera()" alt="摄像头">
             <img :src="images.textA" id="strokeColor" alt="">
           </div>
         </div>
@@ -45,13 +44,14 @@
         </div>
       </div>
 
-
       <div class="main">
         <div class="l fl inbl">
-          <p class="h-line">摄像头设置</p>
-          <div>
-              <!-- 摄像头 -->
-              摄像头1
+          <div v-if="isDrawCamera">
+            <p class="h-line">摄像头设置</p>
+            <div>
+                <!-- 摄像头 -->
+                摄像头1
+            </div>
           </div>
           <div ref="canvasContainer" class="actionImage">
               <!-- 画图区域 -->
@@ -61,7 +61,7 @@
         <div class="r fr inbl">
           <div class="t line-word" title="对象">
             <span></span>
-            <v-tree :tree-data="PrisonareaObjtree" v-on:handle-node-click="handleNodeClick"></v-tree>
+            <v-tree ref="rightTree" :tree-data="PrisonareaObjtree" :default-expand-all="false" v-on:handle-node-click="handleObjectNodeClick"></v-tree>
           </div>
 
           <div class="d line-word" title="属性">
@@ -71,18 +71,23 @@
             </p>
             <p>
               <span>编码:</span>
+              <span class="value" v-text="objectInfo.code"></span>
             </p>
             <p>
               <span>名称:</span>
+              <span class="value" v-text="objectInfo.name"></span>
             </p>
             <p>
               <span>位置:</span>
+              <span class="value" v-text="objectInfo.position"></span>
             </p>
             <p>
               <span>角度:</span>
+              <span class="value"</span>
             </p>
             <p>
               <span>备注:</span>
+              <span class="value"></span>
             </p>
           </div>
         </div>
@@ -136,12 +141,11 @@
         strokeStyle: "#ff0000",
         shapeType: "rect",
         fileList: [],
+        isDrawCamera: false,
+        backgroundImage: null,
         Prisonareatree: [],
-        PrisonareaObjtree:[{
-          id: 1,
-          label: '杭州某某监狱',
-          icon: 'el-icon-menu'
-        }],
+        PrisonareaObjtree:[],
+        objectInfo: {},//选中的父对象
         message: '监区管理'
       }
     },
@@ -150,19 +154,20 @@
       // 犯人总数
       this.$ajxj.get('/getPrisonareatree')
         .then(function (res) {
-          _this.Prisonareatree = res.data;
+          _this.Prisonareatree = _this.PrisonareaObjtree = res.data;
         })
         .catch(function (error) {
-          // handle error
           console.log(error);
         })
         .then(function () {
-          // always executed
         });
     },
     methods: {
       handleNodeClick(data, checked, indeterminate) {
-        console.log(checked);
+        this.PrisonareaObjtree = [data];
+      },
+      handleObjectNodeClick(data, checked, indeterminate) {
+        this.objectInfo = data;
       },
       submitUpload() {
         this.$refs.upload.submit();
@@ -174,22 +179,61 @@
         //将图片转成base64格式
         reader.readAsDataURL(file.raw);
         reader.onload = function (event) {
-          var base64txt = event.target.result;
+          var base64txt = _this.backgroundImage = event.target.result;
           _this.$refs.canvasContainer.style.backgroundImage = "url("+base64txt+")";;
         };
       },
+      checkBackgroundImage() {
+          this.$alert('请先导入平面图', {
+            confirmButtonText: '确定',
+            showClose: false
+          });
+      },
       draw() {
-        this.startDraw();
+        if (this.backgroundImage !== null) {
+          if (this.objectInfo.name) {
+            this.startDraw();
+          } else {
+            this.$alert('请在右侧选择一个对象', {
+              confirmButtonText: '确定',
+              showClose: false
+            });
+          }
+        } else {
+          this.checkBackgroundImage();
+        }
+      },
+      drawCamera() {
+        if (this.backgroundImage !== null) {
+          this.isDrawCamera = true;
+        } else {
+          this.checkBackgroundImage();
+        }
       },
       startDraw() {
         this.drawObj.setDrawState(true);
         this.drawObj.setShape(this.lineWidth, this.strokeStyle, this.shapeType);
+        this.drawObj.showMask();
         this.drawObj.init();
       }
     },
     mounted() {
+      let _this = this;
       var canvasContainerRect = this.$refs.canvasContainer.getBoundingClientRect();
-      this.drawObj = new Draw('canvas', canvasContainerRect.width, canvasContainerRect.height);
+      this.drawObj = new Draw('canvas', canvasContainerRect.width, canvasContainerRect.height, function(uuid) {
+        let tree = _this.$refs.rightTree;
+        let node = tree.getCurrentNode();
+        let data = {
+            label: '矩形',
+            icon: 'el-icon-news',
+            isWarning: false,
+            type: 'custom',
+            name: '矩形',
+            position: '矩形',
+            shapeId: uuid
+        }
+        tree.append(data, node);
+      });
     }
   }
 
@@ -219,6 +263,14 @@
     border-right: 1px solid #e0e3ec;
   }
 
+  .aside-l.fl.inbl {
+    background: #FFFFFF;
+  }
+
+  .left-tree {
+    margin-top: 20px;
+  }
+
   .aside-l-h .l {
     width: 40%;
   }
@@ -228,15 +280,15 @@
   }
 
   .aside-l-h .l img {
-    margin-right: 20%;
+    margin-right: 15px;
   }
 
   .aside-l-h .r img {
-    margin-left: 16%;
+    margin-left: 12px;
   }
 
   .aside-r-h-l {
-    padding-left: 2%;
+    margin-left: 47px;
     width: 66%;
   }
 
@@ -249,16 +301,15 @@
   }
 
   .aside-r-h-l .l img {
-    margin-right: 2%;
+    margin-right: 29px;
   }
 
   .aside-r-h-l .r img {
-    margin-left: 2%;
+    margin-left: 20px;
   }
 
   .aside-r-h-r {
-    width: 29%;
-    padding-right: 2%;
+    margin-right: 34px;
   }
 
   .main {
@@ -279,19 +330,20 @@
   }
 
   .main .l {
-    /* padding: 10px 2%; */
     width: 66%;
   }
 
   .main .r {
-    width: 28%;
+    width: 342px;
   }
 
   .main .r .t,
   .main .r .d {
     border: 1px solid #e0e3ec;
-    /* width: 100%; */
-    padding: 15px 17%;
+    padding: 37px 97px 31px 44px;
+    color: #666666;
+    font-size: 14px;
+    font-weight: 400;
   }
 
   .main .r .t {
@@ -300,6 +352,16 @@
 
   .main .r .d p {
     margin-bottom: 10px;
+  }
+
+  .main .r .line-word > p > b {
+    color: #333333;
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  .main .r .line-word > p > .value {
+    margin-left: 35px;
   }
 
 </style>

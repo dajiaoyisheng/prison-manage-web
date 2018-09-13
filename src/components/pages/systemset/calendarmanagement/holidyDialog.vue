@@ -1,7 +1,7 @@
 <template>
-    <div id="holidyDialog">
+    <div id="holidyDialog clearfixed">
         <div id="tip">
-          <span>单击日期在表格中设置日期类型</span>
+          <span>请在表格中设置日期类型</span>
         </div>
         <!-- 日历 -->
         <vue-event-calendar
@@ -28,7 +28,7 @@
         </div>
         <!-- 操作 -->
         <div class="action">
-          <span @click="addRow">添加</span>
+          <span @click="addRow" style="cursor: pointer;"><i class="el-icon-circle-plus-outline"></i>添加</span>
         </div>
         <!-- 表格 -->
         <div class="events-table">
@@ -47,21 +47,21 @@
           <div class="grid-body">
             <table>
               <tbody>
-                <tr v-for="(event, index) in showEvents">
+                <tr v-for="(event, index) in showEvents" :key="index">
                   <td @click="cellClick(index, 'title')">
-                    <el-input v-model="event.title" autofocus="true" placeholder="输入名称" v-if="seen==('title'+index)" @blur="seen=null" ></el-input>
+                    <el-input size="mini" v-model="event.title" autofocus="true" placeholder="输入名称" v-if="seen==('title'+index)" @blur="seen=null" ></el-input>
                     <span style="margin-left: 10px" v-else>{{ event.title }}</span>
                   </td>
                   <td @click="cellClick(index, 'beginDate')">
-                    <el-date-picker v-model="event.beginDate" type="date" placeholder="选择开始时间" v-if="seen==('beginDate'+index)" @blur="seen=null" format="yyyy/MM/dd" value-format="yyyy/MM/dd"></el-date-picker>
+                    <el-date-picker size="mini" v-model="event.beginDate" type="date" placeholder="选择开始时间" v-if="seen==('beginDate'+index)" @blur="seen=null" format="yyyy/MM/dd" value-format="yyyy/MM/dd"></el-date-picker>
                     <span style="margin-left: 10px" v-else>{{ event.beginDate }}</span>
                   </td>
                   <td @click="cellClick(index, 'endDate')">
-                    <el-date-picker v-model="event.endDate" type="date" placeholder="选择结束时间" v-if="seen==('endDate'+index)" @blur="seen=null" format="yyyy/MM/dd" value-format="yyyy/MM/dd"></el-date-picker>
+                    <el-date-picker size="mini" v-model="event.endDate" type="date" placeholder="选择结束时间" v-if="seen==('endDate'+index)" @blur="seen=null" format="yyyy/MM/dd" value-format="yyyy/MM/dd"></el-date-picker>
                     <span style="margin-left: 10px" v-else>{{ event.endDate }}</span>
                   </td>
                   <td>
-                    <el-select v-model="event.type" placeholder="请选择日期类型">
+                    <el-select size="mini" v-model="event.type" placeholder="请选择日期类型">
                       <el-option :label="'节假日'" :value="2"></el-option>
                       <el-option :label="'非工作日'" :value="1"></el-option>
                     </el-select>
@@ -83,6 +83,7 @@
     import Vue from 'Vue';
     import holiday from './2018Holiday.js';
     import { isBeginEndDate, dateTimeFormatter } from "../../../commons/vue-event-calendar/tools.js";
+    
     export default {
         data() {
             return {
@@ -157,7 +158,6 @@
 </script>
 
 <style>
-
     #holidyDialog {
       width: 600px;
       height: 785px;
@@ -336,5 +336,4 @@
       color:#59C4EE;
       border:1px solid #59C4EE;
     }
-
 </style>

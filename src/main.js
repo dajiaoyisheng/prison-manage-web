@@ -14,9 +14,9 @@ import './css/main.css';
 import VueLoading from 'vue-loading-template';
 Vue.use(VueLoading);
 import {
-    VePie,
-    VeBar,
-    VeHistogram
+  VePie,
+  VeBar,
+  VeHistogram
 } from 'v-charts/lib';
 Vue.component(VePie.name, VePie);
 Vue.component(VeBar.name, VeBar);
@@ -33,14 +33,12 @@ Mock.bootstrap();
 // }
 Vue.config.productionTip = false;
 
-/* eslint-disable no-new */
-
 new Vue({
-    el: '#app',
-    router,
-    store,
-    components: {
-        App
-    },
-    template: '<App/>'
+  el: '#app',
+  router,
+  store,
+  components: {
+    App
+  },
+  template: '<App/>'
 })

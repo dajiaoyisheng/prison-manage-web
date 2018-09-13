@@ -3,15 +3,12 @@
   <!-- nav -->
   <div>
     <nav class="nav-wrap">
-
-      <el-menu :default-active="$route.path" router class="nav-ul" mode="horizontal" @select="handleSelect"
-        background-color="#2f323c" text-color="#a0abb5" active-text-color="#fff">
-
+      <el-menu :default-active="$route.path" router class="nav-ul" :class="{navWrapFull:this.$store.state.isFullNavWrap}"
+        mode="horizontal" @select="handleSelect" background-color="#2f323c" text-color="#a0abb5" active-text-color="#fff">
         <div class="logoWrap">
           <img class="logo" :src="logo" alt="">
           <img class="name" :src="name" alt="">
         </div>
-
         <el-menu-item index="/workbench">
           <router-link to="/workbench">工作台</router-link>
         </el-menu-item>
@@ -105,6 +102,33 @@
 </script>
 
 <style socped>
+  .nav-wrap {
+    background-color: rgb(47, 50, 60);
+    height: 60px;
+    position: fixed;
+    z-index: 1500;
+    width: 100%;
+  }
+
+  .nav-ul {
+    margin: 0 auto;
+    width: 1200px;
+  }
+
+  .navWrapFull {
+    width: 100%;
+    padding: 0 2%
+  }
+
+  .navWrapFull .el-menu-item {
+    padding: 0 2%;
+  }
+
+  .navWrapFull .el-submenu {
+    padding: 0 2%;
+  }
+
+
   .logoWrap {
     /* display: inline-block; */
     float: left;

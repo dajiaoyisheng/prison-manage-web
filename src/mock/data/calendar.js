@@ -16,6 +16,10 @@ let calendarData = Mock.mock({
         {value: "1", label: "必须"},
         {value: "2", label: "禁止"}
     ],
+    scopes: [
+        {value: "1", label: "全体人员"},
+        {value: "2", label: "就医人员除外"}
+    ],
     dailyDates :  {
         "totalRows": Mock.mock('@natural(1, 10)'),
         items: []

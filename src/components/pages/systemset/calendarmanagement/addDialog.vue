@@ -28,9 +28,18 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-form-item label="时长" prop="timeLen">
-                    <el-input-number style="width: 220px; margin-right:10px;" v-model="form.timeLen" :precision="2" :step="0.1" :min="0" :max="24"></el-input-number>小时
-                </el-form-item>
+                <el-col :span="12">
+                    <el-form-item label="时长(小时)" prop="timeLen">
+                        <el-input-number style="width: 220px; margin-right:10px;" v-model="form.timeLen" :precision="2" :step="0.1" :min="0" :max="24"></el-input-number>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="适用范围" prop="scope">
+                        <el-select v-model="form.scope">
+                            <el-option v-for="item in scopes" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
             </el-row>
             <el-row>
                 <el-form-item label="日期类型" prop="dateType">
@@ -46,9 +55,6 @@
                     </el-checkbox-group>
                 </el-form-item>
             </el-row>
-            <el-form-item label="适用范围">
-                <el-transfer v-model="value1" :data="data"></el-transfer>
-            </el-form-item>
             <el-form-item>
                 <el-button size="small" @click="submitForm('form')" type="primary">保存</el-button>
                 <el-button size="small" @click="resetForm('form')">重置</el-button>
@@ -68,6 +74,7 @@
                     timeLen: 1,
                     item: "",
                     option: "",
+                    scope: "",
                     dateType: [],
                     area: []
                 },
@@ -86,6 +93,9 @@
                     ],
                     option: [
                         { required: true, message: '请选择动作', trigger: 'blur' }
+                    ],
+                    scope: [
+                        { required: true, message: '请选择适用范围', trigger: 'blur' }
                     ],
                     dateType: [
                         { type: 'array', required: true, message: '请至少选择一个日期类型', trigger: 'change' }
@@ -112,7 +122,7 @@
                 this.$refs[formName].resetFields();
             }
         },
-        props: ['dateTypes', 'options', 'areas']
+        props: ['dateTypes', 'options', 'areas', 'scopes']
     }
 </script>
 
