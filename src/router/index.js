@@ -128,50 +128,53 @@ const router = new Router({
 
 
 router.beforeEach((to, from, next) => {
-  if (to.path === '/workbench') {
+  if (to.path === '/tvmonitor' || to.path === '/personnelposition' || to.path === '/pointname' || to.path === '/systemset/prisonmanagement' || to.path === '/systemset/prisonermanagement/operation' || to.path === '/systemset/cameramanagement' || to.path === '/systemset/systemmanagement') {
+    store.state.isFullNavWrap = true;
+  } else {
     store.state.isFullNavWrap = false;
+  }
+
+  
+  if (to.path === '/workbench') {
     next()
   } else if (to.path === '/tvmonitor') {
-    store.state.isFullNavWrap = true;
     next()
   } else if (to.path === '/personnelposition') {
-    store.state.isFullNavWrap = true;
     next()
   } else if (to.path === '/pointname') {
-    store.state.isFullNavWrap = true;
     next()
   } else if (to.path === '/querystats/posunusual') {
-    store.state.isFullNavWrap = false;
+    
     next()
   } else if (to.path === '/querystats/violation') {
-    store.state.isFullNavWrap = false;
+    
     next()
   } else if (to.path === '/querystats/prewarningstats') {
-    store.state.isFullNavWrap = false;
+    
     next()
   } else if (to.path === '/systemset/prisonmanagement') {
-    store.state.isFullNavWrap = true;
+    
     next()
   } else if (to.path === '/systemset/prisonermanagement') {
-    store.state.isFullNavWrap = false;
+    
     next()
   } else if (to.path === '/systemset/prisonermanagement/operation') {
-    store.state.isFullNavWrap = true;
+    
     next()
   } else if (to.path === '/systemset/cameramanagement') {
-    store.state.isFullNavWrap = true;
+    
     next()
   } else if (to.path === '/systemset/servermanagement') {
-    store.state.isFullNavWrap = false;
+    
     next()
   } else if (to.path === '/systemset/calendarmanagement') {
-    store.state.isFullNavWrap = false;
+    
     next()
   } else if (to.path === '/systemset/sysoptionsmanagement') {
-    store.state.isFullNavWrap = false;
+    
     next()
   } else if (to.path === '/systemset/systemmanagement') {
-    store.state.isFullNavWrap = true;
+    
     next()
   } else if (localStorage.getItem('token')) {
     next()

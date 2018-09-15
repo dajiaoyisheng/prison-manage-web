@@ -1,18 +1,83 @@
 //工作日(Working day)对应结果为 0, 休息日(RestDay)对应结果为 1, 节假日(festival)对应的结果为 2
 
 let newHoliday = [{
-    beginDate: "2018/9/3",
-    endDate: "2018/9/3",
-    title: "胜利日",
+    beginDate: "2018/1/1",
+    endDate: "2018/1/1",
+    title: "元旦",
     type: 2
 }, {
+    beginDate: "2018/1/6",
+    endDate: "2018/1/6",
+    title: "双休日",
+    type: 1
+}, {
+    beginDate: "2018/1/7",
+    endDate: "2018/1/7",
+    title: "双休日",
+    type: 1
+}, {
+    beginDate: "2018/9/1",
+    endDate: "2018/9/2",
+    title: "双休日",
+    type: 1
+}, {
+    beginDate: "2018/9/8",
+    endDate: "2018/9/9",
+    title: "双休日",
+    type: 1
+}, {
+    beginDate: "2018/9/15",
+    endDate: "2018/9/16",
+    title: "双休日",
+    type: 1
+}, {
     beginDate: "2018/9/22",
+    endDate: "2018/9/23",
+    title: "双休日",
+    type: 1
+}, {
+    beginDate: "2018/9/24",
     endDate: "2018/9/24",
     title: "中秋节",
     type: 2
 }, {
-    beginDate: "2018/9/1",
-    endDate: "2018/9/2",
+    beginDate: "2018/10/01",
+    endDate: "2018/10/07",
+    title: "国庆节",
+    type: 2
+}, {
+    beginDate: "2018/10/13",
+    endDate: "2018/10/14",
+    title: "双休日",
+    type: 1
+}, {
+    beginDate: "2018/10/20",
+    endDate: "2018/10/21",
+    title: "双休日",
+    type: 1
+}, {
+    beginDate: "2018/10/27",
+    endDate: "2018/10/28",
+    title: "双休日",
+    type: 1
+}, {
+    beginDate: "2018/11/03",
+    endDate: "2018/11/04",
+    title: "双休日",
+    type: 1
+}, {
+    beginDate: "2018/11/10",
+    endDate: "2018/11/11",
+    title: "双休日",
+    type: 1
+}, {
+    beginDate: "2018/11/17",
+    endDate: "2018/11/18",
+    title: "双休日",
+    type: 1
+}, {
+    beginDate: "2018/11/24",
+    endDate: "2018/11/25",
     title: "双休日",
     type: 1
 }];

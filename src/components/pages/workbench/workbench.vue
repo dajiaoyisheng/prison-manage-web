@@ -83,11 +83,13 @@
   import area1 from '@/assets/area1.png';
   import area2 from '@/assets/area2.png';
 
-  import pagination from '@/components/commons/pagination.vue';
+  // import pagination from '@/components/commons/pagination.vue';
+  // Vue.component('pagination', () => import('@/components/commons/pagination.vue'))
   export default {
     name: 'workbench',
     components: {
-      pagination
+      // pagination
+      'pagination': () => import('@/components/commons/pagination.vue')
     },
     data() {
       this.pieExtend = {
@@ -222,7 +224,7 @@
             var barItem2 = params[1] || params;
             // if (barItem1.componentType == 'series') {
             var content =
-              `<div class="tooltip-wrap clearfixed">
+              `<div class="tooltip-wrap clearfixe">
                     <div class="tooltip-left fl">
                       <div class="tooltip-header">分类</div>
                       ${detil_str}

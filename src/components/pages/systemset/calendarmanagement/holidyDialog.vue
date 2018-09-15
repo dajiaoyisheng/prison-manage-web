@@ -1,5 +1,5 @@
 <template>
-    <div id="holidyDialog clearfixed">
+    <div id="holidyDialog">
         <div id="tip">
           <span>请在表格中设置日期类型</span>
         </div>
@@ -159,8 +159,8 @@
 
 <style>
     #holidyDialog {
-      width: 600px;
-      height: 785px;
+      /* width: 600px;
+      height: 720px; */
     }
 
     .el-dialog__body {
@@ -232,6 +232,7 @@
       height: 15px;
       width: 15px;
       background: #FFF1EF;
+      border: 1px solid #AAA;
       display: inline-block;
     }
 
@@ -239,13 +240,15 @@
       height: 15px;
       width: 15px;
       background: #EEF9FD;
+      border: 1px solid #AAA;
       display: inline-block;
     }
 
     .legend #s3 {
       height: 15px;
       width: 15px;
-      background: #E0E3EC;
+      background: #FFF;
+      border: 1px solid #AAA;
       display: inline-block;
     }
 
@@ -263,7 +266,7 @@
 
     .events-table table {
       width:569px;
-      height:246px;
+      /* height:246px; */
       border: 1px solid #E0E3EC;
     }
 
@@ -281,7 +284,7 @@
     .events-table > .grid-body {
       overflow-x: hidden;
       width: 569px;
-      height: 200px;
+      height: 240px;
     }
 
     .events-table > .grid-body > table > tbody > tr{
@@ -309,9 +312,9 @@
     }
 
     #buttons {
-      margin-top: 30px;
+      margin-top: 20px;
       padding: 0;
-      line-height: 30px;
+      line-height: 20px;
       text-align: right;
       width: 570px;
     }
