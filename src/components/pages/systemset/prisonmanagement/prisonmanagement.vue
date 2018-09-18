@@ -33,8 +33,8 @@
             <img :src="images.del" alt="">
             <img :src="images.cancel" alt="">
             <img :src="images.renew" alt="">
-            <img :src="images.div" @click="draw()" alt="矩形">
-            <img :src="images.label" alt="">
+            <img :src="images.div" @click="draw('rect')" alt="矩形">
+            <img :src="images.label" @click="draw('text')" alt="标签">
             <img :src="images.camera" @click="drawCamera()" alt="摄像头">
             <img :src="images.textA" id="strokeColor" alt="">
           </div>
@@ -48,9 +48,13 @@
         <div class="l fl inbl">
           <div v-if="isDrawCamera">
             <p class="h-line">摄像头设置</p>
-            <div>
-                <!-- 摄像头 -->
-                摄像头1
+            <div class="camera-list">
+                <span v-for="camera in cameraList">
+                  <span class="icon">
+                    <img :src="images.camera">
+                  </span>
+                  <span class="name" v-text="camera.name"></span>
+                </span>
             </div>
           </div>
           <div ref="canvasContainer" class="actionImage">
@@ -141,6 +145,14 @@
         strokeStyle: "#ff0000",
         shapeType: "rect",
         fileList: [],
+        cameraList: [
+          { name: 'J1JSL02L01' },
+          { name: 'J1JSL02L02' },
+          { name: 'J1JSL02L03' },
+          { name: 'J1JSL02L04' },
+          { name: 'J1JSL02L05' },
+          { name: 'J1JSL02L06' }
+        ],
         isDrawCamera: false,
         backgroundImage: null,
         Prisonareatree: [],
@@ -189,9 +201,10 @@
             showClose: false
           });
       },
-      draw() {
+      draw(type) {
         if (this.backgroundImage !== null) {
           if (this.objectInfo.name) {
+            this.shapeType = type;
             this.startDraw();
           } else {
             this.$alert('请在右侧选择一个对象', {
@@ -325,8 +338,33 @@
     background-size:100% 100%;
   }
 
+  .h-line {
+    font-size: 14px;
+    font-weight: 400;
+    color: #59C4EE;
+  }
+
   .h-line:after {
     width: 89%;
+  }
+
+  .camera-list {
+    padding: 15px 0;
+  }
+
+  .camera-list > span {
+    margin-right: 19px;
+  }
+
+  .camera-list > span > .name {
+    font-size: 14px;
+    font-weight: 400;
+    color: #333333;
+  }
+
+  .camera-list > span > .icon > img {
+    width: 18px;
+    height: 14px;
   }
 
   .main .l {

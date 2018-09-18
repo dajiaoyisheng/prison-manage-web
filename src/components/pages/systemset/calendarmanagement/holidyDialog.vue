@@ -28,7 +28,7 @@
         </div>
         <!-- 操作 -->
         <div class="action">
-          <span @click="addRow" style="cursor: pointer;"><i class="el-icon-circle-plus-outline"></i>添加</span>
+          <span @click="addRow" class="pointer"><i class="el-icon-circle-plus-outline"></i>添加</span>
         </div>
         <!-- 表格 -->
         <div class="events-table">

@@ -15,7 +15,7 @@
               <ul>
                 <li v-for="item in areasDetail" :key="item.area">
                   <span>{{item.area}}：</span>
-                  <router-link class="num-color" to="/personnelposition">{{item.pNumItem}}</router-link>
+                  <router-link class="num-color word-width" to="/personnelposition">{{item.pNumItem}}</router-link>
                   <span>人</span>
                 </li>
               </ul>
@@ -64,7 +64,7 @@
             <ul class="p-status clearfix">
               <li v-for="item in pStatus" :key="item.status">
                 <span>{{item.status}}:</span>
-                <router-link class="num-color" to="/personnelposition">{{item.pNum}}</router-link>
+                <router-link class="num-color word-width" to="/personnelposition">{{item.pNum}}</router-link>
                 <span>人</span>
               </li>
             </ul>
@@ -89,7 +89,8 @@
     name: 'workbench',
     components: {
       // pagination
-      'pagination': () => import('@/components/commons/pagination.vue')
+      'pagination': () =>
+        import('@/components/commons/pagination.vue')
     },
     data() {
       this.pieExtend = {
@@ -609,6 +610,11 @@
 
   .text-decoration {
     text-decoration: underline;
+  }
+
+  .word-width {
+    display: inline-block;
+    width:2em;
   }
 
 </style>

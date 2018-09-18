@@ -404,14 +404,10 @@ th {
 
 /* el行外下边距end */
 /* 搜索按钮颜色begin */
-/* .el-input-group__append,
-.el-input-group__prepend {
-  background-color: #59c4ee;
-  color: #fff;
-} */
+
 .search-btn {
   background-color: #59c4ee;
-  border: 1px solid #59c4ee;
+  border-color: #59c4ee;
   color: #fff;
 }
 
@@ -421,6 +417,19 @@ th {
   border-color: #59c4ee;
   background-color: #59c4ee;
 }
+/* 返回按钮 */
+.return-btn {
+  color: #59c4ee;
+  border-color: #59c4ee;
+}
+
+.return-btn:focus,
+.return-btn:hover {
+  color: #59c4ee;
+  border-color: #59c4ee;
+  background-color: #fff;
+}
+
 
 .el-input.is-active .el-input__inner,
 .el-input__inner:focus {
@@ -460,9 +469,7 @@ th {
 }
 
 /* 内容end */
-.return-btn {
-  background: #e8e8e8;
-}
+
 
 /* 下拉框位置beging */
 .el-popper[x-placement^=bottom] {

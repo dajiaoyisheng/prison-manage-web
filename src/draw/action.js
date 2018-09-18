@@ -18,7 +18,10 @@ export default class Action {
 
         this.mouseupCallback = mouseupCallback;
 
-        this.mouseStart = this.mouseEnd = { x: 0, y: 0 };
+        this.mouseStart = this.mouseEnd = {
+            x: 0,
+            y: 0
+        };
         this.drawing = false;
         this.shape = {
             "control": true,

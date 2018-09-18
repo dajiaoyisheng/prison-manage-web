@@ -7,7 +7,7 @@ class Rect {
     constructor(shape) {
         let lineWidth = shape.lineWidth || 1;
         let strokeStyle = shape.strokeStyle || '#f00';
-        let fillStyle = shape.fillStyle || '#f00';
+        let fillStyle = shape.fillStyle || '#00BFF3';
         let uuid = shape.uuid;
 
         let rect = new Konva.Line({

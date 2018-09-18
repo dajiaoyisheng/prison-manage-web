@@ -3,10 +3,11 @@
     <ul class="mo-paging">
       <!-- prev -->
       <li :class="['paging-item', 'paging-item--prev', {'paging-item--disabled' : index === 1}]" @click="prev"><img
-          :src="prevPage" alt=""></li>
+          class="ver-align" :src="prevPage" alt=""></li>
 
       <!-- first -->
-      <li :class="['paging-item', 'paging-item--first', {'paging-item--disabled' : index === 1}]" v-if="showPrevMore" @click="first">1</li>
+      <li :class="['paging-item', 'paging-item--first', {'paging-item--disabled' : index === 1}]" v-if="showPrevMore"
+        @click="first">1</li>
 
       <li :class="['paging-item', 'paging-item--more']" v-if="showPrevMore">...</li>
 
@@ -21,8 +22,8 @@
 
       <!-- next -->
       <li :class="['paging-item', 'paging-item--next', {'paging-item--disabled' : index === pages}]" @click="next"><img
-          :src="nextPage" alt=""></li>
-      <li :class="['paging-item']">
+          class="ver-align" :src="nextPage" alt=""></li>
+      <li :class="['paging-item']" class="page-total">
         共{{ pages }}页
       </li>
     </ul>
@@ -168,6 +169,10 @@
 
   }
 
+  .ver-align {
+    vertical-align: sub;
+  }
+
   .mo-paging .paging-item {
     display: inline;
     font-size: 14px;
@@ -189,6 +194,13 @@
   .mo-paging .paging-item:hover {
     background-color: #f0f0f0;
     color: #0275d8;
+  }
+
+  /* 总页数 */
+  .mo-paging .paging-item.page-total:hover {
+    background-color: #fff;
+    color: #000;
+    cursor: default;
   }
 
   .mo-paging .paging-item.paging-item--disabled,

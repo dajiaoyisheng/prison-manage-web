@@ -3,11 +3,12 @@
     <ul class="paging-ul">
       <!-- prev -->
       <li :class="['paging-item', 'paging-item--prev', {'paging-item--disabled' : index === 1}]" @click="prev">
-        <img :src="prevPage" alt="">
+        <img class="ver-align" :src="prevPage" alt="">
       </li>
 
       <!-- first -->
-      <li :class="['paging-item', 'paging-item--first', {'paging-item--disabled' : index === 1}]" v-if="showPrevMore" @click="first">1</li>
+      <li :class="['paging-item', 'paging-item--first', {'paging-item--disabled' : index === 1}]" v-if="showPrevMore"
+        @click="first">1</li>
 
       <li :class="['paging-item', 'paging-item--more']" v-if="showPrevMore">...</li>
 
@@ -22,7 +23,7 @@
 
       <!-- next -->
       <li :class="['paging-item', 'paging-item--next', {'paging-item--disabled' : index === pages}]" @click="next">
-        <img :src="nextPage" alt="">
+        <img class="ver-align" :src="nextPage" alt="">
       </li>
       <li class="gotoPage">
         <!-- <el-input v-model="input" placeholder="请输入内容" size="mini"></el-input> -->
@@ -101,13 +102,15 @@
       },
       go(page) {
         page = Number(page);
-        console.log(page)
-        if (this.index !== page) {
-          this.index = page
+        if (page > this.pages) {
+          this.$message.error('超出最大页码数');
+        } else {
+          this.index = page;
           //父组件通过change方法来接受当前的页码
           this.$emit('change', this.index);
           this.gotoPage = null;
         }
+
       }
     },
     computed: {
@@ -124,8 +127,6 @@
         const pageCount = this.pages
         let current = this.index
         const _offset = (perPages - 1) / 2
-
-
         const offset = {
           start: current - _offset,
           end: current + _offset
@@ -176,6 +177,10 @@
     user-select: none;
   }
 
+  .ver-align {
+    vertical-align: sub;
+  }
+
   .paging-ul .paging-item {
     display: inline;
     font-size: 14px;
@@ -222,7 +227,8 @@
     z-index: 1;
     /* border-color: #0275d8; */
   }
-  li.gotoPage{
+
+  li.gotoPage {
     display: inline;
     font-size: 14px;
     position: relative;
@@ -234,6 +240,7 @@
     margin-left: -1px;
     cursor: pointer;
   }
+
   .paging-item-input {
     height: 32px;
     line-height: 32px;

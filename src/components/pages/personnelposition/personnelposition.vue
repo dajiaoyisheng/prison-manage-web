@@ -494,10 +494,10 @@
     position: absolute;
     left: 50%;
     left: 5%;
-    top: -1.4%;
+    top: -1%;
     width: 6em;
     background-color: #fff;
-    height: 1px;
+    height: 2px;
   }
 
   .imgWrap>span.pp-photo {

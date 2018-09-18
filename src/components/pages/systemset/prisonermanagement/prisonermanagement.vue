@@ -6,27 +6,26 @@
         <el-row :gutter="20" type="flex">
           <el-col :span="3">
             <img :src="images.add" alt="">
-            <span>增加</span>
+            <span class="pointer">增加</span>
           </el-col>
           <el-col :span="3">
             <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview"
               :on-remove="handleRemove" :before-remove="beforeRemove" :limit="1" :on-exceed="handleExceed" :file-list="fileList"
               :show-file-list="false">
               <img :src="images.importgroup" alt="">
-              <span>批量导入</span>
+              <span class="pointer">批量导入</span>
             </el-upload>
           </el-col>
           <el-col :span="3">
             <img :src="images.exportgroup" alt="">
-            <span>批量导出</span>
+            <span class="pointer">批量导出</span>
           </el-col>
           <el-col :span="3">
             <img :src="images.del" alt="">
-            <span>批量删除</span>
+            <span @click="delGroup" class="pointer">批量删除</span>
           </el-col>
           <el-col :span="5" :offset="2">
-            <el-input size="small" class="p-m-input" v-model="parame.words" placeholder="请输入姓名或编号">
-            </el-input>
+            <input class="p-m-input" @keyup.enter="search" v-model="parame.words" placeholder="请输入姓名或编号">
           </el-col>
           <el-col :span="4">
             <el-button @click="search" class="search-btn" size="small">搜索</el-button>
@@ -35,7 +34,7 @@
         </el-row>
       </section>
       <section class="el-table-wrap">
-        <el-table :data="tableData" @selection-change="handleSelectionChange" style="width: 100%">
+        <el-table :data="tableData" ref="singleTable" @selection-change="handleSelectionChange" style="width: 100%">
           <el-table-column type="selection" width="55">
           </el-table-column>
           <el-table-column prop="prisonerName" label="服刑人员姓名">
@@ -67,17 +66,10 @@
           </el-table-column>
         </el-table>
       </section>
-        <div class="el-pagination-wrap">
-          <table-pagination :total="count" @change="pageChange"></table-pagination>
-        </div>
+      <div class="el-pagination-wrap">
+        <table-pagination :total="count" @change="pageChange"></table-pagination>
+      </div>
     </section>
-    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
-      <span>这是一段信息</span>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = true">确 定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
@@ -134,24 +126,62 @@
     },
     methods: {
       pageChange(page) {
-        this.currentPage = page
-        this.getTableDatas(page)
+        this.currentPage = page;
+        this.getTableDatas(page);
       },
       // 获取表格数据
       getTableDatas(page) {
-        let _this = this;
         this.parame = {
           "page": page || 1,
-          words: this.words
+          'words': this.words
         }
-        this.$ajxj.post('/getPManageDatas', this.parame).then(function (res) {
-          console.log(res.data.totalRows);
-          _this.count = res.data.totalRows;
-          _this.tableData = res.data.items;
+        this.$ajxj.post('/getPManageDatas', this.parame).then((res) => {
+          this.count = res.data.totalRows;
+          this.tableData = res.data.items;
         }).catch(function (error) {
           console.log(error);
         }).then(function (error) {
           console.log(error);
+        });
+      },
+      // 删除操作
+      delPrisoner(delObj) {
+        // 批量删除参数是数组
+        let isGroupDel = delObj instanceof Array;
+        let delObjNames = null;
+        // 要删除的对象
+        this.$confirm('此操作将删除该服刑人员信息, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          if (isGroupDel) { // 批量删除
+            delObjNames = this.multipleSelection.map((item, index) => item.prisonerName);
+          } else { // 单个删除
+            delObjNames = delObj.prisonerName;
+          }
+          console.log(delObjNames);
+          let parame = {
+            "delIds": delObjNames
+          }
+
+          this.$ajxj.post('/getPManageDatas', parame).then((res) => {
+            this.getTableDatas(this.currentPage || 1);
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+          }).catch(function (error) {
+            console.log(error);
+          }).then(function (error) {
+            console.log(error);
+          });
+
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
         });
       },
       changeCurrent(val) {
@@ -160,7 +190,6 @@
       // 选
       handleSelectionChange(val) {
         this.multipleSelection = val;
-        console.log(this.multipleSelection)
       },
       handleRemove(file, fileList) {
         console.log(file, fileList);
@@ -174,25 +203,19 @@
       },
       // 删除
       handleDelete(index, row) {
-        this.tableData.splice(index, 1);
-        console.log(this.tableData);
+        this.delPrisoner(row)
       },
       // 批量删除
       delGroup() {
         if (this.multipleSelection.length === 0) {
           this.$message("请选择要删除的对象!")
         } else {
-          // 要删除的对象
-          this.$confirm('确认删除？')
-            .then(_ => {
-              var names = this.multipleSelection.map(item => item.name).join()
-              console.log(names);
-            })
-            .catch(_ => {});
+          this.delPrisoner(this.multipleSelection)
         }
       },
       // 搜索
       search() {
+        console.log('搜索');
         this.getTableDatas();
       },
 
@@ -215,6 +238,19 @@
 <style scoped>
   .pm-t span {
     color: #666;
+  }
+
+  .p-m-input {
+    border-radius: 4px;
+    border: 1px solid #dcdfe6;
+    box-sizing: border-box;
+    font-size: inherit;
+    height: 32px;
+    line-height: 32px;
+    padding: 0 15px;
+    -webkit-transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
+    transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
+    width: 100%;
   }
 
 </style>

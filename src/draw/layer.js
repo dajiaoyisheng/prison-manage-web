@@ -1,6 +1,7 @@
 import Konva from 'konva';
 import Rect from './rect';
 import Mask from './mask';
+import Text from './Text';
 
 class Layer {
     constructor(width, height) {
@@ -11,7 +12,11 @@ class Layer {
 
         // 生成对应图形的对象工厂
         let factory = function(type, shape) {
+            console.log(type);
             switch (type) {
+                case 'text':
+                    return new Text(shape);
+                    break;
                 case 'rect':
                 default:
                     return new Rect(shape);

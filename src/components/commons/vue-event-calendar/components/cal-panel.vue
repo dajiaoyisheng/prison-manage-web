@@ -18,7 +18,7 @@
       </div>
       <div class="dates" >
         <div v-for="date in dayList" class="item" :key="date.date">
-          <p ref="dateNum" class="date-num" :class="{'is-selected-day': (isBeginEndDate(date.date,feedbackDayData.beginDate, feedbackDayData.endDate)), 'is-gray':!date.status}"
+          <p style="font-size: 10px;" ref="dateNum" class="date-num" :class="{'is-selected-day': (isBeginEndDate(date.date,feedbackDayData.beginDate, feedbackDayData.endDate)), 'is-gray':!date.status}"
             @click="handleChangeCurday(date)"
             :style="{color: date.type=='2' ? festivalColor : (date.type=='1' ? restDayColor : (!date.status ? '#BCBDBF' : customColor))}">
             {{date.date.split('/')[2]}}</p>
@@ -89,7 +89,7 @@ export default {
       let startDate = new Date(firstDay)
       let isLeapMonth = leapMonth.includes(this.curMonth + 1);
       startDate.setDate(firstDay.getDate() - dayOfWeek)
-      let item, status, tempArr = [], tempItem, end = (dayOfWeek == 6 || dayOfWeek == 5 && isLeapMonth) ? 42 : 35;
+      let item, status, tempArr = [], tempItem, end = 42;//(dayOfWeek == 6 || dayOfWeek == 5 && isLeapMonth) ? 42 : 35;
       for (let i = 0 ; i < end ; i++) {
           item = new Date(startDate);
           item.setDate(startDate.getDate() + i);
@@ -156,7 +156,7 @@ export default {
       if (date.status) {
         this.$refs.dateNum.forEach(function(ele, index) {
           if (index == date.index) {
-            ele.style.border = '3px solid #59C4EE';
+            ele.style.border = '2px solid #59C4EE';
           } else {
             ele.style.border = 'unset';
           }
@@ -233,7 +233,7 @@ export default {
   height: 35px;
   width: 56px;
   color: #333333;
-  font-size:15px;
+  font-size:12px;
   font-family:MicrosoftYaHei;
   font-weight:400;
 }
@@ -248,9 +248,9 @@ export default {
   position: relative;
   float: left;
   display: block;
-  height: 43px;
+  height: 30px;
   width: 56px;
-  line-height: 43px;
+  line-height: 30px;
   cursor: default;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   border-top: 1px solid #e0e3ec;
@@ -260,7 +260,7 @@ export default {
   font-size: 1rem;
   position: relative;
   z-index: 3;
-  line-height: 37px;
+  line-height: 28px;
 }
 
 .cal-wrapper .cal-body .dates .item .date-num.is-gray {
@@ -274,29 +274,29 @@ export default {
   background-color: #f29543;
 }
 .cal-wrapper .cal-body .dates .item .is-selected-day {
-  border: 3px solid #59c4ee;
+  border: 2px solid #59c4ee;
 }
 .cal-wrapper .cal-body .dates .item .is-festival {
   content: "";
   background-color: #fff1ef;
   width: 56px;
-  height: 43px;
+  height: 30px;
   position: absolute;
   top: 50%;
   z-index: 1;
   margin-left: -28px;
-  margin-top: -22px;
+  margin-top: -15px;
 }
 .cal-wrapper .cal-body .dates .item .is-restday {
   content: "";
   background-color: #eef9fd;
   width: 56px;
-  height: 43px;
+  height: 30px;
   position: absolute;
   top: 50%;
   z-index: 1;
   margin-left: -28px;
-  margin-top: -22px;
+  margin-top: -15px;
 }
 .cal-wrapper .cal-body .dates .item .is-today {
   content: "";
