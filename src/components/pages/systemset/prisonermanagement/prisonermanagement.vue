@@ -34,7 +34,7 @@
         </el-row>
       </section>
       <section class="el-table-wrap">
-        <el-table :data="tableData" ref="singleTable" @selection-change="handleSelectionChange" style="width: 100%">
+        <el-table :data="tableData" @selection-change="handleSelectionChange" style="width: 100%">
           <el-table-column type="selection" width="55">
           </el-table-column>
           <el-table-column prop="prisonerName" label="服刑人员姓名">
@@ -122,6 +122,8 @@
       }
     },
     mounted() {
+      
+      
       this.getTableDatas();
     },
     methods: {
@@ -145,9 +147,8 @@
         });
       },
       // 删除操作
-      delPrisoner(delObj) {
+      delPrisoner(delObj, delType) {
         // 批量删除参数是数组
-        let isGroupDel = delObj instanceof Array;
         let delObjNames = null;
         // 要删除的对象
         this.$confirm('此操作将删除该服刑人员信息, 是否继续?', '提示', {
@@ -155,7 +156,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          if (isGroupDel) { // 批量删除
+          if (delType === 'delGroup') { // 批量删除
             delObjNames = this.multipleSelection.map((item, index) => item.prisonerName);
           } else { // 单个删除
             delObjNames = delObj.prisonerName;
@@ -202,15 +203,17 @@
         console.log(index, row);
       },
       // 删除
-      handleDelete(index, row) {
-        this.delPrisoner(row)
+      handleDelete(index, row,p3) {
+        console.log('p3',p3);
+        
+        this.delPrisoner(row, 'del')
       },
       // 批量删除
       delGroup() {
         if (this.multipleSelection.length === 0) {
           this.$message("请选择要删除的对象!")
         } else {
-          this.delPrisoner(this.multipleSelection)
+          this.delPrisoner(this.multipleSelection, 'delGroup')
         }
       },
       // 搜索

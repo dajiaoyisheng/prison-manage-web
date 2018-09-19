@@ -26,7 +26,6 @@
         <img class="ver-align" :src="nextPage" alt="">
       </li>
       <li class="gotoPage">
-        <!-- <el-input v-model="input" placeholder="请输入内容" size="mini"></el-input> -->
         <input class="paging-item-input" v-model="gotoPage" @keyup.enter="go(gotoPage)" type="text">
         <span @click="go(gotoPage)">确定</span>
       </li>
