@@ -12,6 +12,7 @@ class Rect {
 
         let rect = new Konva.Line({
             name: "PerfectRect" + uuid,
+            type: "Rect",
             points: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             fill: fillStyle,
             stroke: strokeStyle,

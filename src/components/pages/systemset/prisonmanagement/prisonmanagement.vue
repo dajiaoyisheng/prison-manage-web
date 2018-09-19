@@ -49,7 +49,7 @@
           <div v-if="isDrawCamera">
             <p class="h-line">摄像头设置</p>
             <div class="camera-list">
-                <span v-for="camera in cameraList">
+                <span v-for="camera in cameraList" @click="draw('camera')">
                   <span class="icon">
                     <img :src="images.camera">
                   </span>
@@ -112,6 +112,7 @@
   import div from '@/assets/div.png';
   import label from '@/assets/label.png';
   import camera from '@/assets/camera.png';
+  import camera0 from '@/assets/camera0.png';
   import review from '@/assets/review.png';
   import textA from '@/assets/text-a.png';
   import exportgroup from '@/assets/exportgroup.png';
@@ -158,7 +159,8 @@
         Prisonareatree: [],
         PrisonareaObjtree:[],
         objectInfo: {},//选中的父对象
-        message: '监区管理'
+        message: '监区管理',
+        cameraImg: new Image()
       }
     },
     created: function () {
@@ -225,6 +227,7 @@
       },
       startDraw() {
         this.drawObj.setDrawState(true);
+        this.drawObj.setImage(this.cameraImg);
         this.drawObj.setShape(this.lineWidth, this.strokeStyle, this.shapeType);
         this.drawObj.showMask();
         this.drawObj.init();
@@ -247,6 +250,7 @@
         }
         tree.append(data, node);
       });
+      this.cameraImg.src = camera0;
     }
   }
 

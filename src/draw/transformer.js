@@ -8,6 +8,7 @@ class Transformer {
         let uuid = shape.uuid;
         return new Konva.Transformer({
             name: "PerfectTransformer" + uuid,
+            type: "Transformer",
             rotateEnabled: false,
             borderStroke: fillStyle,
             anchorStroke: fillStyle,

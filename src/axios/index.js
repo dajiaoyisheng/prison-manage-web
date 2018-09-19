@@ -1,5 +1,7 @@
 import axios from 'axios';
-import { Message } from 'element-ui';
+import {
+    Message
+} from 'element-ui';
 import store from '@/vuex/store'
 // axios 配置
 axios.defaults.timeout = 3000; // 设置超时时间为3s
@@ -24,14 +26,14 @@ axios.defaults.withCredentials = false;
 //     }
 // )
 // 添加请求拦截器
-axios.interceptors.request.use(function (config) {
+axios.interceptors.request.use(function(config) {
     // 在发送请求之前做些什么
     store.state.loading = true;
     return config;
-  }, function (error) {
+}, function(error) {
     // 对请求错误做些什么
     return Promise.reject(error);
-  });
+});
 
 axios.interceptors.response.use(response => {
     store.state.loading = false;

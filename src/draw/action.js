@@ -44,7 +44,12 @@ export default class Action {
         this.shape.strokeStyle = strokeStyle || this.shape.strokeStyle;
         this.shape.fillStyle = fillStyle || this.shape.fillStyle;
         this.shape.type = type || this.shape.type;
+        this.layer.disableShapeDrap();
     };
+
+    setImage(image) {
+        this.shape.image = image;
+    }
 
     //设置当前绘制状态
     setDrawState(state) {
@@ -60,9 +65,11 @@ export default class Action {
     mouseDown() {
         if (self.drawing) {
             self.mouseStart = self.stage.getPointerPosition();
+            self.shape.x = self.mouseStart.x;
+            self.shape.y = self.mouseStart.y;
             self.uuid = self.shape.uuid = UUID.v4();
             self.layer.renderShape(self.shape.type, self.shape).on('click', function() {
-                self.uuid = this.node.getAttr('uuid');
+                self.uuid = this.getAttr('uuid');
             });
 
             self.stage.on('contentMousemove', self.mouseMove);
@@ -71,13 +78,16 @@ export default class Action {
     };
 
     mouseMove() {
-        self.mouseEnd = self.stage.getPointerPosition();
-        self.layer.updateShapeByUUID(self.uuid, self.mouseStart, self.mouseEnd);
+        if (self.drawing) {
+            self.mouseEnd = self.stage.getPointerPosition();
+            self.layer.updateShapeByUUID(self.uuid, self.shape.type, self.mouseStart, self.mouseEnd);
+        }
     };
 
     mouseUp() {
         self.setDrawState(false);
         self.layer.hideMask();
+        self.layer.finished(self.uuid, self.shape.type);
         self.stage.off('contentMousedown');
         self.stage.off('contentMousemove');
         self.stage.off('contentMouseup');
