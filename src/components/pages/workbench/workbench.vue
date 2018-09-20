@@ -15,7 +15,7 @@
               <ul>
                 <li v-for="item in areasDetail" :key="item.area">
                   <span>{{item.area}}：</span>
-                  <router-link class="num-color word-width" to="/personnelposition">{{item.pNumItem}}</router-link>
+                  <router-link class="num-color word-width" :to="{path:'/personnelposition',query:{area:item.area}}">{{item.pNumItem}}</router-link>
                   <span>人</span>
                 </li>
               </ul>
@@ -64,7 +64,7 @@
             <ul class="p-status clearfix">
               <li v-for="item in pStatus" :key="item.status">
                 <span>{{item.status}}:</span>
-                <router-link class="num-color word-width" to="/personnelposition">{{item.pNum}}</router-link>
+                <router-link class="num-color word-width" :to="{path:'/personnelposition',query:{status:item.status}}">{{item.pNum}}</router-link>
                 <span>人</span>
               </li>
             </ul>
@@ -101,7 +101,7 @@
           formatter: function (params) {
             var pieItem1 = params[0] || params;
             var content =
-              `<div>${pieItem1.name}&nbsp;<a class="fontcolor text-decoration" href="/#/personnelposition">${pieItem1.value}</a>&nbsp;${pieItem1.percent}%</div>`;
+              `<div>${pieItem1.name}&nbsp;<a class="fontcolor text-decoration" href="/#/personnelposition?name=${pieItem1.name}">${pieItem1.value}</a>&nbsp;${pieItem1.percent}%</div>`;
             return content;
           }
         },
@@ -217,8 +217,8 @@
               detil_str = detil_str + `<div>${item.detil}</div>`;
               detil_num_str = detil_num_str +
                 `<div>
-                    <a class="fontcolor text-decoration" href="/#/querystats/violation">${item.number}</a>
-                    <a class="fontcolor text-decoration" href="/#/querystats/violation">${item.pNumber}</a>
+                    <a class="fontcolor text-decoration" href="/#/querystats/violation?name=${item.detil}">${item.number}</a>
+                    <a class="fontcolor text-decoration" href="/#/querystats/violation?name=${item.detil}">${item.pNumber}</a>
                   </div>`;
             });
             var barItem1 = params[0] || params;
@@ -277,8 +277,8 @@
         this.$get('/getPrisonersData')
           .then((res) => {
             console.log('犯人总数res', res)
-            this.areasDetail = res.prisonsers;
-            this.personnum = res.personnum;
+            this.areasDetail = res.data.prisonsers;
+            this.personnum = res.data.personnum;
           })
           
       },
@@ -286,22 +286,22 @@
       getPClass() {
         this.$get('/getBenchChartPie')
           .then((res) => {
-            this.benchChartPieData = res.pieData;
+            this.benchChartPieData = res.data.pieData;
           })
       },
       // 人员状态 pStatus
       getPStatus() {
         this.$get('/getPStatus')
           .then((res) => {
-            this.pStatus = res
+            this.pStatus = res.data
           })
       },
       // 预警事件分类
       getPreWarningClass() {
         this.$get('/getBenchChartbarData')
           .then((res) => {
-            this.benchChartbarData = res.barData;
-            this.preWarningDetil = res.detils;
+            this.benchChartbarData = res.data.barData;
+            this.preWarningDetil = res.data.detils;
           })
       },
 
@@ -344,14 +344,13 @@
       },
       //获取数据
       getList() {
-        var _this = this;
         // ?pageSize=${this.pageSize}&currentPage=${this.currentPage}
         this.$post(`/pPTableData`, {
-            currentPage: _this.currentPage
+            currentPage: this.currentPage
           })
-          .then(function (res) {
-            _this.count = 124;
-            _this.items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+          .then((res)=> {
+            this.count = 124;
+            this.items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
           })
       },
 

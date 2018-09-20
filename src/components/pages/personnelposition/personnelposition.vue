@@ -338,15 +338,9 @@
       }
     },
     created: function () {
-      var _this = this;
-      this.$ajxj.get('/pPositionData')
-        .then(function (res) {
-          // _this.loading = false;
-          _this.pPositionData = res.data.data
-          _this.page = res.data.total
-        }).catch(function (error) {
-          console.log(error);
-        }).then(function () {});
+      console.log(this.$route.query.area)
+      let area = this.$route.query.area;
+      this.getPPositionData('', area);
       this.getTableData();
     },
     mounted: function () {
@@ -359,17 +353,25 @@
         this.getTableData(page)
       },
       getTableData(p) {
-        var _this = this
-        this.$ajxj.post('/pPTableData', {
+        this.$post('/pPTableData', {
             page: p || 1
           })
-          .then(function (res) {
-            _this.count = res.data.total;
+          .then((res) => {
+            this.count = res.data.total;
             console.log('res.data', res.data)
-
-            _this.pPTableData = res.data.data
-            _this.page = res.data.total
-          }).catch(function (error) {}).then(function () {});
+            this.pPTableData = res.data.data
+            this.page = res.data.total
+          })
+      },
+      getPPositionData(p, area) {
+        this.$get('/pPositionData', {
+            'area': area
+          })
+          .then((res) => {
+            // this.loading = false;
+            this.pPositionData = res.data.data
+            this.page = res.data.total
+          })
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
