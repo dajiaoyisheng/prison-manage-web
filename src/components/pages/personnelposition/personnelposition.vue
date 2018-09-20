@@ -303,7 +303,7 @@
     },
     data() {
       return {
-        searchPrams: {},
+        // searchPrams: {},
         area: '', //监区
         monitoringHouse: '', //监舍
         room: '',
@@ -370,18 +370,28 @@
       this.getPPositionData('', searchParam);
       this.getTableData('', searchParam);
     },
+    computed: {
+      searchPrams: function(){
+        return {
+        area: this.area,
+        monitoringHouse: this.monitoringHouse, //监舍
+        room: this.room,
+        supervisionType: this.supervisionType,
+        prisoner: this.prisoner,}
+      }
+    },
     mounted: function () {
+      // this.searchPrams = {
+      //   area: this.area,
+      //   monitoringHouse: this.monitoringHouse, //监舍
+      //   room: this.room,
+      //   supervisionType: this.supervisionType,
+      //   prisoner: this.prisoner,
+      // }
       // this.$store.state.setNavFull("full")
     },
     methods: {
       search() {
-        this.searchPrams = {
-          area: this.area,
-          monitoringHouse: this.monitoringHouse, //监舍
-          room: this.room,
-          supervisionType: this.supervisionType,
-          prisoner: this.prisoner,
-        }
         console.log('param', this.searchPrams)
         this.getPPositionData('', this.searchPrams);
         this.getTableData('', this.searchPrams);
@@ -419,8 +429,8 @@
           })
       },
       playvideo(index, row, type) {
-        if(type == 'curevent'){
-          
+        if (type == 'curevent') {
+
         }
         console.log(index, row);
         window.open(row.tv)
