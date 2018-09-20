@@ -28,7 +28,7 @@
             <input class="p-m-input" @keyup.enter="search" v-model="parame.words" placeholder="请输入姓名或编号">
           </el-col>
           <el-col :span="4">
-            <el-button @click="search" class="search-btn" size="small">搜索</el-button>
+            <el-button @click="search" :loading="this.$store.state.loading" class="search-btn" size="small">搜索</el-button>
             <el-button @click="clear" class="return-btn" size="small">返回</el-button>
           </el-col>
         </el-row>

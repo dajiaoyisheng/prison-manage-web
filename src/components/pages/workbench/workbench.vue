@@ -101,7 +101,7 @@
           formatter: function (params) {
             var pieItem1 = params[0] || params;
             var content =
-              `<div>${pieItem1.name}&nbsp;<a class="fontcolor text-decoration" href="/#/personnelposition?name=${pieItem1.name}">${pieItem1.value}</a>&nbsp;${pieItem1.percent}%</div>`;
+              `<div>${pieItem1.name}&nbsp;<a class="fontcolor text-decoration" href="/#/personnelposition?level=${pieItem1.name}">${pieItem1.value}</a>&nbsp;${pieItem1.percent}%</div>`;
             return content;
           }
         },
@@ -217,8 +217,8 @@
               detil_str = detil_str + `<div>${item.detil}</div>`;
               detil_num_str = detil_num_str +
                 `<div>
-                    <a class="fontcolor text-decoration" href="/#/querystats/violation?name=${item.detil}">${item.number}</a>
-                    <a class="fontcolor text-decoration" href="/#/querystats/violation?name=${item.detil}">${item.pNumber}</a>
+                    <a class="fontcolor text-decoration" href="/#/querystats/violation?warnclass=${item.detil}">${item.number}</a>
+                    <a class="fontcolor text-decoration" href="/#/querystats/violation?warnclass=${item.detil}">${item.pNumber}</a>
                   </div>`;
             });
             var barItem1 = params[0] || params;
