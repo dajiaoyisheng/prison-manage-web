@@ -274,48 +274,35 @@
     methods: {
       // 犯人总数
       getPSum() {
-        this.$ajxj.get('/getPrisonersData')
+        this.$get('/getPrisonersData')
           .then((res) => {
-            this.areasDetail = res.data.prisonsers;
-            this.personnum = res.data.personnum;
+            console.log('犯人总数res', res)
+            this.areasDetail = res.prisonsers;
+            this.personnum = res.personnum;
           })
-          .catch((error) => {
-            console.log(error);
-          })
-          .then(() => {});
+          
       },
       // 人员分类
       getPClass() {
-        this.$ajxj.get('/getBenchChartPie')
+        this.$get('/getBenchChartPie')
           .then((res) => {
-            console.log('piedata', res.data.pieData)
-            this.benchChartPieData = res.data.pieData;
-            // 合并对像
-            // Object.assign(this.chartSettingsPie.labelMap, res.data.labelMap)
-            // this.chartSettingsPie.labelMap = res.data.labelMap;
-          }).catch((error) => {
-            console.log(error);
-          }).then(() => {});
+            this.benchChartPieData = res.pieData;
+          })
       },
       // 人员状态 pStatus
       getPStatus() {
-        this.$ajxj.get('/getPStatus')
+        this.$get('/getPStatus')
           .then((res) => {
-            this.pStatus = res.data
-          }).catch((error) => {
-            console.log(error);
-          }).then(() => {});
+            this.pStatus = res
+          })
       },
       // 预警事件分类
       getPreWarningClass() {
-        this.$ajxj.get('/getBenchChartbarData')
+        this.$get('/getBenchChartbarData')
           .then((res) => {
-            console.log('预警事件分类', res);
-            this.benchChartbarData = res.data.barData;
-            this.preWarningDetil = res.data.detils;
-          }).catch((error) => {
-            console.log(error);
-          }).then(() => {});
+            this.benchChartbarData = res.barData;
+            this.preWarningDetil = res.detils;
+          })
       },
 
       // afterConfig 生成echarts配置进行额外的处理  Function   在数据转化为配置项结束后触发
@@ -359,17 +346,13 @@
       getList() {
         var _this = this;
         // ?pageSize=${this.pageSize}&currentPage=${this.currentPage}
-        this.$ajxj.post(`/pPTableData`, {
+        this.$post(`/pPTableData`, {
             currentPage: _this.currentPage
           })
           .then(function (res) {
             _this.count = 124;
             _this.items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
           })
-          .catch(function (error) {
-            console.log(error);
-          })
-          .then(function () {});
       },
 
       //从page组件传递过来的当前page

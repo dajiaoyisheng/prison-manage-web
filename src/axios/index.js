@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {
-    Message
+  Message
 } from 'element-ui';
 import store from '@/vuex/store'
 // axios 配置
@@ -26,35 +26,72 @@ axios.defaults.withCredentials = false;
 //     }
 // )
 // 添加请求拦截器
-axios.interceptors.request.use(function(config) {
-    // 在发送请求之前做些什么
-    store.state.loading = true;
-    return config;
-}, function(error) {
-    // 对请求错误做些什么
-    return Promise.reject(error);
+axios.interceptors.request.use(function (config) {
+  // 在发送请求之前做些什么
+  store.state.loading = true;
+  return config;
+}, function (error) {
+  // 对请求错误做些什么
+  return Promise.reject(error);
 });
 
 axios.interceptors.response.use(response => {
-    store.state.loading = false;
-    const res = response.data;
-    if (res.status !== 0) {
-        Message({
-            message: res.statusinfo,
-            type: 'error',
-            duration: 5 * 1000
-        })
-    } else {
-        return response.data
-    }
-}, error => {
-    console.log('err:' + error)
+  store.state.loading = false;
+  const res = response.data;
+  if (res.status !== 0) {
     Message({
-        message: error.message,
-        type: 'error',
-        duration: 5 * 1000
+      message: res.statusinfo,
+      type: 'error',
+      duration: 5 * 1000
     })
-    return Promise.reject(error)
-})
+  } else {
+    return response.data
+  }
+}, error => {
+  console.log('err:' + error)
+  Message({
+    message: error.message,
+    type: 'error',
+    duration: 5 * 1000
+  })
+  return Promise.reject(error)
+});
+
+/**
+ * 封装get方法
+ * @param url
+ * @param data
+ * @returns {Promise}
+ */
+export function get(url, params = {}) {
+  return new Promise((resolve, reject) => {
+    axios.get(url, {
+        params: params
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+};
+
+/**
+ * 封装post请求
+ * @param url
+ * @param data
+ * @returns {Promise}
+ */
+export function post(url, data = {}) {
+  return new Promise((resolve, reject) => {
+    axios.post(url, data)
+      .then(response => {
+        resolve(response.data);
+      }, err => {
+        reject(err)
+      })
+  })
+}
 
 export default axios

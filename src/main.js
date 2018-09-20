@@ -4,6 +4,14 @@ import Vue from 'vue';
 import router from './router';
 import axios from './axios';
 Vue.prototype.$ajxj = axios;
+// 对get,post进行了封装
+import {
+  post,
+  get
+} from './axios'
+Vue.prototype.$post = post;
+Vue.prototype.$get = get;
+
 import 'es6-promise/auto'
 import store from './vuex/store'
 import 'element-ui/lib/theme-chalk/index.css';
