@@ -36,28 +36,28 @@
       <!-- 右上 -->
       <section class="pp-r-t">
         <span>监区:</span>
-        <el-select size="small" v-model="value" placeholder="请选择">
+        <el-select size="small" v-model="area" placeholder="请选择">
           <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
         <span>监舍:</span>
-        <el-select size="small" v-model="value" placeholder="请选择">
+        <el-select size="small" v-model="monitoringHouse" placeholder="请选择">
           <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
         <span>房间:</span>
-        <el-select size="small" v-model="value" placeholder="请选择">
+        <el-select size="small" v-model="room" placeholder="请选择">
           <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
         <span>监管类型:</span>
-        <el-select size="small" v-model="value" placeholder="请选择">
+        <el-select size="small" v-model="supervisionType" placeholder="请选择">
           <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
         <span>服刑人员:</span>
-        <el-input size="small" class="pp-input" v-model="input" placeholder="请输入内容"></el-input>
-        <el-button size="small" type="primary">搜索</el-button>
+        <el-input size="small" class="pp-input" v-model="prisoner" placeholder="请输入内容"></el-input>
+        <el-button @click="search" size="small" type="primary">搜索</el-button>
       </section>
       <!-- 右下 -->
       <section class="pp-r-d clearfix">
@@ -67,104 +67,104 @@
           <div class="pp-r-d-l-l fl">
             <div>
               <span>编号:</span>
-              <el-input size="small" v-model="input" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="numbering" placeholder="请输入内容"></el-input>
             </div>
             <div>
               <span>姓名:</span>
-              <el-input size="small" v-model="input" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="name" placeholder="请输入内容"></el-input>
             </div>
             <div>
               <span>性别:</span>
-              <el-input size="small" v-model="input" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="sex" placeholder="请输入内容"></el-input>
             </div>
             <div>
               <span>民族:</span>
-              <el-input size="small" v-model="input" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="famousFamily" placeholder="请输入内容"></el-input>
             </div>
             <div>
               <span>出生日期:</span>
-              <el-input size="small" v-model="input" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="birth" placeholder="请输入内容"></el-input>
             </div>
             <div>
               <span>文化程度:</span>
-              <el-input size="small" v-model="input" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="educationalLevel" placeholder="请输入内容"></el-input>
             </div>
             <div>
               <span>婚姻状况:</span>
-              <el-input size="small" v-model="input" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="maritalStatus" placeholder="请输入内容"></el-input>
             </div>
             <div>
               <span>罪名:</span>
-              <el-input size="small" v-model="input" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="crime" placeholder="请输入内容"></el-input>
             </div>
             <div>
               <span>刑期:</span>
-              <el-input size="small" v-model="input" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="prisonTerm" placeholder="请输入内容"></el-input>
             </div>
             <div>
               <span>已服刑时长:</span>
-              <el-input size="small" v-model="input" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="hasPrisonTerm" placeholder="请输入内容"></el-input>
             </div>
             <div>
               <span>剩余时长:</span>
-              <el-input size="small" v-model="input" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="lastPrisonTerm" placeholder="请输入内容"></el-input>
             </div>
             <div class="div-select">
               <span>监区:</span>
-              <el-select size="small" v-model="value" placeholder="请选择">
+              <el-select size="small" v-model="area" placeholder="请选择">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
             </div>
             <div class="div-select">
               <span>监舍:</span>
-              <el-select size="small" v-model="value" placeholder="请选择">
+              <el-select size="small" v-model="monitoringHouse" placeholder="请选择">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
             </div>
             <div class="div-select">
               <span>楼层:</span>
-              <el-select size="small" v-model="value" placeholder="请选择">
+              <el-select size="small" v-model="floor" placeholder="请选择">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
             </div>
             <div class="div-select">
               <span>房间:</span>
-              <el-select size="small" v-model="value" placeholder="请选择">
+              <el-select size="small" v-model="room" placeholder="请选择">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
             </div>
             <div class="div-select">
               <span>监管类型:</span>
-              <el-select size="small" v-model="value" placeholder="请选择">
+              <el-select size="small" v-model="supervisionType" placeholder="请选择">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
             </div>
             <div>
               <span>责任预警:</span>
-              <el-input size="small" v-model="input" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="dutyWarning" placeholder="请输入内容"></el-input>
             </div>
             <div>
               <span>籍贯:</span>
-              <el-input size="small" v-model="input" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="birthplace" placeholder="请输入内容"></el-input>
               <span>省</span>
             </div>
             <div>
               <span></span>
-              <el-input size="small" v-model="input" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="city" placeholder="请输入内容"></el-input>
               <span>市</span>
             </div>
             <div>
               <span>家庭联系人:</span>
-              <el-input size="small" v-model="input" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="familyContact" placeholder="请输入内容"></el-input>
             </div>
             <div>
               <span>联系电话:</span>
-              <el-input size="small" v-model="input" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="phone" placeholder="请输入内容"></el-input>
             </div>
           </div>
           <div class="pp-r-d-l-r fr">
@@ -221,13 +221,13 @@
               <el-table-column label="监控视频">
                 <template slot-scope="scope">
                   <div class="operating">
-                    <span @click="handleEdit(scope.$index, scope.row)">视频</span>
+                    <span @click="playvideo(scope.$index, scope.row, 'curevent')">视频</span>
                   </div>
                 </template>
               </el-table-column>
             </el-table>
             <div class="el-pagination-wrap">
-              <table-pagination :page-index="currentPage" :total="count" :page-size="pageSize" @change="pageChange"></table-pagination>
+              <table-pagination :page-index="currentPage" :total="count" :page-size="pageSize" @change="pageChange(currentPage, 'curevent')"></table-pagination>
             </div>
           </section>
         </section>
@@ -252,10 +252,10 @@
                 <section class="filter-wrap">
                   <span class="block">
                     <span class="demonstration">时间</span>
-                    <el-date-picker size="mini" v-model="value7" type="datetime" placeholder="选择开始时间">
+                    <el-date-picker size="mini" v-model="starttime" type="datetime" placeholder="选择开始时间">
                     </el-date-picker>
                     <span>-</span>
-                    <el-date-picker size="mini" v-model="value7" type="datetime" placeholder="选择结束时间">
+                    <el-date-picker size="mini" v-model="endtime" type="datetime" placeholder="选择结束时间">
                     </el-date-picker>
                   </span>
                 </section>
@@ -272,13 +272,13 @@
                     <el-table-column label="监控视频">
                       <template slot-scope="scope">
                         <div class="operating">
-                          <span @click="handleEdit(scope.$index, scope.row)">视频</span>
+                          <span @click="playVideo(scope.$index, scope.row, 'hisevent')">视频</span>
                         </div>
                       </template>
                     </el-table-column>
                   </el-table>
                   <div class="el-pagination-wrap">
-                    <table-pagination :page-index="currentPage" :total="count" :page-size="pageSize" @change="pageChange"></table-pagination>
+                    <table-pagination :page-index="currentPage" :total="count" :page-size="pageSize" @change="pageChange(currentPage, 'hisevent')"></table-pagination>
                   </div>
                 </section>
               </el-tab-pane>
@@ -303,6 +303,33 @@
     },
     data() {
       return {
+        searchPrams: {},
+        area: '', //监区
+        monitoringHouse: '', //监舍
+        room: '',
+        supervisionType: '',
+        prisoner: '',
+        numbering: '',
+        name: '',
+        sex: '',
+        famousFamily: '', //民族
+        birth: '',
+        educationalLevel: '',
+        maritalStatus: '',
+        crime: '',
+        prisonTerm: '', //刑期
+        hasPrisonTerm: '',
+        lastPrisonTerm: '',
+        floor: '',
+        dutyWarning: '',
+        birthplace: '',
+        city: '',
+        familyContact: '',
+        phone: '',
+        starttime: '',
+        endtime: '',
+
+
         currentPos: currentPos,
         input: '',
         loading: false,
@@ -338,49 +365,63 @@
       }
     },
     created: function () {
-      console.log(this.$route.query.area)
       let area = this.$route.query.area;
-      this.getPPositionData('', area);
-      this.getTableData();
+      let searchParam = {};
+      this.getPPositionData('', searchParam);
+      this.getTableData('', searchParam);
     },
     mounted: function () {
       // this.$store.state.setNavFull("full")
     },
     methods: {
-      //从page组件传递过来的当前page
-      pageChange(page) {
-        this.currentPage = page
-        this.getTableData(page)
+      search() {
+        this.searchPrams = {
+          area: this.area,
+          monitoringHouse: this.monitoringHouse, //监舍
+          room: this.room,
+          supervisionType: this.supervisionType,
+          prisoner: this.prisoner,
+        }
+        console.log('param', this.searchPrams)
+        this.getPPositionData('', this.searchPrams);
+        this.getTableData('', this.searchPrams);
       },
-      getTableData(p) {
-        this.$post('/pPTableData', {
-            page: p || 1
-          })
+      //从page组件传递过来的当前page
+      pageChange(page, type) {
+        this.currentPage = page;
+        if (type === 'curevent') { // 当前历史事件
+          this.getTableData(page, this.searchPrams);
+        } else {
+          this.getPPositionData(page, this.searchPrams);
+        }
+      },
+      getTableData(p, searchParam) {
+        console.log('getTableData')
+        Object.assign(searchParam, {
+          page: p
+        });
+        this.$post('/pPTableData', searchParam)
           .then((res) => {
             this.count = res.data.total;
-            console.log('res.data', res.data)
             this.pPTableData = res.data.data
             this.page = res.data.total
           })
       },
-      getPPositionData(p, area) {
-        this.$get('/pPositionData', {
-            'area': area
-          })
+      getPPositionData(p, searchParam) {
+        Object.assign(searchParam, {
+          page: p
+        });
+        this.$get('/pPositionData', searchParam)
           .then((res) => {
             // this.loading = false;
             this.pPositionData = res.data.data
             this.page = res.data.total
           })
       },
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange(val) {
-        this.getTableData(val);
-        console.log(`当前页: ${val}`);
-      },
-      handleEdit(index, row) {
+      playvideo(index, row, type) {
+        if(type == 'curevent'){
+          
+        }
         console.log(index, row);
         window.open(row.tv)
       },
