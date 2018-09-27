@@ -38,8 +38,6 @@
             <el-button class="primary" size="small" @click="clear()">保存</el-button>
           </el-col>
         </el-row>
-
-
       </section>
       <section class="el-table-wrap">
         <el-table :data="prisonerInfo" stripe style="width: 100%;">
@@ -49,15 +47,32 @@
           <el-table-column prop="prisonerType" label="房间/过道"></el-table-column>
           <el-table-column prop="warningType" label="摄像头编号"></el-table-column>
           <el-table-column prop="prisonerName" label="摄像头名称"></el-table-column>
-          <el-table-column prop="warningArea" label="摄像头类型"></el-table-column>
-          <el-table-column prop="warningArea" label="所在区域"></el-table-column>
-          <el-table-column prop="warningArea" label="坐标位置"></el-table-column>
-          <el-table-column prop="warningArea" label="摄像头方向"></el-table-column>
-          <el-table-column prop="warningArea" label="相邻摄像头"></el-table-column>
-          <el-table-column prop="warningArea" label="视频服务地址"></el-table-column>
-          <el-table-column label="查看视频">
+          <el-table-column prop="prisonerType" label="摄像头类型"></el-table-column>
+          <!-- 可编辑 -->
+          <el-table-column prop="warningArea" label="所在区域">
             <template slot-scope="scope">
+              <div @click="changeArea(scope.$index, scope.row)">
+                <el-select v-show="changeCur === scope.$index" @blur="changeCur
+                =null" size="small"
+                  v-model="editArea" placeholder="请选择">
+                  <el-option v-for="item in warningTypes" :key="item.label" :label="item.label" :value="item.value"></el-option>
+                </el-select>
+                <span v-show="changeCur !== scope.$index">{{scope.row.warningArea}}</span>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="timeLen" label="坐标位置"></el-table-column>
+          <el-table-column prop="timeLen" label="摄像头方向"></el-table-column>
+          <el-table-column prop="timeLen" label="相邻摄像头"></el-table-column>
+          <el-table-column prop="timeLen" label="视频服务地址"></el-table-column>
+          <el-table-column label="查看视频">
+            <!-- <template slot-scope="scope">
               <el-button @click="showVideo(scope.$index, scope.row)" size="mini">查看</el-button>
+            </template> -->
+            <template slot-scope="scope">
+              <router-link tag="a" class="num-color" :to="{path:'/personnelposition',query:{name:scope.row.prisonerName}}">
+                <img class="v-align-m" :src="video" alt=""><span> 查看</span>
+              </router-link>
             </template>
           </el-table-column>
           <el-table-column prop="warningArea" label="备注"></el-table-column>
@@ -75,6 +90,7 @@
 </template>
 
 <script>
+  import video from '@/assets/video.png';
   import tablePagination from '@/components/commons/tablePage.vue';
   export default {
     name: 'posunusual',
@@ -85,17 +101,25 @@
       return {
         count: 0, //总记录数
         message: "定位异常预警",
+        video: video,
         params: {
-          warningType: "0",
-          prisonerType: "0",
+          warningType: "",
+          prisonerType: "",
           prisonerName: "",
           period: [new Date(), new Date()]
         },
         prisonerInfo: [],
-        warningTypes:[],
+        warningType: [],
+        warningTypes: [],
+        editArea: '',
+        curChangeIndex: null,
         prisonerTypes: [],
         ppuTableDatas: [],
+        changeCur: null
       }
+    },
+    created: function () {
+      this.getCameraList();
     },
     methods: {
       pageChange(page) {
@@ -106,6 +130,7 @@
 
       },
       clear: function () {
+        console.log('this.params.warningType', this.params.warningType)
         this.params.period = [new Date(), new Date()];
         this.params.warningType = "";
         this.params.prisonerType = "";
@@ -118,19 +143,38 @@
         });
       },
       getCameraList: function (page) {
-        var _this = this;
-        this.$ajxj.post('/getCameraList',{page:page}).then(function (res) {
-          console.log('res',res);
-          
-          _this.prisonerInfo = res.data.items;
-          _this.count = res.data.totalRows
-        }).catch(function (error) {}).then(function (error) {
-          console.log(error);
-        });
+        this.$post('/getCameraList', {
+          page: page
+        }).then((res) => {
+          this.prisonerInfo = res.data.items;
+          this.count = res.data.totalRows
+        })
+      },
+      // 判断要改变的摄像头区域
+      changeArea: function (index, row) {
+        this.changeCur = index;
+        this.curChangeIndex = index;
+      },
+      // chooseArea: function (val) {
+      //   console.log('chooseArea', val);
+      // }
+    },
+    watch: {
+      // 当所在区域改变时给当前改变的对象赋予新值
+      editArea: function (val, oldval) {
+        this.warningTypes.map((value, index) => {
+          if (val === value.value) {
+            this.prisonerInfo[this.curChangeIndex].warningArea = value.label;
+          }
+        })
+        this.curChangeIndex = null;
       }
     },
     mounted() {
-      this.getCameraList();
+      // 获取预警事件类型
+      this.$get('/getWarningTypes').then((respnose) => {
+        this.warningTypes = respnose.data;
+      })
     }
   }
 
@@ -139,6 +183,14 @@
 <style scoped>
   .el-select {
     width: 58%;
+  }
+
+  .contentInfo {
+    margin-left: 2%;
+  }
+
+  #posunusual .text-center {
+    text-align: center;
   }
 
   /* .puu-params {

@@ -128,7 +128,7 @@ const router = new Router({
 
 
 router.beforeEach((to, from, next) => {
-  if (to.path === '/tvmonitor' || to.path === '/personnelposition' || to.path === '/pointname' || to.path === '/systemset/prisonmanagement' || to.path === '/systemset/prisonermanagement/operation' || to.path === '/systemset/cameramanagement' || to.path === '/systemset/systemmanagement') {
+  if (to.path === '/tvmonitor' || to.path === '/personnelposition' || to.path === '/pointname' || to.path === '/systemset/prisonmanagement' || to.path === '/systemset/prisonermanagement/operation' || to.path === '/systemset/cameramanagement' || to.path === '/systemset/systemmanagement' || to.path === '/querystats/posunusual') {
     store.state.isFullNavWrap = true;
   } else {
     store.state.isFullNavWrap = false;

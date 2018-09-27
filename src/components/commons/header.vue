@@ -4,7 +4,7 @@
   <div>
     <nav class="nav-wrap">
       <el-menu :default-active="$route.path" router class="nav-ul" :class="{navWrapFull:this.$store.state.isFullNavWrap}"
-        mode="horizontal" @select="handleSelect" background-color="#2f323c" text-color="#a0abb5" active-text-color="#fff">
+        mode="horizontal" @select="handleSelect" background-color="#2f323c" text-color="#909399" active-text-color="#fff">
         <div class="logoWrap">
           <img class="logo" :src="logo" alt="">
           <img class="name" :src="name" alt="">
@@ -59,8 +59,21 @@
         </el-submenu>
         <!-- <el-menu-item index="input">
         </el-menu-item> -->
-        <el-input class="nav-input" size="mini" placeholder="请输入内容" suffix-icon="el-icon-search" v-model="input">
+
+        <!-- <el-menu-item index="search"> -->
+        <el-input class="nav-input fl clearfix" size="mini" placeholder="请输入内容" suffix-icon="el-icon-search" v-model="input">
         </el-input>
+        <!-- </el-menu-item> -->
+        <el-menu-item index="username">
+          <span>admin</span>
+          <img class="heard-icon-btn" :src="downopen" alt="">
+        </el-menu-item>
+        <el-menu-item index="login">
+          <span>退出</span>
+          <img class="heard-icon-btn" :src="loginout" alt="">
+        </el-menu-item>
+        <!-- <div>admin</div>
+        <div>退出</div> -->
       </el-menu>
     </nav>
   </div>
@@ -69,13 +82,16 @@
 <script>
   import logo from '@/assets/logo.png'
   import name from '@/assets/name.png'
+  import downopen from '@/assets/downopen.png'
+  import loginout from '@/assets/loginout.png'
   export default {
     name: 'Header',
     data() {
       return {
         logo: logo,
         name: name,
-        activeIndex: '1',
+        loginout: loginout,
+        downopen: downopen,
         input: '',
       };
     },
@@ -106,8 +122,11 @@
     background-color: rgb(47, 50, 60);
     height: 60px;
     position: fixed;
-    z-index: 1500;
+    /* 因为: echart tooltip z-index:9999999 */
+    z-index: 99999999;
     width: 100%;
+    top: 0;
+    left: 0;
   }
 
   .nav-ul {
@@ -117,15 +136,16 @@
 
   .navWrapFull {
     width: 100%;
+    min-width: 1200px;
     padding: 0 2%
   }
 
   .navWrapFull .el-menu-item {
-    padding: 0 2%;
+    padding: 0 1.5%;
   }
 
   .navWrapFull .el-submenu {
-    padding: 0 2%;
+    /* padding: 0 2%; */
   }
 
 
@@ -158,18 +178,51 @@
     height: 16px;
     font-size: 16px;
     font-family: MicrosoftYaHei;
-    color: rgba(255, 255, 255, 1);
+    /* color: rgba(255, 255, 255, 1); */
     line-height: 15px;
   }
 
-  .el-menu--horizontal>.el-menu-item a {
-    color: rgba(255, 255, 255, 1);
+  .el-menu--horizontal .el-menu-item:not(.is-disabled):focus,
+  .el-menu--horizontal .el-menu-item:not(.is-disabled):hover {
+    outline: 0;
+    color: #fff;
   }
 
+  .el-menu-item {
+    padding: 0 0.8%;
+  }
+
+  .el-submenu__title {
+    padding: 0 15px;
+  }
+
+  .navWrapFull .el-submenu__title {
+    padding: 0 20px;
+  }
+
+
+
+  /* .el-menu--horizontal>.el-menu-item a {
+    color: rgba(255, 255, 255, 1);
+  } */
+
   .nav-wrap .nav-input {
-    width: 10%;
+    width: 15%;
     height: 60px;
     line-height: 60px;
+
+    float: left;
+    text-align: right;
+  }
+
+  .nav-wrap .nav-input input {
+    border-radius: 14px;
+    width: 70%;
+  }
+
+  img.heard-icon-btn {
+    width: 15px;
+    height: 15px;
   }
 
 </style>

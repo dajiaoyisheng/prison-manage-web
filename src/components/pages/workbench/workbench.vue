@@ -99,16 +99,22 @@
           trigger: 'item',
           position: 'inside',
           formatter: function (params) {
-            var pieItem1 = params[0] || params;
-            var content =
-              `<div>${pieItem1.name}&nbsp;<a class="fontcolor text-decoration" href="/#/personnelposition?level=${pieItem1.name}">${pieItem1.value}</a>&nbsp;${pieItem1.percent}%</div>`;
+            let pieItem1 = params[0] || params;
+            let content =
+              `<div>
+                <p>${pieItem1.name}</p>
+                <p>
+                  <a class="fontcolor num-color text-decoration" href="/#/personnelposition?level=${pieItem1.name}">${pieItem1.value}</a>
+                </p>
+                <p>${pieItem1.percent}%</p>
+              </div>`;
             return content;
           }
         },
         legend: {
           orient: 'vertical',
           top: "middle",
-          right: "5%",
+          right: "5%"
         },
 
         // pie 圆心位置
@@ -187,17 +193,15 @@
       // this.$route.query.name 应该会用到
       // http://localhost:8080/#/workbench?name=cjd
       // console.log(this.$route.query.name);// cjd
-    },
-    mounted: function () {
-      this.imgBlock = this.picItems[0].pic;
-      document.getElementsByClassName("picS")[0].classList.add("curImageLayer");
-      // 请求数据 也可在created中获取,暂时还不确定在哪更好
       this.getPSum();
       this.getPClass();
       this.getPStatus();
       this.getPreWarningClass();
       this.getList();
-
+    },
+    mounted: function () {
+      this.imgBlock = this.picItems[0].pic;
+      document.getElementsByClassName("picS")[0].classList.add("curImageLayer");
       this.histogramExtend = {
         color: ['#00c6dd', '#5867c2'],
         tooltip: {
@@ -213,12 +217,12 @@
             var index = params[0].dataIndex;
             var curDetil = this.benchChartbarData.rows[index];
             curDetil.detils.map((item) => {
-              console.log('item', item);
-              detil_str = detil_str + `<div>${item.detil}</div>`;
+              detil_str = detil_str + `<div class="class-r-span text-center">${item.detil}</div>`;
               detil_num_str = detil_num_str +
+                // 要求数字居右?太丑 class="text-right"
                 `<div>
-                    <a class="fontcolor text-decoration" href="/#/querystats/violation?warnclass=${item.detil}">${item.number}</a>
-                    <a class="fontcolor text-decoration" href="/#/querystats/violation?warnclass=${item.detil}">${item.pNumber}</a>
+                    <a class="fontcolor wordspacing num-color text-decoration" href="/#/querystats/violation?warnclass=${item.detil}">${item.number}</a>
+                    <a class="fontcolor wordspacing num-color text-decoration" href="/#/querystats/violation?warnclass=${item.detil}">${item.pNumber}</a>
                   </div>`;
             });
             var barItem1 = params[0] || params;
@@ -227,7 +231,7 @@
             var content =
               `<div class="tooltip-wrap clearfixe">
                     <div class="tooltip-left fl">
-                      <div class="tooltip-header">分类</div>
+                      <div class="tooltip-header text-center">分类</div>
                       ${detil_str}
                     </div>
                     <div class="tooltip-right fr">
@@ -276,11 +280,9 @@
       getPSum() {
         this.$get('/getPrisonersData')
           .then((res) => {
-            console.log('犯人总数res', res)
             this.areasDetail = res.data.prisonsers;
             this.personnum = res.data.personnum;
           })
-          
       },
       // 人员分类
       getPClass() {
@@ -348,7 +350,7 @@
         this.$post(`/pPTableData`, {
             currentPage: this.currentPage
           })
-          .then((res)=> {
+          .then((res) => {
             this.count = 124;
             this.items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
           })
@@ -534,14 +536,13 @@
   ul.p-status {
     display: table-cell;
     vertical-align: middle;
-    /* padding: 50px 5%; */
   }
 
   ul.p-status li {
     float: left;
     width: 49%;
-    height: 50px;
-    line-height: 50px;
+    height: 60px;
+    line-height: 60px;
     text-align: center;
   }
 
@@ -586,8 +587,21 @@
     width: 29%;
   }
 
-  .fontcolor {
+  .fontcolor num-color {
     color: #fff;
+  }
+
+  .wordspacing {
+    text-align: center;
+    display: inline-block;
+    width: 2em;
+    height: 26px;
+    line-height: 26px;
+  }
+
+  .class-r-span {
+    height: 26px;
+    line-height: 26px;
   }
 
   .text-decoration {
@@ -596,7 +610,7 @@
 
   .word-width {
     display: inline-block;
-    width:2em;
+    width: 2em;
   }
 
 </style>

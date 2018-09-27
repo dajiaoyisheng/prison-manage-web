@@ -1,11 +1,5 @@
 import Mock from 'mockjs';
 
-// let cameraData = Mock.mock({
-//     ppuTableDatas :  {
-//         "totalRows": Mock.mock('@natural(1, 100)'),
-//         items: []
-//     }
-// })
 let cameraData = {
     "totalRows": Mock.mock('@natural(1, 100)'),
     items: []

@@ -18,6 +18,7 @@ import pManageDatas from './data/pManageDatas';
 import calendarData from './data/calendar';
 import pointnameData from './data/pointname';
 import prewarningstatsData from './data/prewarningstats';
+import systemmanagementData from './data/sysmangement';
 
 export default {
   /**
@@ -274,6 +275,24 @@ export default {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           defaultResData.data = calendarData.scopes;
+          resolve([200, defaultResData])
+        }, 1000);
+      });
+    });
+
+    mock.onGet('/getLoggers').reply(config => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          defaultResData.data = systemmanagementData.loggerTable;
+          resolve([200, defaultResData])
+        }, 1000);
+      });
+    });
+
+    mock.onGet('/getUsers').reply(config => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          defaultResData.data = systemmanagementData.userTable;
           resolve([200, defaultResData])
         }, 1000);
       });

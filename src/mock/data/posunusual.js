@@ -2,13 +2,13 @@ import Mock from 'mockjs';
 
 let posunsualData = Mock.mock({
     "warningTypes|1-1": [
-        {value: "0", label: "全部"},
+        {value: "", label: "全部"},
         {value: "1", label: "无法定位"},
         {value: "2", label: "某一定位方法失效"},
         {value: "3", label: "定位结果不一致"}
     ],
     "prisonerTypes|1-1": [
-        {value: "0", label: "全部"},
+        {value: "", label: "全部"},
         {value: "1", label: "特严级"},
         {value: "2", label: "严管级"},
         {value: "3", label: "普通级"},
@@ -33,7 +33,7 @@ let posunsualData = Mock.mock({
     }
 })
 
-for (let i = 0; i < 10; i++) {
+for (let i = 0; i < 14; i++) {
     posunsualData.ppuTableDatas.items.push({
         startTime: "2017-07-07 12:22:12",
         endTime: "2017-07-07 12:22:12",

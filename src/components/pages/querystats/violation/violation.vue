@@ -17,8 +17,7 @@
             <el-col :span="5">
               <span>预警事件类型：</span>
               <el-select size="small" v-model="parame.warningType" placeholder="请选择">
-                <el-option v-for="item in warningType" :key="item.value" :label="item.label" :value="item.value">
-                </el-option>
+                <el-option v-for="item in warningTypes" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
             </el-col>
             <el-col :span="7">
@@ -27,7 +26,6 @@
             </el-col>
             <el-col :span="3">
               <el-button @click="search" class="search-btn" size="small">查询</el-button>
-              <el-button @click="clearFilter" class="return-btn" size="small">返回</el-button>
             </el-col>
           </el-row>
         </section>
@@ -41,6 +39,11 @@
           <el-table-column prop="timeLen" label="预警时长">
           </el-table-column>
           <el-table-column prop="prisonerName" label="预警事件对象">
+            <template slot-scope="scope">
+              <router-link tag="a" class="pointer num-color" :to="{path:'/personnelposition',query:{name:scope.row.prisonerName}}">
+                {{scope.row.prisonerName}}
+              </router-link>
+            </template>
           </el-table-column>
           <el-table-column prop="warningType" label="预警事件类型">
           </el-table-column>
@@ -52,7 +55,7 @@
             <template slot-scope="scope">
               <div class="operating">
                 <router-link tag="span" to="/systemset/prisonermanagement/operation">
-                  <img :src="images.review" alt=""> 查看
+                  <img class="v-align-m" :src="images.video" alt=""><span> 查看</span>
                 </router-link>
               </div>
             </template>
@@ -70,7 +73,7 @@
 </template>
 
 <script>
-  import review from '@/assets/review.png';
+  import video from '@/assets/video.png';
   import tablePagination from '@/components/commons/tablePage.vue';
   export default {
     name: 'violation',
@@ -82,46 +85,19 @@
         pageSize: 10, //每页显示20条数据
         currentPage: 1, //当前页码
         count: 0, //总记录数
-        
+
         ppuTableDatas: [],
         images: {
-          review: review
+          video: video
         },
         parame: {
-          startTime: '',
-          endTime: '',
+          startTime: new Date(new Date().setHours(0, 0, 0, 0)),
+          endTime: new Date(new Date().setHours(24, 0, 0, 0)),
           warningType: '',
           prisonerName: '',
         },
         warningType: [],
-        // 时间筛选
-        // pickerOptions2: {
-        //   shortcuts: [{
-        //     text: '最近一周',
-        //     onClick(picker) {
-        //       const end = new Date();
-        //       const start = new Date();
-        //       start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-        //       picker.$emit('pick', [start, end]);
-        //     }
-        //   }, {
-        //     text: '最近一个月',
-        //     onClick(picker) {
-        //       const end = new Date();
-        //       const start = new Date();
-        //       start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-        //       picker.$emit('pick', [start, end]);
-        //     }
-        //   }, {
-        //     text: '最近三个月',
-        //     onClick(picker) {
-        //       const end = new Date();
-        //       const start = new Date();
-        //       start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-        //       picker.$emit('pick', [start, end]);
-        //     }
-        //   }]
-        // },
+        warningTypes: [],
         pagination: {
           pageSize: 10,
           currentPage: 1,
@@ -132,9 +108,14 @@
         input: '',
       }
     },
-    mounted() {
-      this.getWarningType();
+    created: function () {
       this.getTableDatas();
+    },
+    mounted() {
+      // 获取预警事件类型
+      this.$get('/getWarningTypes').then((respnose) => {
+        this.warningTypes = respnose.data;
+      })
     },
     methods: {
       pageChange(page) {
@@ -143,7 +124,6 @@
       },
       // 获取表格数据
       getTableDatas(page) {
-        let _this = this;
         this.parame = {
           "page": page || 1,
           "startTime": this.parame.startTime,
@@ -151,45 +131,12 @@
           "warningType": this.parame.warningType,
           "prisonerName": this.parame.prisonerName,
         }
-        this.$ajxj.post('/getPosunusualItems', this.parame).then(function (res) {
-          console.log('res', res);
-          _this.count = res.data.totalRows;
-          _this.ppuTableDatas = res.data.items;
-          _this.pagination.totalRows = res.data.totalRows;
-        }).catch(function (error) {
-          console.log(error);
-        }).then(function (error) {
-          console.log(error);
-        });
+        this.$post('/getPosunusualItems', this.parame).then((res) => {
+          this.count = res.data.totalRows;
+          this.ppuTableDatas = res.data.items;
+          this.pagination.totalRows = res.data.totalRows;
+        })
       },
-      // 获取警告类型
-      getWarningType() {
-        let _this = this;
-        this.$ajxj.post('/getPosunusualItems').then(function (res) {
-          res.data = [{
-            value: '选项1',
-            label: '黄金糕'
-          }, {
-            value: '选项2',
-            label: '双皮奶'
-          }, {
-            value: '选项3',
-            label: '蚵仔煎'
-          }, {
-            value: '选项4',
-            label: '龙须面'
-          }, {
-            value: '选项5',
-            label: '北京烤鸭'
-          }];
-          _this.warningType = res.data;
-        }).catch(function (error) {
-          console.log(error);
-        }).then(function (error) {
-          console.log(error);
-        });
-      },
-
       // 搜索
       search() {
         this.getTableDatas();
@@ -206,6 +153,9 @@
       changeCurrent: function () {
         this.getTableDatas(this.pagination.currentPage);
       },
+      warningPrisoner: function (index, row) {
+        console.log('warningPrisoner', index, row)
+      }
     }
   }
 

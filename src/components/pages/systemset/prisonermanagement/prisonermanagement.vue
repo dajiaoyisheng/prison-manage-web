@@ -24,12 +24,11 @@
             <img :src="images.del" alt="">
             <span @click="delGroup" class="pointer">批量删除</span>
           </el-col>
-          <el-col :span="5" :offset="2">
+          <el-col :span="6" :offset="6">
             <input class="p-m-input" @keyup.enter="search" v-model="parame.words" placeholder="请输入姓名或编号">
           </el-col>
-          <el-col :span="4">
+          <el-col :span="2">
             <el-button @click="search" :loading="this.$store.state.loading" class="search-btn" size="small">搜索</el-button>
-            <el-button @click="clear" class="return-btn" size="small">返回</el-button>
           </el-col>
         </el-row>
       </section>
@@ -54,10 +53,10 @@
           <el-table-column label="操作" width="255">
             <template slot-scope="scope">
               <div class="operating">
-                <router-link tag="span" to="/systemset/prisonermanagement/operation">
+                <router-link tag="span" :to="{path:'/personnelposition',query:{name:scope.row.prisonerName}}">
                   <img :src="images.review" alt=""> 查看
                 </router-link>
-                <router-link tag="span" to="/systemset/prisonermanagement/operation">
+                <router-link tag="span" :to="{path:'/personnelposition',query:{name:scope.row.prisonerName}}">
                   <img :src="images.edit" alt="">编辑</router-link>
                 <span @click="handleDelete(scope.$index, scope.row)">
                   <img :src="images.del" alt="">删除</span>
@@ -122,8 +121,8 @@
       }
     },
     mounted() {
-      
-      
+
+
       this.getTableDatas();
     },
     methods: {
@@ -203,9 +202,9 @@
         console.log(index, row);
       },
       // 删除
-      handleDelete(index, row,p3) {
-        console.log('p3',p3);
-        
+      handleDelete(index, row, p3) {
+        console.log('p3', p3);
+
         this.delPrisoner(row, 'del')
       },
       // 批量删除

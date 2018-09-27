@@ -11,7 +11,7 @@ for (let i = 0; i < p; i++) {
         starttime: Mock.mock('@datetime'),
         endtime: Mock.mock('@datetime'),
         during: Mock.mock('@natural(1, 100)'),
-        tyle: '无法定位',
+        tyle: '必须在监舍睡觉',
         area: "餐厅",
         tv: 'http://mockjs.com/examples.html#Date',
     });

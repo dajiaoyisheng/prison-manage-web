@@ -151,6 +151,10 @@ div.content-wrap {
   text-align: center;
 }
 
+.text-right {
+  text-align: right;
+}
+
 
 /* 行内块级元素 */
 .inbl {
@@ -214,6 +218,7 @@ div.content-wrap {
 
 /* 横线 end */
 .num-color {
+  cursor: pointer;
   color: #0a74bb;
 }
 
@@ -417,6 +422,7 @@ th {
   border-color: #59c4ee;
   background-color: #59c4ee;
 }
+
 /* 返回按钮 */
 .return-btn {
   color: #59c4ee;
@@ -513,3 +519,10 @@ th {
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
 }
+
+/* 图片的垂直居中对齐begin */
+.v-align-m {
+  vertical-align: middle;
+}
+
+/* 图片的垂直居中对齐end */

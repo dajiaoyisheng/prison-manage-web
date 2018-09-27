@@ -27,14 +27,15 @@
           <el-main class="pn-right-main-main">
             <section class="pn-right-main-main-top">
               <el-card class="box-card">
-                <div slot="header" class="pn-card-label">未到人员列表(<span style="color: red;">{{ topTableData.length }}人</span>)</div>
+                <div slot="header" class="pn-card-label">未识别人员列表(<span style="color: red;">{{ topTableData.length }}人</span>)</div>
                 <el-table :data="topTableData" stripe style="width: 100%" height="175">
                   <el-table-column prop="number"      label="编号"              min-width="100px" align="center"></el-table-column>
-                  <el-table-column label="姓名"        min-width="100px" align="center">
+                  <el-table-column prop="name"        label="姓名"              min-width="100px" align="center"></el-table-column>
+                  <!-- <el-table-column label="姓名"        min-width="100px" align="center">
                     <template slot-scope="scope">
                       <span class="btn" @click="showItem(scope.$index, scope.row)">{{ scope.row.name }}</span>
                     </template>
-                  </el-table-column>
+                  </el-table-column> -->
                   <el-table-column prop="warningType" label="预警事件类型"       min-width="120px"></el-table-column>
                   <el-table-column prop="lastArea"    label="最后一次被定位区域"  min-width="230px"></el-table-column>
                   <el-table-column prop="lastTime"    label="最后一次被定位时间"  min-width="200px"></el-table-column>
@@ -47,21 +48,22 @@
                     </template>
                   </el-table-column>
                 </el-table>
-                <el-pagination @current-change="topTableChange()" layout="prev, pager, next, jumper"
-                               :current-page.sync="topPagination.currentPage" :page-size="topPagination.pageSize" :total="topPagination.totalRows">
-                </el-pagination>
+                <div class="el-pagination-wrap text-center">
+                  <table-pagination :total="topCount" @change="topTableChange"></table-pagination>
+                </div>
               </el-card>
             </section>
             <section class="pn-main-main-bottom">
               <el-card class="box-card">
-                <div slot="header" class="pn-card-label"><span>已到人员列表({{ bottomTableData.length }}人)</span></div>
-                <el-table :data="bottomTableData" stripe style="width: 100%" height="380">
+                <div slot="header" class="pn-card-label"><span>已识别人员列表({{ bottomTableData.length }}人)</span></div>
+                <el-table :data="bottomTableData" stripe style="width: 100%" height="355">
                   <el-table-column prop="number" label="编号"     min-width="100px" align="center"></el-table-column>
-                  <el-table-column label="姓名"  min-width="100px" align="center">
+                  <el-table-column prop="name"   label="姓名"     min-width="100px" align="center"></el-table-column>
+                  <!-- <el-table-column label="姓名"  min-width="100px" align="center">
                     <template slot-scope="scope">
                       <span class="btn" @click="showItem(scope.$index, scope.row)">{{ scope.row.name }}</span>
                     </template>
-                  </el-table-column>
+                  </el-table-column> -->
                   <el-table-column prop="area"   label="当前区域" min-width="230px"></el-table-column>
                   <el-table-column prop="time"   label="识别时间" min-width="200px"></el-table-column>
                   <el-table-column prop="func"   label="识别方法" min-width="100px"></el-table-column>
@@ -74,9 +76,9 @@
                     </template>
                   </el-table-column>
                 </el-table>
-                <el-pagination @current-change="bottomTableChange()" layout="prev, pager, next, jumper"
-                               :current-page.sync="bottomPagination.currentPage" :page-size="bottomPagination.pageSize" :total="bottomPagination.totalRows">
-                </el-pagination>
+                <div class="el-pagination-wrap text-center">
+                  <table-pagination :total="bottomCount" @change="bottomTableChange"></table-pagination>
+                </div>
               </el-card>
             </section>
           </el-main>
@@ -87,7 +89,7 @@
                 <el-button style="float: right; padding: 3px 0" type="text" @click="closeVideo()">关闭</el-button>
               </div>
               <div>
-                视频内容
+                <iframe v-for="camera in cameras" :key="camera" style="height: 370px; width: 750px;" :src="'http://www.baidu.com?id=' + camera"></iframe>
               </div>
             </el-card>
           </el-aside>
@@ -102,6 +104,7 @@
   import right from '@/assets/right.gif';
   import video from '@/assets/video.png';
   import warning from '@/assets/warning.png';
+  import tablePagination from '@/components/commons/tablePage.vue';
 
   export default {
     data() {
@@ -117,11 +120,8 @@
           video: video,
           warning: warning
         },
-        topPagination: {
-            pageSize : 10,
-            currentPage : 1,
-            totalRows : 100
-        },
+        topCount: 0,
+        bottomCount: 0,
         bottomPagination: {
             pageSize : 10,
             currentPage : 1,
@@ -132,7 +132,8 @@
         },
         treeData: [],
         topTableData: [],
-        bottomTableData: []
+        bottomTableData: [],
+        cameras: []
       }
     },
     methods: {
@@ -140,9 +141,16 @@
         alert("获取下级");
       },
       showVideo: function(name, index, row) {
+        this.pnAside = false;
+        this.pnAsideLeft=0;
+        this.pnMainAsideLeft=7;
         this.pnMainAside = true;
+        this.cameras = row.cameras;
       },
       closeVideo: function() {
+        this.pnAside=true;
+        this.pnAsideLeft=250;
+        this.pnMainAsideLeft=257
         this.pnMainAside = false;
       },
       doQuery: function() {
@@ -158,6 +166,23 @@
         this.$router.push({
           path: "/personnelposition"
         });
+      },
+      getTabledatas: function() {
+          var _this = this;
+          this.$ajxj.get('/getPointNameDatas').then(function (res) {
+            _this.topCount = res.data.topTable.count;
+            _this.topTableData = res.data.topTable.data;
+            _this.bottomCount = res.data.bottomTable.count;
+            _this.bottomTableData = res.data.bottomTable.data;
+          }).catch(function (error) {
+            console.log(error);
+          }).then(function () {
+          });
+      },
+      initSetInterval: function() {
+        setInterval(() => {
+          this.getTabledatas();
+        }, 5000);
       }
     },
     mounted() {
@@ -170,12 +195,20 @@
       });
       
       this.$ajxj.get('/getPointNameDatas').then(function (res) {
-         _this.topTableData = res.data.topTableData;
-         _this.bottomTableData = res.data.bottomTableData;
+         _this.topCount = res.data.topTable.count;
+         _this.topTableData = res.data.topTable.data;
+         _this.bottomCount = res.data.bottomTable.count;
+         _this.bottomTableData = res.data.bottomTable.data;
       }).catch(function (error) {
          console.log(error);
       }).then(function () {
       });
+
+      this.getTabledatas();
+      // this.initSetInterval();
+    },
+    components: {
+      tablePagination
     }
   }
 </script>
@@ -275,7 +308,7 @@
   }
 
   .pn-card-label {
-    color: #08B8EF  
+    color: black;
   }
 </style>
 <style>
@@ -289,5 +322,9 @@
 
   #pointname .pn-right-main-main-top td {
     color: red;
+  }
+
+  #pointname .el-card__body {
+    padding-bottom: 0px;
   }
 </style>

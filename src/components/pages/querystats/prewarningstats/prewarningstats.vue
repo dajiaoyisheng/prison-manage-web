@@ -57,8 +57,16 @@
             <div>
               <el-table :data="tableData" stripe style="width: 100%" height="240">
                 <el-table-column prop="warningEvent" label="违规预警事件"></el-table-column>
-                <el-table-column prop="warningTimes" label="预警次数"     width="150"></el-table-column>
-                <el-table-column prop="warningCount" label="预警人数"     width="150"></el-table-column>
+                <el-table-column label="预警次数"     width="150" align="center">
+                  <template slot-scope="scope">
+                    <span @click="showVideo(scope.$index, scope.row)" class="num-color" style="cursor: pointer;">{{ scope.row.warningTimes }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="预警人数"     width="150" align="center">
+                  <template slot-scope="scope">
+                    <span @click="showVideo(scope.$index, scope.row)" class="num-color" style="cursor: pointer;">{{ scope.row.warningCount }}</span>
+                  </template>
+                </el-table-column>
               </el-table>
             </div>
           </el-card>
@@ -226,7 +234,12 @@
       },
       queryAreaOrder: function() {
         alert("查询预警区域排名");
-      }
+      },
+      showVideo: function (index, row) {
+        this.$router.push({
+          path: "/personnelposition"
+        });
+      },
     },
     mounted() {
       // 获取区间字典

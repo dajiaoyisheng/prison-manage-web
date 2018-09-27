@@ -65,7 +65,7 @@
                         <el-card class="sm-main-item">
                             <div slot="header" class="clearfix">
                                 <span>特殊作息来源服务地址</span>
-                                <el-button style="float: right; padding: 3px 0" type="text" icon="el-icon-circle-plus-outline" @click="addServerInfo()">新增</el-button>
+                                <el-button style="color: #666; float: right; padding: 3px 0" type="text" icon="el-icon-plus" @click="addServerInfo()">新增</el-button>
                             </div>
                             <div class="sm-main-item-content" v-for="(item, key) in specialItems" :key="item" v-bind:class="{'active' : key!=0}" @mouseenter="enter('username', key)" @mouseleave="leave">
                                 <el-row class="item">

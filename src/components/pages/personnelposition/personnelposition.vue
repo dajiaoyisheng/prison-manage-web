@@ -214,14 +214,15 @@
               </el-table-column>
               <el-table-column prop="during" label="预警时长">
               </el-table-column>
-              <el-table-column prop="tyle" label="预警事件类型">
+              <el-table-column prop="tyle" label="预警事件">
               </el-table-column>
               <el-table-column prop="area" label="所在区域">
               </el-table-column>
               <el-table-column label="监控视频">
                 <template slot-scope="scope">
                   <div class="operating">
-                    <span @click="playvideo(scope.$index, scope.row, 'curevent')">视频</span>
+                    <img class="v-align-m" :src="video" alt="">
+                    <span @click="playvideo(scope.$index, scope.row, 'curevent')">查看</span>
                   </div>
                 </template>
               </el-table-column>
@@ -272,7 +273,8 @@
                     <el-table-column label="监控视频">
                       <template slot-scope="scope">
                         <div class="operating">
-                          <span @click="playVideo(scope.$index, scope.row, 'hisevent')">视频</span>
+                          <img class="v-align-m" :src="video" alt="">
+                          <span @click="playVideo(scope.$index, scope.row, 'hisevent')">查看</span>
                         </div>
                       </template>
                     </el-table-column>
@@ -295,6 +297,7 @@
 
 <script>
   import currentPos from '@/assets/currentPos.png';
+  import video from '@/assets/video.png';
   import tablePagination from '@/components/commons/tablePage.vue';
   export default {
     name: 'personnelposition',
@@ -326,10 +329,10 @@
         city: '',
         familyContact: '',
         phone: '',
-        starttime: '',
-        endtime: '',
+        starttime: new Date(new Date().setHours(0, 0, 0, 0)),
+        endtime: new Date(new Date().setHours(24, 0, 0, 0)),
 
-
+        video: video,
         currentPos: currentPos,
         input: '',
         loading: false,

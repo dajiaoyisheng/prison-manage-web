@@ -32,17 +32,18 @@
         <section class="right fr">
           <section class="house-floor">
             <p class="item-header">楼层</p>
-            <div class="block">
-              <el-carousel trigger="click" height="150px" :autoplay="false" indicator-position="none" arrow="always">
+            <div class="banner">
+              <el-carousel trigger="click" :autoplay="false" indicator-position="none" arrow="always">
                 <el-carousel-item v-for="item in floors" :key="item">
-                  <img :src="item" alt="">
+                  <img class="banner-item-img" :src="item" alt="">
+                  <img class="banner-item-img" :src="item" alt="">
                 </el-carousel-item>
               </el-carousel>
             </div>
           </section>
           <section class="house-p">
             <p class="item-header">人员</p>
-            <div>
+            <div class="table-wrap">
               <table>
                 <thead>
                   <tr>
@@ -60,13 +61,13 @@
                 <tbody>
                   <tr v-for="(item,index) in pPositionData" :key="item.name">
                     <td>
-                      <div class="cell">{{index+1}}</div>
+                      <router-link class="num-color" :to="{path:'/personnelposition',query:{name:item.name}}">{{index+1}}</router-link>
                     </td>
                     <td>
-                      <div class="cell">{{item.name}}</div>
+                      <router-link class="num-color" :to="{path:'/personnelposition',query:{name:item.name}}">{{item.name}}</router-link>
                     </td>
                     <td>
-                      <div class="cell">{{item.numbering}}</div>
+                      <router-link class="num-color" :to="{path:'/personnelposition',query:{name:item.name}}">{{item.numbering}}</router-link>
                     </td>
                   </tr>
                 </tbody>
@@ -80,7 +81,8 @@
 </template>
 <style scoped>
   .left-tree {
-    width: 15%;
+    /* width: 15%; */
+    width: 225px;
     display: inline-block;
     position: fixed;
     top: 60px;
@@ -91,8 +93,9 @@
 
   .right-main {
     background: #f3f6f8;
-    margin-left: 15%;
-    width: 83%;
+    margin-left: 225px;
+    /* width: 83%; */
+    /* max-width: 225px; */
     padding: 20px 1%;
   }
 
@@ -104,6 +107,16 @@
     height: 50px;
     line-height: 50px;
     font-size: 26px;
+  }
+
+  .item-header {
+    padding-left: 3%;
+    font-size: 16px;
+  }
+
+  .table-wrap {
+    background: #fff;
+    padding: 0 10%;
   }
 
   .area {
@@ -133,6 +146,18 @@
 
   .right-main .monitor-house .right .house-floor {
     margin-bottom: 20px;
+  } 
+
+  .banner {
+    background: #fff;
+    height: 300px;
+    padding: 5% 0;
+  }
+
+  .banner-item-img {
+    width: 50%;
+    height: 50%;
+    margin: 0 25%;
   }
 
 </style>
@@ -188,16 +213,14 @@
         .then(function () {});
 
       this.$ajxj.get('/pPositionData')
-        .then(function (res) {
-          // _this.loading = false;
-          _this.pPositionData = res.data.data
-          _this.page = res.data.total
+        .then((res)=> {
+          this.pPositionData = res.data.data;
+          this.page = res.data.total
         }).catch(function (error) {
           console.log(error);
         }).then(function () {});
     },
-    mounted: function () {
-    },
+    mounted: function () {},
     methods: {
       handleNodeClick(data, d1, d2) {
         this.isShowMonitorHouse = true;
