@@ -147,8 +147,8 @@
         this.params = {
           startTime: new Date(new Date().setHours(0, 0, 0, 0)),
           endTime: new Date(new Date().setHours(24, 0, 0, 0)),
-          warningType: "0",
-          prisonerType: "0",
+          warningType: "",
+          prisonerType: "",
           prisonerName: ""
         }
       },

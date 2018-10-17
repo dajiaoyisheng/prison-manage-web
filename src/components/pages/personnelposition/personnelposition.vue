@@ -238,16 +238,6 @@
             <el-tabs v-model="activeName" @tab-click="handleClick" class="pos-res">
               <el-tab-pane label="当前活动区域" name="first">
                 <img :src="currentPos" alt="">
-                <!-- 视频 -->
-                <video width="320" height="240" controls="controls">
-                  <source src="movie.ogg" type="video/ogg">
-                  <source src="movie.mp4" type="video/mp4"> Your browser does not support the video tag.
-                </video>
-                <!-- 视频 -->
-                <video width="320" height="240" controls="controls">
-                  <source src="movie.ogg" type="video/ogg">
-                  <source src="movie.mp4" type="video/mp4"> Your browser does not support the video tag.
-                </video>
               </el-tab-pane>
               <el-tab-pane label="历史活动区域" name="second">
                 <section class="filter-wrap">
@@ -288,7 +278,16 @@
           </p>
         </section>
         <section>
-          <!-- 视频位置? -->
+          <!-- 视频 -->
+          <video width="320" height="240" controls="controls">
+            <source src="movie.ogg" type="video/ogg">
+            <source src="movie.mp4" type="video/mp4"> Your browser does not support the video tag.
+          </video>
+          <!-- 视频 -->
+          <video width="320" height="240" controls="controls">
+            <source src="movie.ogg" type="video/ogg">
+            <source src="movie.mp4" type="video/mp4"> Your browser does not support the video tag.
+          </video>
         </section>
       </section>
     </section>

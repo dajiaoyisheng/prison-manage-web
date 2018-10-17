@@ -166,7 +166,6 @@
     font-size: 0;
     list-style: none;
     user-select: none;
-
   }
 
   .ver-align {

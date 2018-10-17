@@ -3,8 +3,8 @@
   <!-- nav -->
   <div>
     <nav class="nav-wrap">
-      <el-menu :default-active="$route.path" router class="nav-ul" :class="{navWrapFull:this.$store.state.isFullNavWrap}"
-        mode="horizontal" @select="handleSelect" background-color="#2f323c" text-color="#909399" active-text-color="#fff">
+      <el-menu :default-active="$route.path" router class="nav-ul" :class="{navWrapFull:isFullNavWrap}" mode="horizontal"
+        @select="handleSelect" background-color="#2f323c" text-color="#909399" active-text-color="#fff">
         <div class="logoWrap">
           <img class="logo" :src="logo" alt="">
           <img class="name" :src="name" alt="">
@@ -95,29 +95,21 @@
         input: '',
       };
     },
-    mounted: function () {
-      // 首页即工作台页面与其他页面不同,其width:1200px,居中,利用vue组件相关知识应该也可以,但还不知道怎么写
-      // if (location.hash === "#/personnelposition") {
-      //   this.setNavUlWithd();
-      // }
+    computed: {
+      isFullNavWrap() {
+        return this.$store.state.isFullNavWrap
+      }
     },
+    mounted: function () {},
 
     methods: {
-      handleSelect(key, keyPath) {
-        // if (key === "/personnelposition") {
-        //   this.setNavUlWithd();
-        // } 
-      },
-      // setNavUlWithd() {
-      //   document.getElementsByClassName("nav-ul")[0].style.cssText =
-      //     "width:100%;margin:0 auto;transition:width 0.5s;";
-      // }
+      handleSelect(key, keyPath) {},
     },
   }
 
 </script>
 
-<style socped>
+<style scoped>
   .nav-wrap {
     background-color: rgb(47, 50, 60);
     height: 60px;
@@ -129,25 +121,20 @@
     left: 0;
   }
 
-  .nav-ul {
+  .nav-wrap .nav-ul {
     margin: 0 auto;
     width: 1200px;
   }
 
-  .navWrapFull {
+  .nav-wrap .navWrapFull {
     width: 100%;
     min-width: 1200px;
     padding: 0 2%
   }
 
-  .navWrapFull .el-menu-item {
+  .nav-wrap .navWrapFull .el-menu-item {
     padding: 0 1.5%;
   }
-
-  .navWrapFull .el-submenu {
-    /* padding: 0 2%; */
-  }
-
 
   .logoWrap {
     /* display: inline-block; */
@@ -188,7 +175,7 @@
     color: #fff;
   }
 
-  .el-menu-item {
+  .nav-wrap .el-menu-item {
     padding: 0 0.8%;
   }
 
@@ -207,10 +194,10 @@
   } */
 
   .nav-wrap .nav-input {
+    /* outline: none; */
     width: 15%;
     height: 60px;
     line-height: 60px;
-
     float: left;
     text-align: right;
   }

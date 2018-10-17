@@ -150,7 +150,7 @@
           this.count = res.data.totalRows
         })
       },
-      // 判断要改变的摄像头区域
+      // 判断要改变的摄像头区域并保存
       changeArea: function (index, row) {
         this.changeCur = index;
         this.curChangeIndex = index;
