@@ -34,6 +34,7 @@ axios.interceptors.request.use(function (config) {
   store.state.loading = true;
   if (config.method === "post") {
     // 序列化
+    console.log(`接口:${config.url}的参数:`, config.data);
     config.data = qs.stringify(config.data);
     // 温馨提示,提交能直接接受json 格式,可以不用 qs 来序列化的
   }
@@ -77,7 +78,7 @@ axios.interceptors.response.use(response => {
  * @returns {Promise}
  */
 export function get(url, params = {}) {
-  console.log(`接口:${url}的参数:`,params);
+  console.log(`$get方法->接口:${url}的参数:`,params);
   return new Promise((resolve, reject) => {
     axios.get(url, {
         params: params
@@ -98,6 +99,7 @@ export function get(url, params = {}) {
  * @returns {Promise}
  */
 export function post(url, data = {}) {
+  console.log(`$post方法->接口:${url}的参数:`,data);
   return new Promise((resolve, reject) => {
     axios.post(url, data)
       .then(response => {

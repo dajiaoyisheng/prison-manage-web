@@ -44,21 +44,25 @@
             <el-row>
                 <el-form-item label="日期类型" prop="dateType">
                     <el-checkbox-group v-model="form.dateType">
-                        <el-checkbox v-for="item in dateTypes" :key="item" :label="item.value" name="dateType">{{ item.label }}</el-checkbox>
+                        <el-checkbox v-for="item in dateTypes" :key="item.value" :label="item.value" name="dateType">{{ item.label }}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
             </el-row>
             <el-row>
                 <el-form-item label="区域" prop="area">
                     <el-checkbox-group v-model="form.area">
-                        <el-checkbox v-for="item in areas" :key="item" :label="item.value" name="area">{{ item.label }}</el-checkbox>
+                        <el-checkbox v-for="item in areas" :key="item.value" :label="item.value" name="area">{{ item.label }}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
             </el-row>
-            <el-form-item>
-                <el-button size="small" @click="submitForm('form')" type="primary">保存</el-button>
-                <el-button size="small" @click="resetForm('form')">重置</el-button>
-            </el-form-item>
+            <el-row>
+                <el-col :span="10" :offset="14">
+                    <el-form-item>
+                        <el-button size="small" @click="submitForm('form')" type="primary">保存</el-button>
+                        <el-button size="small" @click="resetForm('form')">重置</el-button>
+                    </el-form-item>
+                </el-col>
+            </el-row>
         </el-form>
     </div>
 </template>
@@ -107,18 +111,26 @@
             }
         },
         methods: {
-            submitForm(formName) {
+            /** 保存作息表单 */
+            submitForm : function(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        alert("创建成功");
-                        this.resetForm('form');
+                        this.$ajxj.post('/saveDailyDates', this.form).then((respnose) => {
+                            alert("创建成功");
+                            this.resetForm('form');
+                        }).catch((error) => {
+                            console.log(error);
+                        }).then(() => {
+                            // todo something...
+                        });
                     } else {
-                        console.log('error submit!!');
+                        console.log("保存日常作息失败");
                         return false;
                     }
                 });
             },
-            resetForm(formName) {
+            /** 重置作息表单 */
+            resetForm : function(formName) {
                 this.$refs[formName].resetFields();
             }
         },

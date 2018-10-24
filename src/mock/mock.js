@@ -190,7 +190,25 @@ export default {
       });
     });
 
+    mock.onPost('/getPrisonerInfo').reply(config => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          defaultResData.data = posunsualData.prisonerInfo;
+          resolve([200, defaultResData])
+        }, 1000);
+      });
+    });
+
     mock.onGet('/getDailyDates').reply(config => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          defaultResData.data = calendarData.dailyDates;
+          resolve([200, defaultResData])
+        }, 1000);
+      });
+    });
+
+    mock.onPost('/getDailyDates').reply(config => {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           defaultResData.data = calendarData.dailyDates;
@@ -235,6 +253,15 @@ export default {
       });
     });
 
+    mock.onPost('/getSpecialDates').reply(config => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          defaultResData.data = calendarData.specialDates;
+          resolve([200, defaultResData])
+        }, 1000);
+      });
+    });
+
     mock.onGet('/getHolidayDates').reply(config => {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
@@ -253,7 +280,34 @@ export default {
       });
     });
 
+    mock.onPost('/getPointNameDatas').reply(config => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          defaultResData.data = pointnameData;
+          resolve([200, defaultResData])
+        }, 1000);
+      });
+    });
+
     mock.onGet('/getPrewarningstatsDatas').reply(config => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          defaultResData.data = prewarningstatsData;
+          resolve([200, defaultResData])
+        }, 1000);
+      });
+    });
+
+    mock.onPost('/getPrewarningstatsDatas').reply(config => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          defaultResData.data = prewarningstatsData;
+          resolve([200, defaultResData])
+        }, 1000);
+      });
+    });
+
+    mock.onPost('/queryAreaOrder').reply(config => {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           defaultResData.data = prewarningstatsData;
@@ -280,7 +334,7 @@ export default {
       });
     });
 
-    mock.onGet('/getLoggers').reply(config => {
+    mock.onPost('/getLoggers').reply(config => {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           defaultResData.data = systemmanagementData.loggerTable;
@@ -289,10 +343,67 @@ export default {
       });
     });
 
-    mock.onGet('/getUsers').reply(config => {
+    mock.onPost('/getUsers').reply(config => {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           defaultResData.data = systemmanagementData.userTable;
+          resolve([200, defaultResData])
+        }, 1000);
+      });
+    });
+
+    mock.onPost('/saveSysOptions').reply(config => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, defaultResData])
+        }, 1000);
+      });
+    });
+
+    mock.onPost('/saveServerInfo').reply(config => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, defaultResData])
+        }, 1000);
+      });
+    });
+
+    mock.onPost('/deleteUser').reply(config => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, defaultResData])
+        }, 1000);
+      });
+    });
+
+    mock.onPost('/getUser').reply(config => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          defaultResData.data = systemmanagementData.userItem;
+          resolve([200, defaultResData])
+        }, 1000);
+      });
+    });
+
+    mock.onPost('/saveUser').reply(config => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, defaultResData])
+        }, 1000);
+      });
+    });
+
+    mock.onPost('/saveDailyDates').reply(config => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, defaultResData])
+        }, 1000);
+      });
+    });
+
+    mock.onPost('/deleteDailyDate').reply(config => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
           resolve([200, defaultResData])
         }, 1000);
       });

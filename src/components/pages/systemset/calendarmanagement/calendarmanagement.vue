@@ -1,305 +1,356 @@
 <template>
-    <div id="calendarmanagement" class="w1200">
-        <el-container>
-            <el-header>
-                <el-row>
-                    <el-col :span="21" class="cal-header-title"><span>日历管理</span></el-col>
-                    <el-col :span="3" class="cal-header-toolbar">
-                        <el-button type="primary" size="mini" class="search-btn" @click="holidyDialog=true">节假日管理</el-button>
-                        <el-dialog title="节假日管理" :visible.sync="holidyDialog" width="600px" :before-close="holidyDialogClose">
-                            <v-holidyDialog :dateTypes='dateTypes' ref="holidyDialog"></v-holidyDialog>
-                        </el-dialog>
-                    </el-col>
-                </el-row>
-            </el-header>
-            <el-main>
-                <section class="cal-main-params">
-                    <span>时间:</span>
-                    <el-time-picker size="mini" style="width: 16.5%; margin: 0px 15px 0px 5px;" is-range v-model="params.period" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间"></el-time-picker>
-                    <span>日期类型:</span>
-                    <el-select size="mini" v-model="params.dateType" placeholder="请选择">
-                        <el-option v-for="item in dateTypes" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                    </el-select>
-                    <span>区域:</span>
-                    <el-select size="mini" v-model="params.area" placeholder="请选择">
-                        <el-option v-for="item in areas" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                    </el-select>
-                    <span>动作:</span>
-                    <el-select size="mini" v-model="params.option" placeholder="请选择">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                    </el-select>
-                    <span>服刑人员姓名/编号:</span>
-                    <el-input size="mini" class="pp-input" v-model="params.prisonerName" placeholder="请输入姓名或编号" clearable></el-input>
-                    <el-button size="mini" type="primary" class="search-btn" @click="query()">查询</el-button>
-                    <el-button size="mini" type="primary" class="search-btn" @click="clear()">清空</el-button>
-                </section>
-                <section class="cal-main-content">
-                    <el-tabs type="border-card" @tab-click="changeTabs">
-                        <el-tab-pane label="日常作息时间">
-                            <el-row style="line-height: 30px;">
-                                <el-col :span="2" :offset="22">
-                                    <el-button title="增加作息" type="text" icon="el-icon-circle-plus-outline" size="mini" @click="addDialog=true">增加作息</el-button>
-                                    <el-dialog title="增加作息" :visible.sync="addDialog" width="670px" :before-close="addDialogClose">
-                                        <v-addDialog :dateTypes="dateTypes" :options="options" :areas="areas" :scopes="scopes" ref="addDialog"></v-addDialog>
-                                    </el-dialog>
-                                </el-col>
-                            </el-row>
-                            <el-table :data="dailyDates" stripe style="width: 100%" height=600>
-                                <el-table-column prop="startTime"   label="开始时间"></el-table-column>
-                                <el-table-column prop="endTime"     label="结束时间"></el-table-column>
-                                <el-table-column prop="dateType"    label="日期类型"></el-table-column>
-                                <el-table-column label="时长">
-                                    <template slot-scope="scope">{{ scope.row.timeLen }}小时</template>
-                                </el-table-column>
-                                <el-table-column prop="item"        label="事项"></el-table-column>
-                                <el-table-column prop="area"        label="区域"></el-table-column>
-                                <el-table-column prop="option"      label="动作"></el-table-column>
-                                <el-table-column prop="scene"       label="适用范围"></el-table-column>
-                                <el-table-column label="操作" width="100">
-                                    <template slot-scope="scope">
-                                        <el-button icon="el-icon-delete" @click.native.prevent="deleteRow(scope.$index, scope.row)" type="text" size="small">删除</el-button>
-                                    </template>
-                                </el-table-column>
-                            </el-table>
-                            <el-pagination background @current-change="changeCurrent()" layout="prev, pager, next, jumper"
-                                :current-page.sync="pagination.currentPage" :page-size="pagination.pageSize" :total="pagination.totalRows"></el-pagination>
-                        </el-tab-pane>
-                        <el-tab-pane label="特殊人员作息时间">
-                            <el-row style="line-height: 30px;">
-                                <el-col :span="1" :offset="23">
-                                    <el-button title="刷新" type="text" icon="el-icon-refresh" size="mini" @click="refreshTables()">刷新</el-button>
-                                </el-col>
-                            </el-row>
-                            <el-table :data="specialDates" stripe style="width: 100%" height=600>
-                                <el-table-column prop="startTime"   label="开始时间"    width="100"></el-table-column>
-                                <el-table-column prop="endTime"     label="结束时间"    width="100"></el-table-column>
-                                <el-table-column prop="dateType"    label="日期类型"></el-table-column>
-                                <el-table-column prop="timeLen"     label="时长"        width="120"></el-table-column>
-                                <el-table-column prop="item"        label="事项"        width="100"></el-table-column>
-                                <el-table-column prop="area"        label="区域"        width="100"></el-table-column>
-                                <el-table-column prop="option"      label="动作"        width="100"></el-table-column>
-                                <el-table-column prop="scene"       label="适用范围"></el-table-column>
-                            </el-table>
-                            <el-pagination background @current-change="changeCurrent()" layout="prev, pager, next, jumper"
-                                :current-page.sync="pagination.currentPage" :page-size="pagination.pageSize" :total="pagination.totalRows"></el-pagination>
-                        </el-tab-pane>
-                    </el-tabs>
-                </section>
-            </el-main>
-        </el-container>
-    </div>
+  <div id="calendarmanagement" class="w1200">
+    <el-container>
+      <el-header>
+        <el-row>
+          <el-col :span="21" class="cal-header-title"><span>日历管理</span></el-col>
+          <el-col :span="3" class="cal-header-toolbar">
+            <el-button type="primary" size="mini" class="search-btn" @click="isShowHolidyDialog=true">节假日管理</el-button>
+            <el-dialog title="节假日管理" :visible.sync="isShowHolidyDialog" width="600px" :before-close="holidyDialogClose">
+              <v-holidyDialog :dateTypes='dateTypes' ref="holidyDialog" @ope-holidyDialog="listenMsgFromeChild"></v-holidyDialog>
+            </el-dialog>
+          </el-col>
+        </el-row>
+      </el-header>
+      <el-main>
+        <section class="cal-main-params">
+          <span>时间:</span>
+          <el-time-picker size="mini" style="width: 16.5%; margin: 0px 15px 0px 5px;" is-range v-model="params.period"
+            range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间"></el-time-picker>
+          <span>日期类型:</span>
+          <el-select size="mini" v-model="params.dateType" placeholder="请选择">
+            <el-option v-for="item in dateTypes" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
+          <span>区域:</span>
+          <el-select size="mini" v-model="params.area" placeholder="请选择">
+            <el-option v-for="item in areas" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
+          <span>动作:</span>
+          <el-select size="mini" v-model="params.option" placeholder="请选择">
+            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
+          <span>服刑人员姓名/编号:</span>
+          <el-input size="mini" class="pp-input" v-model="params.prisonerName" placeholder="请输入姓名或编号" clearable></el-input>
+          <el-button size="mini" type="primary" class="search-btn" @click="query()">查询</el-button>
+          <el-button size="mini" type="primary" class="search-btn" @click="clear()">清空</el-button>
+        </section>
+        <section class="cal-main-content">
+          <el-tabs type="border-card" @tab-click="changeTabs">
+            <el-tab-pane label="日常作息时间">
+              <el-row style="line-height: 30px;">
+                <el-col :span="2" :offset="22">
+                  <el-button title="增加作息" type="text" icon="el-icon-circle-plus-outline" size="mini" @click="addDialog=true">增加作息</el-button>
+                  <el-dialog title="增加作息" :visible.sync="addDialog" width="670px" :before-close="addDialogClose">
+                    <v-addDialog :dateTypes="dateTypes" :options="options" :areas="areas" :scopes="scopes" ref="addDialog"></v-addDialog>
+                  </el-dialog>
+                </el-col>
+              </el-row>
+              <el-table :data="dailyDates" stripe style="width: 100%">
+                <el-table-column prop="startTime" label="开始时间"></el-table-column>
+                <el-table-column prop="endTime" label="结束时间"></el-table-column>
+                <el-table-column prop="dateType" label="日期类型"></el-table-column>
+                <el-table-column label="时长">
+                  <template slot-scope="scope">{{ scope.row.timeLen }}小时</template>
+                </el-table-column>
+                <el-table-column prop="item" label="事项"></el-table-column>
+                <el-table-column prop="area" label="区域"></el-table-column>
+                <el-table-column prop="option" label="动作"></el-table-column>
+                <el-table-column prop="scene" label="适用范围"></el-table-column>
+                <el-table-column label="操作" width="100">
+                  <template slot-scope="scope">
+                    <el-button icon="el-icon-delete" @click.native.prevent="deleteDailyDate(scope.$index, scope.row)"
+                      type="text" size="small">删除</el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+              <div class="el-pagination-wrap text-center">
+                <v-tablePagination :total="pagination.totalRows" @change="query" ref="dailyPagination"></v-tablePagination>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="特殊人员作息时间">
+              <el-row style="line-height: 30px;">
+                <el-col :span="1" :offset="23">
+                  <el-button title="刷新" type="text" icon="el-icon-refresh" size="mini" @click="getSpecialDates()">刷新</el-button>
+                </el-col>
+              </el-row>
+              <el-table :data="specialDates" stripe style="width: 100%">
+                <el-table-column prop="startTime" label="开始时间" width="100"></el-table-column>
+                <el-table-column prop="endTime" label="结束时间" width="100"></el-table-column>
+                <el-table-column prop="dateType" label="日期类型"></el-table-column>
+                <el-table-column prop="timeLen" label="时长" width="120"></el-table-column>
+                <el-table-column prop="item" label="事项" width="100"></el-table-column>
+                <el-table-column prop="area" label="区域" width="100"></el-table-column>
+                <el-table-column prop="option" label="动作" width="100"></el-table-column>
+                <el-table-column prop="scene" label="适用范围"></el-table-column>
+              </el-table>
+              <div class="el-pagination-wrap text-center">
+                <v-tablePagination :total="pagination.totalRows" @change="query" ref="specialPagination"></v-tablePagination>
+              </div>
+            </el-tab-pane>
+          </el-tabs>
+        </section>
+      </el-main>
+    </el-container>
+  </div>
 </template>
 
 <script>
-    import addDialog from './addDialog';
-    import holidyDialog from './holidyDialog';
+  import addDialog from './addDialog';
+  import holidyDialog from './holidyDialog';
+  import tablePagination from '@/components/commons/tablePage.vue';
 
-    export default {
-        data() {
-            return {
-                message: '日历管理',
-                params: {
-                    dateType : "1",
-                    area : "1",
-                    option : "1",
-                    prisonerName : "",
-                    period : [new Date(0, 0, 0, 0, 0, 0), new Date(0, 0, 0, 23, 59, 59)]
-                },
-                pagination : {
-                    pageSize : 10,
-                    currentPage : 1,
-                    totalRows : 100
-                },
-                dailyDates: [],
-                specialDates: [],
-                dateTypes: [],
-                areas: [],
-                options: [],
-                scopes: [],
-                holidyDialog: false,
-                addDialog: false
-            }
+  export default {
+    data() {
+      return {
+        message: '日历管理',
+        params: {
+          dateType: "1",
+          area: "1",
+          option: "1",
+          prisonerName: "",
+          period: [new Date(0, 0, 0, 0, 0, 0), new Date(0, 0, 0, 23, 59, 59)]
         },
-        methods: {
-            query : function() {
-                alert("时期：" + this.params.period);
-                alert("日期类型：" + this.params.dateType);
-                alert("区域：" + this.params.area);
-                alert("动作：" + this.params.option);
-                alert("服刑人员姓名/编码：" + this.params.prisonerName);
-            },
-            clear : function() {
-                this.params.period = [new Date(0, 0, 0, 0, 0, 0), new Date(0, 0, 0, 23, 59, 59)];
-                this.params.dateType = "1";
-                this.params.area = "1";
-                this.params.option = "1";
-                this.params.prisonerName = "";
-            },
-            changeTabs : function(tab, event) {
-                var _this = this;
-                let tabId = event.target.getAttribute('id');
-
-                if (tabId == 'tab-0') {
-                    this.pagination.currentPage = 1;
-                    this.$ajxj.get('/getDailyDates').then(function (respnose) {
-                        _this.dailyDates = respnose.data.items;
-                        _this.pagination.totalRows = respnose.data.totalRows;
-                    }).catch(function (error) {
-                    }).then(function () {
-                        console.log(error);
-                    });
-                } else if (tabId == 'tab-1') {
-                    this.pagination.currentPage = 1;
-                    this.$ajxj.get('/getSpecialDates').then(function (respnose) {
-                        _this.specialDates = respnose.data.items;
-                        _this.pagination.totalRows = respnose.data.totalRows;
-                    }).catch(function (error) {
-                    }).then(function () {
-                        console.log(error);
-                    });
-                }
-            },
-            changeCurrent : function() {
-                alert("当前第" + this.pagination.currentPage + "页");
-            },
-            holidyDialogClose(done) {
-                this.$confirm('确认关闭？')
-                .then(_ => {
-                    done();
-                    this.$refs.holidyDialog.initTableData();
-                })
-                .catch(_ => {});
-            },
-            addDialogClose(done) {
-                this.$confirm('确认关闭？')
-                .then(_ => {
-                    // 执行关闭，并清空表单元素
-                    done();
-                    this.$refs.addDialog.resetForm('form');
-
-                    // 获取日常作息时间列表
-                    this.$ajxj.get('/getDailyDates').then(function (respnose) {
-                        _this.dailyDates = respnose.data.items;
-                        _this.pagination.totalRows = respnose.data.totalRows;
-                    }).catch(function (error) {
-                    }).then(function () {
-                    });
-                })
-                .catch(_ => {});
-            },
-            deleteRow(index, row) {
-                this.dailyDates.splice(index, 1);
-            },
-            refreshTables : function() {
-                alert("刷新作息时间");
-            }
+        pagination: {
+          totalRows: 100
         },
-        mounted() {
-            // 获取日期类型
-            var _this = this;
-            this.$ajxj.get('/getDateTypes').then(function (respnose) {
-                _this.dateTypes = respnose.data;
-            }).catch(function (error) {
-            }).then(function () {
-            });
-
-            // 获取区间字典
-            this.$ajxj.get('/getAreas').then(function (respnose) {
-                _this.areas = respnose.data;
-            }).catch(function (error) {
-            }).then(function () {
-            });
-
-            // 获取动作字典
-            this.$ajxj.get('/getOptions').then(function (respnose) {
-                _this.options = respnose.data;
-            }).catch(function (error) {
-            }).then(function () {
-            });
-
-            // 获取动作字典
-            this.$ajxj.get('/getScopes').then(function (respnose) {
-                _this.scopes = respnose.data;
-            }).catch(function (error) {
-            }).then(function () {
-            });
-
-            // 获取日常作息时间列表
-            this.$ajxj.get('/getDailyDates').then(function (respnose) {
-                _this.dailyDates = respnose.data.items;
-                _this.pagination.totalRows = respnose.data.totalRows;
-            }).catch(function (error) {
-            }).then(function () {
-            });
-        },
-        components: {
-            'v-addDialog' : addDialog,
-            'v-holidyDialog' : holidyDialog
+        tabId: "tab-0",
+        dailyDates: [],
+        specialDates: [],
+        dateTypes: [],
+        areas: [],
+        options: [],
+        scopes: [],
+        isShowHolidyDialog: false,
+        addDialog: false
+      }
+    },
+    methods: {
+      /** 获取日期类型 */
+      getDateTypes: function () {
+        this.$ajxj.get('/getDateTypes').then((respnose) => {
+          this.dateTypes = respnose.data;
+        }).catch((error) => {
+          console.log(error);
+        }).then(() => {
+          // todo somthing...
+        });
+      },
+      /** 获取区间字典 */
+      getAreas: function () {
+        this.$ajxj.get('/getAreas').then((respnose) => {
+          this.areas = respnose.data;
+        }).catch((error) => {
+          console.log(error);
+        }).then(() => {
+          // todo something...
+        });
+      },
+      /** 获取动作字典 */
+      getOptions: function () {
+        this.$ajxj.get('/getOptions').then((respnose) => {
+          this.options = respnose.data;
+        }).catch((error) => {
+          console.log(error);
+        }).then(() => {
+          // todo somthing...
+        });
+      },
+      /** 获取动作字典 */
+      getScopes: function () {
+        this.$ajxj.get('/getScopes').then((respnose) => {
+          this.scopes = respnose.data;
+        }).catch((error) => {
+          console.log(error);
+        }).then(() => {
+          // todo somthing...
+        });
+      },
+      /** 获取日常作息时间列表 */
+      getDailyDates: function () {
+        let data = {
+          "params": this.params,
+          "index": this.$refs.dailyPagination.index,
+          "limit": this.$refs.dailyPagination.limit
         }
+
+        this.$ajxj.post('/getDailyDates', this.params).then((respnose) => {
+          this.dailyDates = respnose.data.items;
+          this.pagination.totalRows = respnose.data.totalRows;
+        }).catch((error) => {
+          console.log(error);
+        }).then(() => {
+          // todo something...
+        });
+      },
+      /** 获取特殊人员作息时间 */
+      getSpecialDates: function () {
+        let data = {
+          "params": this.params,
+          "index": this.$refs.specialPagination.index,
+          "limit": this.$refs.specialPagination.limit
+        }
+
+        this.$ajxj.post('/getSpecialDates', this.params).then((respnose) => {
+          this.specialDates = respnose.data.items;
+          this.pagination.totalRows = respnose.data.totalRows;
+        }).catch((error) => {
+          console.log(error);
+        }).then(() => {
+          // todo something...
+        });
+      },
+      /** 根据条件查询作息列表 */
+      query: function () {
+        if (this.tabId == 'tab-0') {
+          this.getDailyDates();
+        } else if (this.tabId == 'tab-1') {
+          this.getSpecialDates();
+        }
+      },
+      /** 切换页签操作 */
+      changeTabs: function (tab, event) {
+        this.clear();
+        this.tabId = event.target.getAttribute('id');
+
+        if (this.tabId == 'tab-0') {
+          this.getDailyDates();
+          this.$refs.dailyPagination.index = 1;
+        } else if (this.tabId == 'tab-1') {
+          this.getSpecialDates();
+          this.$refs.specialPagination.index = 1;
+        }
+      },
+      /** 删除作息时间 */
+      deleteDailyDate: function (index, row) {
+        this.$confirm('确认删除？').then(() => {
+          this.dailyDates.splice(index, 1);
+          this.$ajxj.post('/deleteDailyDate', row.guid).then((respnose) => {
+            this.scopes = respnose.data;
+          }).catch((error) => {
+            console.log(error);
+          }).then(() => {
+            // todo somthing...
+          });
+        }).catch((error) => {
+          console.log(error);
+        });
+      },
+      /** 关闭增加作息窗口前操作 */
+      addDialogClose: function (done) {
+        this.$confirm('确认关闭？').then(() => {
+          done();
+          this.$refs.addDialog.resetForm('form');
+          this.getDailyDates();
+        }).catch((error) => {
+          console.log(error);
+        });
+      },
+      /** 关闭节假日窗口前操作 */
+      holidyDialogClose: function (done) {
+        this.$confirm('确认关闭？').then(() => {
+          done();
+          this.$refs.holidyDialog.initTableData();
+        }).catch((error) => {
+          console.log(error);
+        });
+      },
+      /** 重置查询条件 */
+      clear: function () {
+        this.params.period = [new Date(0, 0, 0, 0, 0, 0), new Date(0, 0, 0, 23, 59, 59)];
+        this.params.dateType = "1";
+        this.params.area = "1";
+        this.params.option = "1";
+        this.params.prisonerName = "";
+      },
+      listenMsgFromeChild: function (type, data) {
+        if (type === "save") { //保存节假日管理弹层
+          console.log("保存", data);
+            this.isShowHolidyDialog = false;
+        } else {
+          console.log("取消", data);
+          this.isShowHolidyDialog = false;
+        }
+      }
+    },
+    mounted() {
+      this.getDateTypes();
+      this.getAreas();
+      this.getOptions();
+      this.getScopes();
+      this.getDailyDates();
+    },
+    components: {
+      'v-addDialog': addDialog,
+      'v-holidyDialog': holidyDialog,
+      'v-tablePagination': tablePagination
     }
+  }
+
 </script>
 
 <style scoped>
-    .el-header {
-        line-height: 60px;
-    }
+  .el-header {
+    line-height: 60px;
+  }
 
-    .el-main {
-        height: 100%;
-        padding-top: 0px;
-    }
+  .el-main {
+    height: 100%;
+    padding-top: 0px;
+  }
 
-    .el-row {
-        line-height: 60px;
-    }
+  .el-row {
+    line-height: 60px;
+  }
 
-    .cal-header-title {
-        font-size: 18px;
-        color: #59c4ee;
-    }
+  .cal-header-title {
+    font-size: 18px;
+    color: #59c4ee;
+  }
 
-    .cal-main-params {
-        padding: 0 1%;
-        height: 60px;
-        line-height: 60px;
-        vertical-align: middle;
-        font-size: 14px;
-    }
+  .cal-main-params {
+    padding: 0 1%;
+    height: 60px;
+    line-height: 60px;
+    vertical-align: middle;
+    font-size: 14px;
+  }
 
-    .cal-main-params .el-select {
-        width: 8.7%;
-        margin: 0px 15px 0px 5px;
-    }
+  .cal-main-params .el-select {
+    width: 8.7%;
+    margin: 0px 15px 0px 5px;
+  }
 
-    .cal-main-params .pp-input {
-        width: 9.5%;
-        margin: 0px 15px 0px 5px;
-    }
+  .cal-main-params .pp-input {
+    width: 9.5%;
+    margin: 0px 15px 0px 5px;
+  }
 
-    .cal-header-toolbar {
-        padding-left: 40px;
-    }
+  .cal-header-toolbar {
+    padding-left: 40px;
+  }
+
 </style>
 
 <style>
-    #calendarmanagement .el-tabs__header {
-        padding: 0;
-        position: relative;
-    }
+  #calendarmanagement .el-tabs__header {
+    padding: 0;
+    position: relative;
+  }
 
-    #calendarmanagement .el-tabs__item {
-        padding: 0 20px;
-        height: 40px;
-        box-sizing: border-box;
-        line-height: 40px;
-        display: inline-block;
-        list-style: none;
-        font-size: 14px;
-        font-weight: 500;
-        position: relative;
-    }
+  #calendarmanagement .el-tabs__item {
+    padding: 0 20px;
+    height: 40px;
+    box-sizing: border-box;
+    line-height: 40px;
+    display: inline-block;
+    list-style: none;
+    font-size: 14px;
+    font-weight: 500;
+    position: relative;
+  }
 
-    #calendarmanagement .el-dialog__body {
-        padding: 10px 20px;
-    }
+  #calendarmanagement .el-dialog__body {
+    padding: 10px 20px;
+  }
+
 </style>

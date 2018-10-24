@@ -67,7 +67,7 @@
                                 <span>特殊作息来源服务地址</span>
                                 <el-button style="color: #666; float: right; padding: 3px 0" type="text" icon="el-icon-plus" @click="addServerInfo()">新增</el-button>
                             </div>
-                            <div class="sm-main-item-content" v-for="(item, key) in specialItems" :key="item" v-bind:class="{'active' : key!=0}" @mouseenter="enter('username', key)" @mouseleave="leave">
+                            <div class="sm-main-item-content" v-for="(item, key) in specialItems" :key="key" v-bind:class="{'active' : key!=0}" @mouseenter="enter('username', key)" @mouseleave="leave">
                                 <el-row class="item">
                                     <el-col :span="6"><span>服务地址：</span></el-col>
                                     <el-col :span="14"><el-input placeholder="请输入服务地址" v-model="item.address" clearable></el-input></el-col>
@@ -103,9 +103,32 @@
             }
         },
         methods: {
-            saveServerInfo : function() {
-                alert("保存服务信息成功");
+            /** 获取服务地址信息 */
+            getServerInfo : function() {
+                this.$ajxj.get('/getServerInfo').then((respnose) => {
+                    this.serverItem = respnose.data.serverItem;
+                    this.engineItem = respnose.data.engineItem;
+                    this.specialItems = respnose.data.specialItems;
+                    console.log("this.specialItems", this.specialItems);
+                    
+                }).catch((error) => {
+                    console.log(error);
+                }).then(() => {
+                    // todo somthing...
+                });
             },
+            /** 保存服务地址信息 */
+            saveServerInfo : function() {
+                let data = this.createModel();
+                this.$ajxj.post('/saveServerInfo', data).then((respnose) => {
+                    alert("保存成功");
+                }).catch((error) => {
+                    console.log(error);
+                }).then(() => {
+                    // todo somthing...
+                });
+            },
+            /** 视频分析引擎修改确认 */
             insureChange : function() {
                 if (this.engineItem.switch) {
                     this.$confirm('启动视频引擎?', '提示', {
@@ -127,35 +150,38 @@
                     });
                 }
             },
-            addServerInfo: function() {
-                var newServer = {
+            /** 增加特殊来源服务地址 */
+            addServerInfo : function() {
+                let newServer = {
                     address: '',
                     username: '',
                     password: ''
                 }
                 this.specialItems.unshift(newServer);
             },
-            delServerInfo: function(key) {
+            /** 删除特殊来源服务地址 */
+            delServerInfo : function(key) {
                 this.specialItems.splice(key, 1);
             },
-            enter: function(key, username) {
+            /** 移进特殊服务来源效果 */
+            enter : function(key, username) {
                 this.seen = key + username;
             },
-            leave: function() {
+            /** 移出特殊服务来源效果 */
+            leave : function() {
                 this.seen = null;
+            },
+            /** 创建参数模型 */
+            createModel : function() {
+                let data = { };
+                data.serverItem = JSON.stringify(this.serverItem);
+                data.engineItem = JSON.stringify(this.engineItem);
+                data.specialItems = JSON.stringify(this.specialItems);
+                return data;
             }
         },
         mounted() {
-            // 获取服务地址信息
-            var _this = this;
-            this.$ajxj.get('/getServerInfo').then(function (respnose) {
-                _this.serverItem = respnose.data.serverItem;
-                _this.engineItem = respnose.data.engineItem;
-                _this.specialItems = respnose.data.specialItems;
-            }).catch(function (error) {
-            }).then(function () {
-                console.log(error);
-            });
+            this.getServerInfo();
         }
     }
 </script>

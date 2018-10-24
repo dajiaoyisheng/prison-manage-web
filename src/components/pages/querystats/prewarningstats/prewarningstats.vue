@@ -214,43 +214,57 @@
       }
     },
     methods: {
-      doQuery: function() {
-        var _this = this;
-        this.$ajxj.get('/getPrewarningstatsDatas').then(function (respnose) {
-          _this.list = respnose.data.list;
-          _this.tableData = respnose.data.tableData;
-          _this.option1.series[0].data = respnose.data.option1.xAxisData;
-          _this.option1.yAxis.data = respnose.data.option1.yAxisData;
-          _this.option2.series[0].data = respnose.data.option2.xAxisData;
-          _this.option2.yAxis.data = respnose.data.option2.yAxisData;
-        }).catch(function (error) {
-        }).then(function () {
+      /** 获取区间字典 */
+      getPrisonDatas : function() {
+        this.$ajxj.get('/getPrisonDatas').then((respnose) => {
+            this.areas = respnose.data;
+        }).catch((error) => {
+          console.log(error);
+        }).then(() => {
+          // todo somthing...
         });
       },
-      queryStatistics: function() {
+      /** 获取预警统计 */
+      queryStatistics : function() {
         if (this.parameter.activeTab != 'other') {
           this.doQuery();
         }
       },
-      queryAreaOrder: function() {
-        alert("查询预警区域排名");
+      /** 查询预警统计 */
+      doQuery : function() {
+        this.$ajxj.post('/getPrewarningstatsDatas', this.parameter).then((respnose) => {
+          this.list = respnose.data.list;
+          this.tableData = respnose.data.tableData;
+          this.option1.series[0].data = respnose.data.option1.xAxisData;
+          this.option1.yAxis.data = respnose.data.option1.yAxisData;
+          this.option2.series[0].data = respnose.data.option2.xAxisData;
+          this.option2.yAxis.data = respnose.data.option2.yAxisData;
+        }).catch((error) => {
+          console.log(error);
+        }).then(() => {
+          // todo somthing...
+        });
       },
-      showVideo: function (index, row) {
+      /** 获取预警区域排名 */
+      queryAreaOrder : function() {
+        this.$ajxj.post('/queryAreaOrder', this.parameter).then((respnose) => {
+          this.option2.series[0].data = respnose.data.option2.xAxisData;
+          this.option2.yAxis.data = respnose.data.option2.yAxisData;
+        }).catch((error) => {
+          console.log(error);
+        }).then(() => {
+          // todo somthing...
+        });
+      },
+      /** 跳转预警统计 */
+      showVideo : function(index, row) {
         this.$router.push({
           path: "/personnelposition"
         });
       },
     },
     mounted() {
-      // 获取区间字典
-      var _this = this;
-      this.$ajxj.get('/getPrisonDatas').then(function (respnose) {
-          _this.areas = respnose.data;
-      }).catch(function (error) {
-      }).then(function () {
-      });
-
-      // 获取预警统计数据
+      this.getPrisonDatas();
       this.queryStatistics();
     }
   }

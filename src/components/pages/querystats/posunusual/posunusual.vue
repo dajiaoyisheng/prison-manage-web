@@ -2,32 +2,32 @@
   <div id="posunusual">
     <section class="puu-params">
       <el-row style="margin: 0px 10px;">
-        <el-col :span="6">
+        <el-col :span="8">
           <span>
             <span class="puu-params-label">时间:</span>
-            <el-date-picker style="width: 40%" size="mini" v-model="params.startTime" type="datetime" placeholder="选择开始时间"></el-date-picker>
+            <el-date-picker style="width: 43%" size="mini" v-model="params.startTime" type="datetime" placeholder="选择开始时间"></el-date-picker>
             <span>-</span>
-            <el-date-picker style="width: 40%" size="mini" v-model="params.endTime" type="datetime" placeholder="选择结束时间"></el-date-picker>
+            <el-date-picker style="width: 43%" size="mini" v-model="params.endTime" type="datetime" placeholder="选择结束时间"></el-date-picker>
           </span>
         </el-col>
         <el-col :span="5">
-          <span class="puu-params-label">预警事件类型:</span>
+          <span class="puu-params-label">事件类型:</span>
           <el-select size="mini" v-model="params.warningType" placeholder="请选择">
             <el-option v-for="item in warningTypes" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-col>
-        <el-col :span="5">
-          <span class="puu-params-label">服刑人员类型:</span>
+        <el-col :span="4">
+          <span class="puu-params-label">人员类型:</span>
           <el-select size="mini" v-model="params.prisonerType" placeholder="请选择">
             <el-option v-for="item in prisonerTypes" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-col>
-        <el-col :span="6">
-          <span class="puu-params-label">服刑人员姓名/编号:</span>
+        <el-col :span="5">
+          <span class="puu-params-label">人员姓名/编号:</span>
           <el-input size="mini" class="puu-input" v-model="params.prisonerName" placeholder="请输入姓名/编号" clearable></el-input>
         </el-col>
         <el-col :span="1">
-          <el-button size="mini" type="primary" class="search-btn" @click="doQuery()">查询</el-button>
+          <el-button size="mini" type="primary" class="search-btn" @click="getPosunusualItems()">查询</el-button>
         </el-col>
         <el-col :span="1">
           <el-button size="mini" type="primary" class="search-btn" @click="clear()">清空</el-button>
@@ -41,7 +41,7 @@
         <el-table-column prop="timeLen"      label="预警时长"     min-width="120px"  align="center"></el-table-column>
         <el-table-column prop="prisonerName" label="服刑人员姓名" min-width="120px"  align="center">
           <template slot-scope="scope">
-            <el-popover placement="top" width="240" trigger="hover" @show="showPrisoner()">
+            <el-popover placement="top" width="240" trigger="hover" @show="showPrisoner(scope.row)">
               <el-row style="margin-bottom: 0px;">
                 <el-col :span="11">
                   <div class="puu-item-popover"><span>姓名：</span>{{ prisonerInfo.prisonerName }}</div>
@@ -69,7 +69,7 @@
         </el-table-column>
         <el-table-column prop="prisonerNum"  label="服刑人员编码"  min-width="120px" align="center">
           <template slot-scope="scope">
-            <el-popover placement="top" width="240" trigger="hover" @show="showPrisoner()">
+            <el-popover placement="top" width="240" trigger="hover" @show="showPrisoner(scope.row)">
               <el-row style="margin-bottom: 0px;">
                 <el-col :span="11">
                   <div class="puu-item-popover"><span>姓名：</span>{{ prisonerInfo.prisonerName }}</div>
@@ -108,7 +108,7 @@
         </el-table-column>
       </el-table>
       <div class="el-pagination-wrap text-center">
-        <table-pagination :total="count" @change="changeCurrent"></table-pagination>
+        <table-pagination :total="count" @change="changeCurrent" ref="posunusualPagination"></table-pagination>
       </div>
     </section>
   </div>
@@ -140,10 +140,45 @@
       }
     },
     methods: {
-      doQuery: function () {
-        
+      /** 获取预警事件类型 */
+      getWarningTypes : function() {
+        this.$ajxj.get('/getWarningTypes').then((respnose) => {
+          this.warningTypes = respnose.data;
+        }).catch((error) => {
+          console.log(error);
+        }).then(() => {
+          // todo somthing...
+        });
       },
-      clear: function () {
+      /** 获取服刑人员类型 */
+      getPrisonerTypes : function() {
+        this.$ajxj.get('/getPrisonerTypes').then((respnose) => {
+          this.prisonerTypes = respnose.data;
+        }).catch((error) => {
+          console.log(error);
+        }).then(() => {
+          // todo somthing...
+        });
+      },
+      /** 获取定位异常清单 */
+      getPosunusualItems : function() {
+        let data = {
+          params: this.params,
+          currPage: this.$refs.posunusualPagination.index,
+          pageSize: this.$refs.posunusualPagination.pageSize
+        }
+
+        this.$ajxj.post('/getPosunusualItems', data).then((respnose) => {
+          this.count = respnose.data.totalRows;
+          this.ppuTableDatas = respnose.data.items;
+        }).catch((error) => {
+          console.log(error);
+        }).then(() => {
+          // todo somthing...
+        });
+      },
+      /** 清空查询条件信息 */
+      clear : function () {
         this.params = {
           startTime: new Date(new Date().setHours(0, 0, 0, 0)),
           endTime: new Date(new Date().setHours(24, 0, 0, 0)),
@@ -152,44 +187,31 @@
           prisonerName: ""
         }
       },
-      changeCurrent: function () {
-        alert("分页");
-      },
-      showVideo: function (index, row) {
+      /** 查看预警视频信息 */
+      showVideo : function(index, row) {
         this.$router.push({
-          path: "/personnelposition"
+          path : "/personnelposition"
         });
       },
-      showPrisoner: function (page) {
-        var _this = this;
-        this.$ajxj.get('/getPrisonerInfo',{page:page}).then(function (respnose) {
-          _this.prisonerInfo = respnose.data;
-        }).catch(function (error) {}).then(function (error) {
+      /** 查看服刑人员信息 */
+      showPrisoner : function(row) {
+        this.$ajxj.post('/getPrisonerInfo', { prisonerNum : row.prisonerNum }).then((respnose) => {
+          this.prisonerInfo = respnose.data;
+        }).catch((error) => {
           console.log(error);
+        }).then(() => {
+          // todo somthing...
         });
+      },
+      /** 切换分页操作处理 */
+      changeCurrent : function() {
+        this.getPosunusualItems();
       }
     },
     mounted() {
-      var _this = this;
-      // 获取表格数据
-      this.$ajxj.post('/getPosunusualItems').then(function (respnose) {
-        _this.ppuTableDatas = respnose.data.items;
-        _this.count = respnose.data.totalRows;
-      }).catch(function (error) {}).then(function (error) {
-        console.log(error);
-      });
-
-      this.$ajxj.get('/getWarningTypes').then(function (respnose) {
-        _this.warningTypes = respnose.data;
-      }).catch(function (error) {}).then(function (error) {
-        console.log(error);
-      });
-
-      this.$ajxj.get('/getPrisonerTypes').then(function (respnose) {
-        _this.prisonerTypes = respnose.data;
-      }).catch(function (error) {}).then(function (error) {
-        console.log(error);
-      });
+      this.getWarningTypes();
+      this.getPrisonerTypes();
+      this.getPosunusualItems();
     },
     components: {
       tablePagination

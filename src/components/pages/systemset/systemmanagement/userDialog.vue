@@ -54,19 +54,37 @@
             }
         },
         methods: {
-            submitForm(formName) {
+            /** 提交新增用户 */
+            submitForm : function(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        alert("创建成功");
-                        this.resetForm('form');
+                        this.$ajxj.post('/saveUser', this.form).then((respnose) => {
+                            alert("新增用户成功");
+                            this.resetForm('form');
+                        }).catch((error) => {
+                            console.log(error);
+                        }).then(() => {
+                            // todo somthing...
+                        });
                     } else {
-                        console.log('error submit!!');
+                        console.log('新增用户失败');
                         return false;
                     }
                 });
             },
-            resetForm(formName) {
+            /** 重置表单信息 */
+            resetForm : function(formName) {
                 this.$refs[formName].resetFields();
+            },
+            /** 查询指定用户 */
+            queryUser : function(guid) {
+                this.$ajxj.post('/getUser', guid).then((respnose) => {
+                    this.form = respnose.data;
+                }).catch((error) => {
+                    console.log(error);
+                }).then(() => {
+                    // todo somthing...
+                });
             }
         }
     }

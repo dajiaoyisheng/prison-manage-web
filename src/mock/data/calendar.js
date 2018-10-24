@@ -53,6 +53,7 @@ let calendarData = Mock.mock({
 
 for (let i = 0; i < 5; i++) {
     calendarData.dailyDates.items.push({
+        guid: "123456",
         startTime: "12:22:12",
         endTime: "12:22:12",
         dateType: "工作日",
@@ -66,6 +67,7 @@ for (let i = 0; i < 5; i++) {
 
 for (let i = 0; i < 5; i++) {
     calendarData.specialDates.items.push({
+        guid: "123456",
         startTime: "12:22:12",
         endTime: "12:22:12",
         dateType: "工作日/非工作日/节假日",

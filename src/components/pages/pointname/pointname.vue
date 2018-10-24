@@ -31,11 +31,6 @@
                 <el-table :data="topTableData" stripe style="width: 100%" height="175">
                   <el-table-column prop="number"      label="编号"              min-width="100px" align="center"></el-table-column>
                   <el-table-column prop="name"        label="姓名"              min-width="100px" align="center"></el-table-column>
-                  <!-- <el-table-column label="姓名"        min-width="100px" align="center">
-                    <template slot-scope="scope">
-                      <span class="btn" @click="showItem(scope.$index, scope.row)">{{ scope.row.name }}</span>
-                    </template>
-                  </el-table-column> -->
                   <el-table-column prop="warningType" label="预警事件类型"       min-width="120px"></el-table-column>
                   <el-table-column prop="lastArea"    label="最后一次被定位区域"  min-width="230px"></el-table-column>
                   <el-table-column prop="lastTime"    label="最后一次被定位时间"  min-width="200px"></el-table-column>
@@ -59,11 +54,6 @@
                 <el-table :data="bottomTableData" stripe style="width: 100%" height="355">
                   <el-table-column prop="number" label="编号"     min-width="100px" align="center"></el-table-column>
                   <el-table-column prop="name"   label="姓名"     min-width="100px" align="center"></el-table-column>
-                  <!-- <el-table-column label="姓名"  min-width="100px" align="center">
-                    <template slot-scope="scope">
-                      <span class="btn" @click="showItem(scope.$index, scope.row)">{{ scope.row.name }}</span>
-                    </template>
-                  </el-table-column> -->
                   <el-table-column prop="area"   label="当前区域" min-width="230px"></el-table-column>
                   <el-table-column prop="time"   label="识别时间" min-width="200px"></el-table-column>
                   <el-table-column prop="func"   label="识别方法" min-width="100px"></el-table-column>
@@ -137,73 +127,69 @@
       }
     },
     methods: {
-      handleNodeClick: function(data) {
-        alert("获取下级");
+      /** 获取人员点名导航树 */
+      getPrisonareatree : function() {
+        this.$ajxj.get('/getPrisonareatree').then((response) => {
+          this.treeData = response.data;
+        }).catch((error) => {
+          console.log(error);
+        }).then(() => {
+          // todo somthing...
+        });
       },
-      showVideo: function(name, index, row) {
+      /** 获取点名列表信息 */
+      getTabledatas : function() {
+          this.$ajxj.post('/getPointNameDatas').then((response) => {
+            this.topCount = response.data.topTable.count;
+            this.topTableData = response.data.topTable.data;
+            this.bottomCount = response.data.bottomTable.count;
+            this.bottomTableData = response.data.bottomTable.data;
+          }).catch((error) => {
+            console.log(error);
+          }).then(() => {
+            // todo somthing...
+          });
+      },
+      /** 点击树节点获取列表信息 */
+      handleNodeClick : function(data) {
+        this.getTabledatas();
+      },
+      /** 根据条件查询列表信息 */
+      doQuery : function() {
+        this.getTabledatas();
+      },
+      /** 未识别人员分页 */
+      topTableChange : function() {
+        this.getTabledatas();
+      },
+      /** 已识别人员分页 */
+      bottomTableChange : function() {
+        this.getTabledatas();
+      },
+      /** 显示监控视频区域 */
+      showVideo : function(name, index, row) {
         this.pnAside = false;
         this.pnAsideLeft=0;
         this.pnMainAsideLeft=7;
         this.pnMainAside = true;
         this.cameras = row.cameras;
       },
-      closeVideo: function() {
+      /** 关闭监控视频区域 */
+      closeVideo : function() {
         this.pnAside=true;
         this.pnAsideLeft=250;
         this.pnMainAsideLeft=257
         this.pnMainAside = false;
       },
-      doQuery: function() {
-        alert("服刑人员:" + this.parameter.name);
-      },
-      topTableChange: function() {
-        alert("切换分页");
-      },
-      bottomTableChange: function() {
-        alert("切换分页");
-      },
-      showItem: function(index, row) {
-        this.$router.push({
-          path: "/personnelposition"
-        });
-      },
-      getTabledatas: function() {
-          var _this = this;
-          this.$ajxj.get('/getPointNameDatas').then(function (res) {
-            _this.topCount = res.data.topTable.count;
-            _this.topTableData = res.data.topTable.data;
-            _this.bottomCount = res.data.bottomTable.count;
-            _this.bottomTableData = res.data.bottomTable.data;
-          }).catch(function (error) {
-            console.log(error);
-          }).then(function () {
-          });
-      },
-      initSetInterval: function() {
+      /** 初始化定时刷新任务 */
+      initSetInterval : function() {
         setInterval(() => {
           this.getTabledatas();
         }, 5000);
       }
     },
     mounted() {
-      var _this = this;
-      this.$ajxj.get('/getPrisonareatree').then(function (res) {
-        _this.treeData = res.data;
-      }).catch(function (error) {
-        console.log(error);
-      }).then(function () {
-      });
-      
-      this.$ajxj.get('/getPointNameDatas').then(function (res) {
-         _this.topCount = res.data.topTable.count;
-         _this.topTableData = res.data.topTable.data;
-         _this.bottomCount = res.data.bottomTable.count;
-         _this.bottomTableData = res.data.bottomTable.data;
-      }).catch(function (error) {
-         console.log(error);
-      }).then(function () {
-      });
-
+      this.getPrisonareatree();
       this.getTabledatas();
       // this.initSetInterval();
     },

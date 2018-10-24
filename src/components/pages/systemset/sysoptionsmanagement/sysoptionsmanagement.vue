@@ -37,22 +37,38 @@
             }
         },
         methods: {
+            /** 获取系统选项 */
+            getSysOptions : function() {
+                this.$ajxj.get('/getSysOptions').then((respnose) => {
+                    this.optionMaxTime = respnose.data.optionMaxTime;
+                    this.stayMaxTime = respnose.data.stayMaxTime;
+                }).catch((error) => {
+                    console.log(error);
+                }).then(() => {
+                    // todo somthing...
+                });
+            },
+            /** 保存系统选项 */
             saveSysOptions : function() {
-                alert("无法定位允许最长时间：" + this.optionMaxTime);
-                alert("允许在卫生间中停留的最长时间：" + this.stayMaxTime);
+                let data = this.createModel();
+                this.$ajxj.post('/saveSysOptions', data).then((respnose) => {
+                    alert("保存成功");
+                }).catch((error) => {
+                    console.log(error);
+                }).then(() => {
+                    // todo somthing...
+                });
+            },
+            /** 创建参数模型 */
+            createModel : function() {
+                let data = { }
+                data.optionMaxTime = this.optionMaxTime;
+                data.stayMaxTime = this.stayMaxTime;              
+                return data;
             }
         },
         mounted() {
-            // 获取系统选项
-            var _this = this;
-            this.$ajxj.get('/getSysOptions').then(function (respnose) {
-                _this.optionMaxTime = respnose.data.optionMaxTime;
-                _this.stayMaxTime = respnose.data.stayMaxTime;
-            }).catch(function (error) {
-                console.log(error);
-            }).then(function () {
-                // TODO:always executed
-            });
+            this.getSysOptions();
         }
     }
 </script>

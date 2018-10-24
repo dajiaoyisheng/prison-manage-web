@@ -11,6 +11,12 @@ let systemmanagementData = Mock.mock({
     userTable: {
         count: userCount,
         data: []
+    },
+    userItem: {
+        guid: '123456',
+        userName: '张三',
+        passWord: '123456',
+        insurePwd: '123456'
     }
 })
 
@@ -26,6 +32,7 @@ for (let i = 0; i < logCount; i++) {
 
 for (let i = 0; i < userCount; i++) {
     systemmanagementData.userTable.data.push({
+        guid: '123456',
         userName: '张三',
         createTime: '2018-09-27 12:02:00'
     });
