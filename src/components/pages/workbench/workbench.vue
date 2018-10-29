@@ -98,6 +98,7 @@
           enterable: true,
           trigger: 'item',
           position: 'inside',
+          extraCssText:'z-index: 99',
           formatter: function (params) {
             let pieItem1 = params[0] || params;
             let content =
@@ -208,6 +209,7 @@
           enterable: true, // 鼠标是否可进入tooltip
           position: ['20%', '20%'],
           trigger: 'axis', // 触发方式
+          extraCssText:'z-index: 99',
           // axisPointer: { // 坐标轴指示器，坐标轴触发有效
           //   type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
           // },
@@ -250,7 +252,7 @@
           left: '3%',
           right: '4%',
           bottom: '3%',
-          containLabel: true
+          containLabel: true,
         },
         xAxis: [{
           type: 'category',

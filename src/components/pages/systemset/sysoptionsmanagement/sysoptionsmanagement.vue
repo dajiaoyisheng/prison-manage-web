@@ -39,7 +39,8 @@
         methods: {
             /** 获取系统选项 */
             getSysOptions : function() {
-                this.$ajxj.get('/getSysOptions').then((respnose) => {
+                let url = this.$store.state.env + "/systemOption.action?method=getSysOptions";
+                this.$ajxj.get(url).then((respnose) => {
                     this.optionMaxTime = respnose.data.optionMaxTime;
                     this.stayMaxTime = respnose.data.stayMaxTime;
                 }).catch((error) => {
@@ -50,20 +51,43 @@
             },
             /** 保存系统选项 */
             saveSysOptions : function() {
-                let data = this.createModel();
-                this.$ajxj.post('/saveSysOptions', data).then((respnose) => {
-                    alert("保存成功");
+                this.$confirm('是否保存?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    let data = this.createModel();
+                    let url = this.$store.state.env + "/systemOption.action?method=saveSysOptions";
+                    this.$ajxj.post(url, data).then((respnose) => {
+                        alert("保存成功");
+                    }).catch((error) => {
+                        console.log(error);
+                    }).then(() => {
+                        // todo somthing...
+                    });
                 }).catch((error) => {
                     console.log(error);
-                }).then(() => {
-                    // todo somthing...
                 });
             },
             /** 创建参数模型 */
             createModel : function() {
-                let data = { }
-                data.optionMaxTime = this.optionMaxTime;
-                data.stayMaxTime = this.stayMaxTime;              
+                // 无法定位允许最长时间
+                let option1 = { }
+                option1.name = "optionMaxTime";
+                option1.value = this.optionMaxTime;
+
+                // 允许在卫生间中停留的最长时间
+                let option2 = { }
+                option2.name = "stayMaxTime";
+                option2.value = this.stayMaxTime;
+               
+                // 系统选项参数集合
+                let options = [];
+                options.push(option1);
+                options.push(option2);
+
+                let data = { };
+                data.options = JSON.stringify(options);
                 return data;
             }
         },

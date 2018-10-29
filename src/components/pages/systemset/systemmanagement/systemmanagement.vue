@@ -61,8 +61,8 @@
                 <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
                 <el-table-column fixed="right" label="操作" align="center" width="200px">
                   <template slot-scope="scope">
-                    <el-button style="padding: 0px 15px;" class="el-icon-edit" size="mini" type="text" @click="initModifyUser(scope.row)">修改</el-button>
-                    <el-button style="padding: 0px 15px;" class="el-icon-delete" size="mini" type="text"
+                    <el-button style="padding: 0px 15px;" class="el-icon-edit" type="text" @click="initModifyUser(scope.row)">修改</el-button>
+                    <el-button style="padding: 0px 15px;" class="el-icon-delete" type="text"
                       @click.native.prevent="deleteUser(scope.$index, scope.row)">删除</el-button>
                   </template>
                 </el-table-column>

@@ -28,7 +28,7 @@
             <section class="pn-right-main-main-top">
               <el-card class="box-card">
                 <div slot="header" class="pn-card-label">未识别人员列表(<span style="color: red;">{{ topTableData.length }}人</span>)</div>
-                <el-table :data="topTableData" stripe style="width: 100%" height="175">
+                <el-table :data="topTableData" stripe style="width: 100%" height="205">
                   <el-table-column prop="number"      label="编号"              min-width="100px" align="center"></el-table-column>
                   <el-table-column prop="name"        label="姓名"              min-width="100px" align="center"></el-table-column>
                   <el-table-column prop="warningType" label="预警事件类型"       min-width="120px"></el-table-column>
@@ -36,7 +36,7 @@
                   <el-table-column prop="lastTime"    label="最后一次被定位时间"  min-width="200px"></el-table-column>
                   <el-table-column label="视频" width="100px" fixed="right" align="center">
                     <template slot-scope="scope">
-                      <el-button class="btn" @click="showVideo('topTableData', scope.$index, scope.row)" type="text" size="mini">
+                      <el-button class="btn" @click="showVideo('topTableData', scope.$index, scope.row)" type="text">
                         <img :src="images.video" style="display: inline-block; line-height: 20px; vertical-align: middle;">
                         <span style="display: inline-block; line-height: 20px; vertical-align: middle;">查看</span>
                       </el-button>
@@ -51,7 +51,7 @@
             <section class="pn-main-main-bottom">
               <el-card class="box-card">
                 <div slot="header" class="pn-card-label"><span>已识别人员列表({{ bottomTableData.length }}人)</span></div>
-                <el-table :data="bottomTableData" stripe style="width: 100%" height="355">
+                <el-table :data="bottomTableData" stripe style="width: 100%" height="325">
                   <el-table-column prop="number" label="编号"     min-width="100px" align="center"></el-table-column>
                   <el-table-column prop="name"   label="姓名"     min-width="100px" align="center"></el-table-column>
                   <el-table-column prop="area"   label="当前区域" min-width="230px"></el-table-column>
@@ -59,7 +59,7 @@
                   <el-table-column prop="func"   label="识别方法" min-width="100px"></el-table-column>
                   <el-table-column label="视频" width="100px" fixed="right" align="center">
                     <template slot-scope="scope">
-                      <el-button class="btn" @click="showVideo('bottomTableData', scope.$index, scope.row)" type="text" size="mini">
+                      <el-button class="btn" @click="showVideo('bottomTableData', scope.$index, scope.row)" type="text">
                         <img :src="images.video" style="display: inline-block; line-height: 20px; vertical-align: middle;">
                         <span style="display: inline-block; line-height: 20px; vertical-align: middle;">查看</span>
                       </el-button>

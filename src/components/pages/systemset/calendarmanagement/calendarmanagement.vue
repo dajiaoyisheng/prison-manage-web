@@ -39,7 +39,7 @@
             <el-tab-pane label="日常作息时间">
               <el-row style="line-height: 30px;">
                 <el-col :span="2" :offset="22">
-                  <el-button title="增加作息" type="text" icon="el-icon-circle-plus-outline" size="mini" @click="addDialog=true">增加作息</el-button>
+                  <el-button title="增加作息" type="text" icon="el-icon-circle-plus-outline" @click="addDialog=true">增加作息</el-button>
                   <el-dialog title="增加作息" :visible.sync="addDialog" width="670px" :before-close="addDialogClose">
                     <v-addDialog :dateTypes="dateTypes" :options="options" :areas="areas" :scopes="scopes" ref="addDialog"></v-addDialog>
                   </el-dialog>
@@ -59,7 +59,7 @@
                 <el-table-column label="操作" width="100">
                   <template slot-scope="scope">
                     <el-button icon="el-icon-delete" @click.native.prevent="deleteDailyDate(scope.$index, scope.row)"
-                      type="text" size="small">删除</el-button>
+                      type="text">删除</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -70,7 +70,7 @@
             <el-tab-pane label="特殊人员作息时间">
               <el-row style="line-height: 30px;">
                 <el-col :span="1" :offset="23">
-                  <el-button title="刷新" type="text" icon="el-icon-refresh" size="mini" @click="getSpecialDates()">刷新</el-button>
+                  <el-button title="刷新" type="text" icon="el-icon-refresh" @click="getSpecialDates()">刷新</el-button>
                 </el-col>
               </el-row>
               <el-table :data="specialDates" stripe style="width: 100%">

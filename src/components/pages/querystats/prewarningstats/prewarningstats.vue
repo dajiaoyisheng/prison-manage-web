@@ -19,7 +19,7 @@
           <el-button size="mini" type="primary" class="search-btn" @click="doQuery()">查询</el-button>
         </el-col>
       </el-row>
-      <el-rolw>
+      <el-row>
         <el-col :span="12">
           <el-card class="box-card pws-card">
             <div slot="header" class="clearfix">
@@ -29,7 +29,7 @@
               <el-row>
                 <el-col :span="12">
                   <ul class="pws-card-first-left">
-                    <li v-for="(item, index) in list" :key="item" v-if="index < 5">
+                    <li v-for="(item, index) in list" :key="index" v-if="index < 5">
                       <span class="pws-card-first-label">NO.{{ index + 1 }}</span>
                       <span class="pws-card-first-name">{{ item.name }}</span>
                       <span class="pws-card-first-times">违规{{ item.times }}次</span>
@@ -38,7 +38,7 @@
                 </el-col>
                 <el-col :span="12">
                   <ul class="pws-card-first-right">
-                    <li v-for="(item, index) in list" :key="item" v-if="index > 4">
+                    <li v-for="(item, index) in list" :key="index" v-if="index > 4">
                       <span class="pws-card-first-label">NO.{{ index + 1 }}</span>
                       <span class="pws-card-first-name">{{ item.name }}</span>
                       <span class="pws-card-first-times">违规{{ item.times }}次</span>
@@ -71,8 +71,8 @@
             </div>
           </el-card>
         </el-col>
-      </el-rolw>
-      <el-rolw>
+      </el-row>
+      <el-row>
         <el-col :span="12">
           <el-card class="box-card pws-card">
             <div slot="header" class="clearfix">
@@ -98,7 +98,7 @@
             </div>
           </el-card>
         </el-col>
-      </el-rolw>
+      </el-row>
   </div>
 </template>
 

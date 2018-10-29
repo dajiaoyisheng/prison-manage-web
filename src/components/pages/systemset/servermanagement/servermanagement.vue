@@ -105,27 +105,37 @@
         methods: {
             /** 获取服务地址信息 */
             getServerInfo : function() {
-                this.$ajxj.get('/getServerInfo').then((respnose) => {
+                let url = this.$store.state.env + "/serverConfig.action?method=getServerInfo";
+                this.$ajxj.get(url).then((respnose) => {
                     this.serverItem = respnose.data.serverItem;
                     this.engineItem = respnose.data.engineItem;
                     this.specialItems = respnose.data.specialItems;
-                    console.log("this.specialItems", this.specialItems);
-                    
                 }).catch((error) => {
                     console.log(error);
                 }).then(() => {
                     // todo somthing...
+                    console.log("123");
+                    
                 });
             },
             /** 保存服务地址信息 */
             saveServerInfo : function() {
-                let data = this.createModel();
-                this.$ajxj.post('/saveServerInfo', data).then((respnose) => {
-                    alert("保存成功");
+                this.$confirm('是否保存?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    let data = this.createModel();
+                    let url = this.$store.state.env + "/serverConfig.action?method=saveServerInfo";
+                    this.$ajxj.post(url, data).then((respnose) => {
+                        alert("保存成功");
+                    }).catch((error) => {
+                        console.log(error);
+                    }).then(() => {
+                        // todo somthing...
+                    });
                 }).catch((error) => {
                     console.log(error);
-                }).then(() => {
-                    // todo somthing...
                 });
             },
             /** 视频分析引擎修改确认 */

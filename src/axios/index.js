@@ -7,6 +7,7 @@ import {
 } from 'element-ui';
 import store from '@/vuex/store'
 // axios 配置
+// axios.defaults.baseURL = process.env.BASE_API, // 设置超时时间为3s
 axios.defaults.timeout = 3000; // 设置超时时间为3s
 // 配置axios发送请求时携带cookie
 axios.defaults.withCredentials = false;
@@ -31,16 +32,18 @@ axios.defaults.withCredentials = false;
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
   // 在发送请求之前做些什么
-  store.state.loading = true;
+  // store.state.loading = true;
+  // showLoading
+  store.commit("showLoading")
   if (config.method === "post") {
     // 序列化
     console.log(`接口:${config.url}的参数:`, config.data);
     config.data = qs.stringify(config.data);
     // 温馨提示,提交能直接接受json 格式,可以不用 qs 来序列化的
   }
-//   if (localStorage.token) {
-//     config.headers.Authorization = localStorage.token;
-//   }
+  //   if (localStorage.token) {
+  //     config.headers.Authorization = localStorage.token;
+  //   }
   return config;
 }, function (error) {
   // 对请求错误做些什么
@@ -49,7 +52,7 @@ axios.interceptors.request.use(function (config) {
 
 axios.interceptors.response.use(response => {
   // 对响应数据做点什么
-  store.state.loading = false;
+  store.commit("hideLoading");
   const res = response.data;
   if (res.status !== 0) {
     Message({
@@ -62,7 +65,7 @@ axios.interceptors.response.use(response => {
   }
 }, error => {
   // 对响应错误做点什么
-  console.log('err:' + error)
+  // 如果路由改变提示信息提示
   Message({
     message: error.message,
     type: 'error',
@@ -78,7 +81,7 @@ axios.interceptors.response.use(response => {
  * @returns {Promise}
  */
 export function get(url, params = {}) {
-  console.log(`$get方法->接口:${url}的参数:`,params);
+  console.log(`$get方法->接口:${url}的参数:`, params);
   return new Promise((resolve, reject) => {
     axios.get(url, {
         params: params
@@ -99,7 +102,7 @@ export function get(url, params = {}) {
  * @returns {Promise}
  */
 export function post(url, data = {}) {
-  console.log(`$post方法->接口:${url}的参数:`,data);
+  console.log(`$post方法->接口:${url}的参数:`, data);
   return new Promise((resolve, reject) => {
     axios.post(url, data)
       .then(response => {

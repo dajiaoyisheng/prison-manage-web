@@ -114,8 +114,8 @@
     background-color: rgb(47, 50, 60);
     height: 60px;
     position: fixed;
-    /* 因为: echart tooltip z-index:9999999 */
-    z-index: 99999999;
+    /* 因为: echart tooltip z-index:99 导航挑nav ele-ui messege z-index:2000 */
+    z-index: 999;
     width: 100%;
     top: 0;
     left: 0;
