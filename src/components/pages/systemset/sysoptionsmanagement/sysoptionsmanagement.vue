@@ -13,13 +13,13 @@
                 <el-row>
                     <el-col :span="15">
                         <span>无法定位允许最长时间：</span>
-                        <el-input-number size="mini" v-model="optionMaxTime" controls-position="right" :min="1" :max="60"></el-input-number>分钟
+                        <el-input-number size="mini" v-model="optionMaxTime" controls-position="right" :min="1" :max="3600"></el-input-number>秒
                     </el-col>
                 </el-row>
                 <div>
                     <el-col :span="15">
                         <span>允许在卫生间中停留的最长时间：</span>
-                        <el-input-number size="mini" v-model="stayMaxTime" controls-position="right" :min="1" :max="60"></el-input-number>分钟
+                        <el-input-number size="mini" v-model="stayMaxTime" controls-position="right" :min="1" :max="3600"></el-input-number>秒
                     </el-col>
                 </div>
             </el-main>

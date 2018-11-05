@@ -115,7 +115,8 @@
         legend: {
           orient: 'vertical',
           top: "middle",
-          right: "5%"
+          right: "5%",
+          itemWidth: 14  // 图例标记的图形宽度,高度默认是14
         },
 
         // pie 圆心位置
@@ -124,6 +125,18 @@
           label: {
             show: false,
           },
+          itemStyle: { // 饼图白色间隙
+            normal: {
+                borderWidth: 4,
+                borderColor: '#ffffff',
+            },
+            // emphasis: {
+            //     borderWidth: 0,
+            //     shadowBlur: 10,
+            //     shadowOffsetX: 0,
+            //     shadowColor: 'rgba(0, 0, 0, 0.5)'
+            // }
+        }
         }
       };
       return {
@@ -274,6 +287,7 @@
         },
         legend: {
           right: "5%",
+          itemWidth: 14
         }
       };
     },
@@ -591,6 +605,10 @@
 
   .fontcolor num-color {
     color: #fff;
+  }
+  /* tooltip上的数字因背景色显示的不清楚 */
+  .num-color.text-decoration {
+    color: #0099ff;
   }
 
   .wordspacing {

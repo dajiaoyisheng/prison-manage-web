@@ -22,6 +22,12 @@
                                     </el-col>
                                 </el-row>
                                 <el-row class="item">
+                                    <el-col :span="6"><span>访问端口：</span></el-col>
+                                    <el-col :span="14">
+                                        <el-input placeholder="请输入访问端口" v-model="serverItem.port" clearable></el-input>
+                                    </el-col>
+                                </el-row>
+                                <el-row class="item">
                                     <el-col :span="6"><span>用户名：</span></el-col>
                                     <el-col :span="14">
                                         <el-input placeholder="请输入用户名" v-model="serverItem.username" clearable></el-input>
@@ -114,8 +120,6 @@
                     console.log(error);
                 }).then(() => {
                     // todo somthing...
-                    console.log("123");
-                    
                 });
             },
             /** 保存服务地址信息 */

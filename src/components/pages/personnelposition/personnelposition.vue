@@ -277,7 +277,7 @@
             </el-tabs>
           </p>
         </section>
-        <section>
+        <section class="movie-wrap">
           <!-- 视频 -->
           <video width="320" height="240" controls="controls">
             <source src="movie.ogg" type="video/ogg">
@@ -391,6 +391,8 @@
       //   prisoner: this.prisoner,
       // }
       // this.$store.state.setNavFull("full")
+      
+      // 判断进入此页面是否是要看视频
     },
     methods: {
       search() {
@@ -431,11 +433,12 @@
           })
       },
       playvideo(index, row, type) {
+        this.$el.querySelector(".movie-wrap").scrollIntoView();
         if (type == 'curevent') {
 
         }
         console.log(index, row);
-        window.open(row.tv)
+        // window.open(row.tv)
       },
       handleClick(tab, event) {
         console.log(tab, event);

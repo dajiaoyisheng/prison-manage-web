@@ -1,242 +1,230 @@
 <template>
-  <div class="w1200">
+  <div id="prisonermanagement" class="w1200">
     <p class="contentInfo">服刑人员信息管理</p>
     <section class="contentMain clearfixs">
       <section class="pm-t puu-params">
         <el-row :gutter="20" type="flex">
-          <el-col :span="3">
-            <img :src="images.add" alt="">
-            <span class="pointer">增加</span>
-          </el-col>
-          <el-col :span="3">
-            <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview"
-              :on-remove="handleRemove" :before-remove="beforeRemove" :limit="1" :on-exceed="handleExceed" :file-list="fileList"
-              :show-file-list="false">
-              <img :src="images.importgroup" alt="">
-              <span class="pointer">批量导入</span>
-            </el-upload>
-          </el-col>
-          <el-col :span="3">
-            <img :src="images.exportgroup" alt="">
-            <span class="pointer">批量导出</span>
-          </el-col>
-          <el-col :span="3">
-            <img :src="images.del" alt="">
-            <span @click="delGroup" class="pointer">批量删除</span>
-          </el-col>
-          <el-col :span="6" :offset="6">
-            <input class="p-m-input" @keyup.enter="search" v-model="parame.words" placeholder="请输入姓名或编号">
+          <el-col :span="2">
+            <img :src="images.add"><span class="pointer" @click="showDialog=true, dialogTitle='新增服刑人员'">新增</span>
           </el-col>
           <el-col :span="2">
-            <el-button @click="search" :loading="this.$store.state.loading" class="search-btn" size="small">搜索</el-button>
+            <img :src="images.del"><span @click="deleteBatch" class="pointer">批量删除</span>
+          </el-col>
+          <el-col :span="6" :offset="12">
+            <input class="p-m-input" @keyup.enter="getTableDatas" v-model="params.keyWord" placeholder="请输入姓名或编号">
+          </el-col>
+          <el-col :span="2">
+            <el-button @click="getTableDatas" :loading="this.$store.state.loading" class="search-btn" size="small">搜索</el-button>
           </el-col>
         </el-row>
       </section>
+      <section>
+        <el-dialog :title="dialogTitle" :visible.sync="showDialog" width="800px" :before-close="beforeClose">
+          <prisonerInfo ref="prisonerInfo" :superviseType="superviseType" :criState="criState" :state="state"></prisonerInfo>
+        </el-dialog>
+      </section>
       <section class="el-table-wrap">
         <el-table :data="tableData" @selection-change="handleSelectionChange" style="width: 100%">
-          <el-table-column type="selection" width="55">
+          <el-table-column type="selection" width="55"></el-table-column>
+          <el-table-column prop="criName"           label="服刑人员姓名"></el-table-column>
+          <el-table-column prop="criCode"           label="服刑人员编码"></el-table-column>
+          <el-table-column label="服刑人员年龄">
+            <template slot-scope="scope">{{ scope.row.criBirthday }}岁</template>
           </el-table-column>
-          <el-table-column prop="prisonerName" label="服刑人员姓名">
-          </el-table-column>
-          <el-table-column prop="pCoding" label="服刑人员编码">
-          </el-table-column>
-          <el-table-column prop="age" label="年龄">
-          </el-table-column>
-          <el-table-column prop="pType.label" label="服刑人员类型">
-          </el-table-column>
-          <el-table-column prop="comeTime" label="入监时间">
-          </el-table-column>
-          <el-table-column prop="crime.label" label="涉案罪名">
-          </el-table-column>
-          <el-table-column prop="during" label="服刑时长">
+          <el-table-column prop="criSupervisetype"  label="服刑人员类型"></el-table-column>
+          <el-table-column prop="criStartdate"      label="入监时间"></el-table-column>
+          <el-table-column prop="criAccusation"     label="涉案罪名"></el-table-column>
+          <el-table-column label="服刑时长">
+            <template slot-scope="scope">{{ scope.row.criPrisonterm }}个月</template>
           </el-table-column>
           <el-table-column label="操作" width="255">
             <template slot-scope="scope">
               <div class="operating">
-                <router-link tag="span" :to="{path:'/personnelposition',query:{name:scope.row.prisonerName}}">
-                  <img :src="images.review" alt=""> 查看
+                <router-link tag="span" :to="{path:'/personnelposition', query:{name:scope.row.prisonerName}}">
+                  <img :src="images.review">查看
                 </router-link>
-                <router-link tag="span" :to="{path:'/personnelposition',query:{name:scope.row.prisonerName}}">
-                  <img :src="images.edit" alt="">编辑</router-link>
-                <span @click="handleDelete(scope.$index, scope.row)">
-                  <img :src="images.del" alt="">删除</span>
+                <el-button style="padding: 0px 15px;" type="text" @click="initModifyInfo(scope.row)">
+                  <img :src="images.edit">修改
+                </el-button>
+                <span @click="deleteItem(scope.$index, scope.row)"><img :src="images.del" alt="">删除</span>
               </div>
             </template>
           </el-table-column>
         </el-table>
       </section>
       <div class="el-pagination-wrap">
-        <table-pagination :total="count" @change="pageChange"></table-pagination>
+        <table-pagination :total="count" @change="pageChange" ref="pagination"></table-pagination>
       </div>
     </section>
   </div>
 </template>
 
 <script>
-  import tablePagination from '@/components/commons/tablePage.vue';
-
   import add from '@/assets/add.png';
   import del from '@/assets/del.png';
   import edit from '@/assets/edit.png';
   import review from '@/assets/review.png';
-  import exportgroup from '@/assets/exportgroup.png';
-  import importgroup from '@/assets/importgroup.png';
+  import tablePagination from '@/components/commons/tablePage.vue';
+  import prisonerInfo from '@/components/pages/systemset/prisonermanagement/prisonerInfo.vue';
 
   export default {
-    name: 'violation',
     components: {
+      prisonerInfo,
       tablePagination
     },
     data() {
       return {
-        count: 0, //总记录数
+        dialogTitle: '新增服刑人员',
+        showDialog: false,
+        count: 0,
         images: {
           add: add,
           del: del,
           edit: edit,
-          review: review,
-          exportgroup: exportgroup,
-          importgroup: importgroup,
+          review: review
         },
-        parame: {
-          words: ''
+        params: {
+          keyWord: ''
         },
         pagination: {
           totalRows: 0
         },
+        tableData: [],
         multipleSelection: [],
-        fileList: [{
-          name: 'food.jpeg',
-          url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-        }, {
-          name: 'food2.jpeg',
-          url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-        }],
-        dialogVisible: false,
-        value7: '',
-        value: '',
-        // 服刑人员类型
-        input: '',
-        tableData: []
+        superviseType: [],
+        criState: [],
+        state: []
       }
     },
     mounted() {
-
-
+      this.getState();
+      this.getCriState();
+      this.getSuperviseType();
       this.getTableDatas();
     },
     methods: {
-      pageChange(page) {
-        this.currentPage = page;
-        this.getTableDatas(page);
-      },
-      // 获取表格数据
-      getTableDatas(page) {
-        this.parame = {
-          "page": page || 1,
-          'words': this.words
-        }
-        this.$ajxj.post('/getPManageDatas', this.parame).then((res) => {
-          this.count = res.data.totalRows;
-          this.tableData = res.data.items;
-        }).catch(function (error) {
+      /** 获取服刑人员状态 */
+      getState: function() {
+        let url = this.$store.state.env + "/systemCode.action?method=getState";
+        this.$ajxj.get(url).then((response) => {
+          this.state = response.data;
+        }).catch((error) => {
           console.log(error);
-        }).then(function (error) {
+        }).then((error) => {
           console.log(error);
         });
       },
-      // 删除操作
-      delPrisoner(delObj, delType) {
-        // 批量删除参数是数组
-        let delObjNames = null;
-        // 要删除的对象
-        this.$confirm('此操作将删除该服刑人员信息, 是否继续?', '提示', {
+      /** 获取人员当前状态 */
+      getCriState: function() {
+        let url = this.$store.state.env + "/systemCode.action?method=getCriState";
+        this.$ajxj.get(url).then((response) => {
+          this.criState = response.data;
+        }).catch((error) => {
+          console.log(error);
+        }).then((error) => {
+          console.log(error);
+        });
+      },
+      /** 获取服刑监管类型 */
+      getSuperviseType: function() {
+        let url = this.$store.state.env + "/systemCode.action?method=getSuperviseType";
+        this.$ajxj.get(url).then((response) => {
+          this.superviseType = response.data;
+        }).catch((error) => {
+          console.log(error);
+        }).then((error) => {
+          console.log(error);
+        });
+      },
+      /** 获取服刑人员列表 */
+      getTableDatas: function(page) {
+        let data = {
+          "pageIndex": page || 1,
+          'pageSize': this.$refs.pagination.limit,
+          "keyWord": this.params.keyWord
+        }
+
+        let url = this.$store.state.env + "/criminalManager.action?method=getCriminals";
+        this.$ajxj.post(url, data).then((response) => {
+          this.count = response.data.totalRows;
+          this.tableData = response.data.items;
+        }).catch((error) => {
+          console.log(error);
+        }).then((error) => {
+          console.log(error);
+        });
+      },
+      /** 分页操作处理 */
+      pageChange: function(page) {
+        this.currentPage = page;
+        this.getTableDatas(page);
+      },
+      /** 执行删除操作 */
+      handleDelete: function(delItem, delType) {
+        this.$confirm('是否确认删除?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          if (delType === 'delGroup') { // 批量删除
-            delObjNames = this.multipleSelection.map((item, index) => item.prisonerName);
-          } else { // 单个删除
-            delObjNames = delObj.prisonerName;
-          }
-          console.log(delObjNames);
-          let parame = {
-            "delIds": delObjNames
+          let criIds = [];
+          if (delType === 'deleteItem') {
+            criIds.push(delItem.criId);
+          } else {
+            criIds = this.multipleSelection.map((item, index) => item.criId);
           }
 
-          this.$ajxj.post('/getPManageDatas', parame).then((res) => {
-            this.getTableDatas(this.currentPage || 1);
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            });
-          }).catch(function (error) {
+          let data = { "criIds": JSON.stringify(criIds) }
+          let url = this.$store.state.env + "/criminalManager.action?method=deleteCriminals";
+          this.$ajxj.post(url, data).then((response) => {
+            alert("删除成功");
+            this.getTableDatas();
+          }).catch((error) => {
             console.log(error);
-          }).then(function (error) {
+          }).then((error) => {
             console.log(error);
           });
-
         }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
+          // todo somthing...
         });
       },
-      changeCurrent(val) {
-        this.getTableDatas(val);
+      /** 删除服刑人员 */
+      deleteItem: function(index, row, p3) {
+        this.handleDelete(row, 'deleteItem');
       },
-      // 选
-      handleSelectionChange(val) {
+      /** 服刑人员多选操作 */
+      handleSelectionChange: function(val) {
         this.multipleSelection = val;
       },
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
-      },
-      handlePreview(file) {
-        console.log(file);
-      },
-      // 查看
-      handleReview(index, row) {
-        console.log(index, row);
-      },
-      // 删除
-      handleDelete(index, row, p3) {
-        console.log('p3', p3);
-
-        this.delPrisoner(row, 'del')
-      },
-      // 批量删除
-      delGroup() {
+      /** 批量删除服刑人员 */
+      deleteBatch: function() {
         if (this.multipleSelection.length === 0) {
-          this.$message("请选择要删除的对象!")
+          alert("请选择要删除的服刑人员!");
         } else {
-          this.delPrisoner(this.multipleSelection, 'delGroup')
+          this.handleDelete(this.multipleSelection, 'deleteBatch');
         }
       },
-      // 搜索
-      search() {
-        console.log('搜索');
-        this.getTableDatas();
+      /** 修改服刑人员初始化 */
+      initModifyInfo: function(row) {
+        this.showDialog = true;
+        this.dialogTitle = '修改服刑人员';
+        this.$nextTick(() => {
+          this.$refs.prisonerInfo.queryPrisonerInfo("update", row.criId);
+        });
       },
-
-      clear() {
-        this.parame = {
-          words: ''
-        };
-        this.getTableDatas();
-      },
-      handleExceed(files, fileList) {
-        this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-      },
-      beforeRemove(file, fileList) {
-        return this.$confirm(`确定移除 ${ file.name }？`);
+      /** 关闭服刑人员信息对话框 */
+      beforeClose: function(done) {
+        this.$confirm('确认关闭？').then(() => {
+          done();
+          this.$refs.prisonerInfo.resetForm('form');
+          this.getTableDatas();
+        }).catch((error) => {
+          console.log(error);
+        });
       }
     }
   }
-
 </script>
+
 <style scoped>
   .pm-t span {
     color: #666;
@@ -254,5 +242,10 @@
     transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
     width: 100%;
   }
+</style>
 
+<style>
+  #prisonermanagement .el-dialog__body {
+    padding: 10px 20px;
+  }
 </style>

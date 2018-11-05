@@ -26,7 +26,7 @@
 <script>
   import vHead from './header.vue';
   import warning from '@/assets/warning.png';
-  import websocket from 'websocket';
+  // import websocket from 'websocket';
   export default {
     name: 'Home',
     data() {

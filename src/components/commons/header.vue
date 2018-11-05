@@ -187,8 +187,6 @@
     padding: 0 20px;
   }
 
-
-
   /* .el-menu--horizontal>.el-menu-item a {
     color: rgba(255, 255, 255, 1);
   } */
@@ -212,4 +210,11 @@
     height: 15px;
   }
 
+</style>
+// 写在下面是因为:写在scoped中设置不生效
+<style>
+  /* 调整带有二级菜单的一级菜单位置偏下的问题 */
+  .nav-wrap .el-menu--horizontal>.el-submenu .el-submenu__title {
+    line-height: 64px;
+  }
 </style>
