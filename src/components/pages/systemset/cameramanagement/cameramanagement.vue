@@ -6,7 +6,7 @@
         <el-row>
           <el-col :span="7">
             <span>所在区域:</span>
-            <el-cascader change-on-select v-model="paiPathFilter" placeholder="请选择" :options="prisonSubRegions">
+            <el-cascader size="small" change-on-select v-model="paiPathFilter" placeholder="请选择" :options="prisonSubRegions">
             </el-cascader>
           </el-col>
           <el-col :span="7">
@@ -51,8 +51,11 @@
             </template>
           </el-table-column>
         </el-table>
-        <div class="el-pagination-wrap text-center">
+        <!-- <div class="el-pagination-wrap text-center">
           <table-pagination :total="count" @change="getCameraList" ref="pagination"></table-pagination>
+        </div> -->
+        <div class="el-pagination-wrap">
+          <table-pagination :page-index="currentPage" :total="count" @change="pageChange(currentPage)"></table-pagination>
         </div>
       </section>
       <!-- 视频 -->
@@ -89,6 +92,7 @@
         cameraList: [], // 摄像头列表
         current: null, // 修改当前节点
         currentIndex: "", // 当前节点索引
+        currentPage: 1, //当前页码
         paiPathFilter: [],
         savePaiCodeTable: [], // table当前所在区域
         params: {
@@ -127,11 +131,13 @@
         });
       },
       /** 获取摄像头列表 */
-      getCameraList: function () {
+      getCameraList: function (page) {
+        this.currentPage = page;
         this.params.psiCode = this.paiPathFilter.length === 0 ? this.paiPathFilter : this.paiPathFilter.join("/");
         let data = {
-          "pageIndex": this.$refs.pagination.index,
-          'pageSize': this.$refs.pagination.limit,
+          "page":page,
+          // "pageIndex": this.$refs.pagination.index,
+          // 'pageSize': this.$refs.pagination.limit,
           "params": JSON.stringify(this.params)
         }
         let url = this.$store.state.env + "/cameraInfo.action?method=getCameraList";
@@ -143,6 +149,10 @@
         }).then(() => {
           // todo somthing...
         });
+      },
+      pageChange(page) {
+        this.currentPage = page;
+        this.getCameraList(page);
       },
       /** 保存摄像头信息 */
       saveCameraInfo: function () {
