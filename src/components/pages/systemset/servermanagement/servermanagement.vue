@@ -112,7 +112,7 @@
             /** 获取服务地址信息 */
             getServerInfo : function() {
                 let url = this.$store.state.env + "/serverConfig.action?method=getServerInfo";
-                this.$ajxj.get(url).then((respnose) => {
+                this.$get(url).then((respnose) => {
                     this.serverItem = respnose.data.serverItem;
                     this.engineItem = respnose.data.engineItem;
                     this.specialItems = respnose.data.specialItems;
@@ -131,7 +131,7 @@
                 }).then(() => {
                     let data = this.createModel();
                     let url = this.$store.state.env + "/serverConfig.action?method=saveServerInfo";
-                    this.$ajxj.post(url, data).then((respnose) => {
+                    this.$post(url, data).then((respnose) => {
                         alert("保存成功");
                     }).catch((error) => {
                         console.log(error);

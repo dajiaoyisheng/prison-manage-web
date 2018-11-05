@@ -37,7 +37,7 @@ import Mock from './mock';
 
 import App from './App';
 // if (process.env.NODE_ENV === 'development') {
-Mock.bootstrap();
+// Mock.bootstrap();
 // }
 Vue.config.productionTip = false;
 

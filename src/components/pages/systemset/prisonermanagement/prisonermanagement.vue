@@ -106,7 +106,7 @@
       /** 获取服刑人员状态 */
       getState: function() {
         let url = this.$store.state.env + "/systemCode.action?method=getState";
-        this.$ajxj.get(url).then((response) => {
+        this.$get(url).then((response) => {
           this.state = response.data;
         }).catch((error) => {
           console.log(error);
@@ -117,7 +117,7 @@
       /** 获取人员当前状态 */
       getCriState: function() {
         let url = this.$store.state.env + "/systemCode.action?method=getCriState";
-        this.$ajxj.get(url).then((response) => {
+        this.$get(url).then((response) => {
           this.criState = response.data;
         }).catch((error) => {
           console.log(error);
@@ -128,7 +128,7 @@
       /** 获取服刑监管类型 */
       getSuperviseType: function() {
         let url = this.$store.state.env + "/systemCode.action?method=getSuperviseType";
-        this.$ajxj.get(url).then((response) => {
+        this.$get(url).then((response) => {
           this.superviseType = response.data;
         }).catch((error) => {
           console.log(error);
@@ -145,7 +145,7 @@
         }
 
         let url = this.$store.state.env + "/criminalManager.action?method=getCriminals";
-        this.$ajxj.post(url, data).then((response) => {
+        this.$post(url, data).then((response) => {
           this.count = response.data.totalRows;
           this.tableData = response.data.items;
         }).catch((error) => {
@@ -175,7 +175,7 @@
 
           let data = { "criIds": JSON.stringify(criIds) }
           let url = this.$store.state.env + "/criminalManager.action?method=deleteCriminals";
-          this.$ajxj.post(url, data).then((response) => {
+          this.$post(url, data).then((response) => {
             alert("删除成功");
             this.getTableDatas();
           }).catch((error) => {

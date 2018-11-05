@@ -117,7 +117,7 @@
                     if (valid) {
                         let data = { "saveItme": JSON.stringify(this.form) };
                         let url = this.$store.state.env + "/spriSchedule.action?method=saveDailyDates";
-                        this.$ajxj.post(url, data).then((respnose) => {
+                        this.$post(url, data).then((respnose) => {
                             alert("保存成功");
                             this.resetForm('form');
                         }).catch((error) => {

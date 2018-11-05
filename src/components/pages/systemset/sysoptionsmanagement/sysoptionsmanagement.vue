@@ -40,7 +40,7 @@
             /** 获取系统选项 */
             getSysOptions : function() {
                 let url = this.$store.state.env + "/systemOption.action?method=getSysOptions";
-                this.$ajxj.get(url).then((respnose) => {
+                this.$get(url).then((respnose) => {
                     this.optionMaxTime = respnose.data.optionMaxTime;
                     this.stayMaxTime = respnose.data.stayMaxTime;
                 }).catch((error) => {
@@ -58,7 +58,7 @@
                 }).then(() => {
                     let data = this.createModel();
                     let url = this.$store.state.env + "/systemOption.action?method=saveSysOptions";
-                    this.$ajxj.post(url, data).then((respnose) => {
+                    this.$post(url, data).then((respnose) => {
                         alert("保存成功");
                     }).catch((error) => {
                         console.log(error);

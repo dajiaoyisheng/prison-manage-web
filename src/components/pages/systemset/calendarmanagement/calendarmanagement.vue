@@ -131,7 +131,7 @@
       /** 获取日期类型 */
       getDateTypes: function() {
         let url = this.$store.state.env + "/systemCode.action?method=getDateType";
-        this.$ajxj.get(url).then((respnose) => {
+        this.$get(url).then((respnose) => {
           this.dateTypes = respnose.data;
         }).catch((error) => {
           console.log(error);
@@ -142,7 +142,7 @@
       /** 获取区间字典 */
       getAreas: function() {
         let url = this.$store.state.env + "/systemCode.action?method=getAreaType";
-        this.$ajxj.get(url).then((respnose) => {
+        this.$get(url).then((respnose) => {
           this.areas = respnose.data;
         }).catch((error) => {
           console.log(error);
@@ -153,7 +153,7 @@
       /** 获取动作字典 */
       getOptions: function() {
         let url = this.$store.state.env + "/systemCode.action?method=getActionType";
-        this.$ajxj.get(url).then((respnose) => {
+        this.$get(url).then((respnose) => {
           this.options = respnose.data;
         }).catch((error) => {
           console.log(error);
@@ -164,7 +164,7 @@
       /** 获取适用范围字典 */
       getScopes: function() {
         let url = this.$store.state.env + "/systemCode.action?method=getPersonRange";
-        this.$ajxj.get(url).then((respnose) => {
+        this.$get(url).then((respnose) => {
           this.scopes = respnose.data;
         }).catch((error) => {
           console.log(error);
@@ -181,7 +181,7 @@
         }
 
         let url = this.$store.state.env + "/spriSchedule.action?method=getDailyDates";
-        this.$ajxj.post(url, data).then((respnose) => {
+        this.$post(url, data).then((respnose) => {
           this.dailyDates = respnose.data.items;
           this.pagination.totalRows = respnose.data.totalRows;
         }).catch((error) => {
@@ -199,7 +199,7 @@
         }
 
         let url = this.$store.state.env + "/spriSchedule.action?method=getSpecialDates";
-        this.$ajxj.post(url, data).then((respnose) => {
+        this.$post(url, data).then((respnose) => {
           this.specialDates = respnose.data.items;
           this.pagination.totalRows = respnose.data.totalRows;
         }).catch((error) => {
@@ -235,7 +235,7 @@
           let data = {"psId" : row.psId};
           let url = this.$store.state.env + "/spriSchedule.action?method=deleteDailyDate";
 
-          this.$ajxj.post(url, data).then((respnose) => {
+          this.$post(url, data).then((respnose) => {
             this.query();
           }).catch((error) => {
             console.log(error);
@@ -274,8 +274,9 @@
         this.params.psAlerttype = "01";
         this.params.psPersonrange = "";
       },
+      /** 保存节假日管理弹层 */
       listenMsgFromeChild: function(type, data) {
-        if (type === "save") { //保存节假日管理弹层
+        if (type === "save") {
           console.log("保存", data);
             this.isShowHolidyDialog = false;
         } else {

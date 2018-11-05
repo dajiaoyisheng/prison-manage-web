@@ -270,7 +270,7 @@ export default {
                 if (valid) {
                     let data = { "saveType": this.saveType, "saveItem": JSON.stringify(this.form) };
                     let url = this.$store.state.env + "/criminalManager.action?method=saveCriminals";
-                    this.$ajxj.post(url, data).then((respnose) => {
+                    this.$post(url, data).then((respnose) => {
                         alert("保存成功");
                         this.resetForm('form');
                     }).catch((error) => {
@@ -294,7 +294,7 @@ export default {
             let data = { "criId" : criId };
             let url = this.$store.state.env + "/criminalManager.action?method=getCriminal";
             
-            this.$ajxj.post(url, data).then((respnose) => {
+            this.$post(url, data).then((respnose) => {
                 this.form = respnose.data;
             }).catch((error) => {
                 console.log(error);
