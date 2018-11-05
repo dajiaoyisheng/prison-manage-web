@@ -51,11 +51,8 @@
             </template>
           </el-table-column>
         </el-table>
-        <!-- <div class="el-pagination-wrap text-center">
-          <table-pagination :total="count" @change="getCameraList" ref="pagination"></table-pagination>
-        </div> -->
         <div class="el-pagination-wrap">
-          <table-pagination :page-index="currentPage" :total="count" @change="pageChange(currentPage)"></table-pagination>
+          <table-pagination :total="count" @change="pageChange"></table-pagination>
         </div>
       </section>
       <!-- 视频 -->
@@ -132,10 +129,10 @@
       },
       /** 获取摄像头列表 */
       getCameraList: function (page) {
-        this.currentPage = page;
+        this.currentPage = page || 1;
         this.params.psiCode = this.paiPathFilter.length === 0 ? this.paiPathFilter : this.paiPathFilter.join("/");
         let data = {
-          "page":page,
+          "page": page,
           // "pageIndex": this.$refs.pagination.index,
           // 'pageSize': this.$refs.pagination.limit,
           "params": JSON.stringify(this.params)

@@ -100,16 +100,23 @@
         }
       },
       go(page) {
-        page = Number(page);
+        let re = /^\d+$/;
+        if (!re.test(page)) {
+          this.$message.error('请输入有效页数');
+          this.gotoPage = "";
+          return
+        }
+        // page = Number(page);
         if (page > this.pages) {
           this.$message.error('超出最大页码数');
+        } else if(page < 1){
+          this.$message.error('请输入有效页数');
         } else {
           this.index = page;
           //父组件通过change方法来接受当前的页码
           this.$emit('change', this.index);
           this.gotoPage = null;
         }
-
       }
     },
     computed: {
