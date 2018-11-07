@@ -19,7 +19,7 @@
     <section class="pn-right" :class="{'pn-right-show': !pnAside, 'pn-right-hidden': pnAside}">
       <section class="pn-right-header">
         <span style="font-size: 14px;">服刑人员:</span>
-        <el-input size="small" class="pn-right-header-input" v-model="parameter.name" placeholder="请输入服刑人员姓名或编号" clearable></el-input>
+        <el-input size="small" class="pn-right-header-input" v-model="parameter.keyword" placeholder="请输入服刑人员姓名或编号" clearable></el-input>
         <el-button size="mini" class="search-btn" @click="doQuery()">查询</el-button>
       </section>
       <section class="pn-right-main" v-bind:style="{'left': pnMainAsideLeft + 'px'}">
@@ -28,12 +28,12 @@
             <section class="pn-right-main-main-top">
               <el-card class="box-card">
                 <div slot="header" class="pn-card-label">未识别人员列表(<span style="color: red;">{{ topTableData.length }}人</span>)</div>
-                <el-table :data="topTableData" stripe style="width: 100%" height="205">
-                  <el-table-column prop="number"      label="编号"              min-width="100px" align="center"></el-table-column>
-                  <el-table-column prop="name"        label="姓名"              min-width="100px" align="center"></el-table-column>
-                  <el-table-column prop="warningType" label="预警事件类型"       min-width="120px"></el-table-column>
-                  <el-table-column prop="lastArea"    label="最后一次被定位区域"  min-width="230px"></el-table-column>
-                  <el-table-column prop="lastTime"    label="最后一次被定位时间"  min-width="200px"></el-table-column>
+                <el-table :data="topTableData" stripe style="width: 100%" height="269">
+                  <el-table-column prop="criCode"      label="编号"              min-width="100px" align="center"></el-table-column>
+                  <el-table-column prop="criName"      label="姓名"              min-width="100px" align="center"></el-table-column>
+                  <el-table-column prop="warningType"  label="预警事件类型"       min-width="120px"></el-table-column>
+                  <el-table-column prop="paiCode"      label="最后一次被定位区域"  min-width="230px"></el-table-column>
+                  <el-table-column prop="cpcLoctime"   label="最后一次被定位时间"  min-width="200px"></el-table-column>
                   <el-table-column label="视频" width="100px" fixed="right" align="center">
                     <template slot-scope="scope">
                       <el-button class="btn" @click="showVideo('topTableData', scope.$index, scope.row)" type="text">
@@ -43,20 +43,17 @@
                     </template>
                   </el-table-column>
                 </el-table>
-                <div class="el-pagination-wrap text-center">
-                  <table-pagination :total="topCount" @change="topTableChange"></table-pagination>
-                </div>
               </el-card>
             </section>
             <section class="pn-main-main-bottom">
               <el-card class="box-card">
                 <div slot="header" class="pn-card-label"><span>已识别人员列表({{ bottomTableData.length }}人)</span></div>
-                <el-table :data="bottomTableData" stripe style="width: 100%" height="325">
-                  <el-table-column prop="number" label="编号"     min-width="100px" align="center"></el-table-column>
-                  <el-table-column prop="name"   label="姓名"     min-width="100px" align="center"></el-table-column>
-                  <el-table-column prop="area"   label="当前区域" min-width="230px"></el-table-column>
-                  <el-table-column prop="time"   label="识别时间" min-width="200px"></el-table-column>
-                  <el-table-column prop="func"   label="识别方法" min-width="100px"></el-table-column>
+                <el-table :data="bottomTableData" stripe style="width: 100%" height="390">
+                  <el-table-column prop="criCode"       label="编号"     min-width="100px" align="center"></el-table-column>
+                  <el-table-column prop="criName"       label="姓名"     min-width="100px" align="center"></el-table-column>
+                  <el-table-column prop="paiCode"       label="当前区域" min-width="230px"></el-table-column>
+                  <el-table-column prop="cpcLoctime"    label="识别时间" min-width="200px"></el-table-column>
+                  <el-table-column prop="cpoLoctype"    label="识别方法" min-width="100px"></el-table-column>
                   <el-table-column label="视频" width="100px" fixed="right" align="center">
                     <template slot-scope="scope">
                       <el-button class="btn" @click="showVideo('bottomTableData', scope.$index, scope.row)" type="text">
@@ -66,9 +63,6 @@
                     </template>
                   </el-table-column>
                 </el-table>
-                <div class="el-pagination-wrap text-center">
-                  <table-pagination :total="bottomCount" @change="bottomTableChange"></table-pagination>
-                </div>
               </el-card>
             </section>
           </el-main>
@@ -110,26 +104,28 @@
           video: video,
           warning: warning
         },
-        topCount: 0,
-        bottomCount: 0,
         bottomPagination: {
             pageSize : 10,
             currentPage : 1,
             totalRows : 100
         },
         parameter: {
-          name: ''
+          keyword: '',
+          nodeType: '',
+          nodeId: ''
         },
         treeData: [],
         topTableData: [],
         bottomTableData: [],
-        cameras: []
+        cameras: [],
+        timmer: null
       }
     },
     methods: {
       /** 获取人员点名导航树 */
       getPrisonareatree : function() {
-        this.$ajxj.get('/getPrisonareatree').then((response) => {
+        let url = this.$store.state.env + "/prisonRegion.action?method=getPrisonRegionTree"; 
+        this.$get(url).then((response) => {
           this.treeData = response.data;
         }).catch((error) => {
           console.log(error);
@@ -139,11 +135,12 @@
       },
       /** 获取点名列表信息 */
       getTabledatas : function() {
-          this.$ajxj.post('/getPointNameDatas').then((response) => {
-            this.topCount = response.data.topTable.count;
-            this.topTableData = response.data.topTable.data;
-            this.bottomCount = response.data.bottomTable.count;
-            this.bottomTableData = response.data.bottomTable.data;
+          let data = { "parameter" : JSON.stringify(this.parameter) };
+          let url = this.$store.state.env + "/pointName.action?method=getPointNameDatas";
+
+          this.$post(url, data).then((response) => {
+            this.topTableData = response.data.unidentified;
+            this.bottomTableData = response.data.identified;
           }).catch((error) => {
             console.log(error);
           }).then(() => {
@@ -152,18 +149,12 @@
       },
       /** 点击树节点获取列表信息 */
       handleNodeClick : function(data) {
+        this.parameter.nodeType = data.nodeType;
+        this.parameter.nodeId = data.id;
         this.getTabledatas();
       },
       /** 根据条件查询列表信息 */
       doQuery : function() {
-        this.getTabledatas();
-      },
-      /** 未识别人员分页 */
-      topTableChange : function() {
-        this.getTabledatas();
-      },
-      /** 已识别人员分页 */
-      bottomTableChange : function() {
         this.getTabledatas();
       },
       /** 显示监控视频区域 */
@@ -183,7 +174,7 @@
       },
       /** 初始化定时刷新任务 */
       initSetInterval : function() {
-        setInterval(() => {
+        this.timmer = setInterval(() => {
           this.getTabledatas();
         }, 5000);
       }
@@ -191,7 +182,12 @@
     mounted() {
       this.getPrisonareatree();
       this.getTabledatas();
-      // this.initSetInterval();
+      this.initSetInterval();
+    },
+    beforeDestroy() {
+      if (timmer != null) {
+        clearInterval(this.timmer);
+      }
     },
     components: {
       tablePagination
@@ -297,6 +293,7 @@
     color: black;
   }
 </style>
+
 <style>
   #pointname .el-table th {
     padding: 5px 0px;

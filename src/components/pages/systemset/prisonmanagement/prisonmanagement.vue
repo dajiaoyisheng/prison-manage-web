@@ -67,7 +67,7 @@
         <div class="r fr inbl">
           <div class="t line-word" title="对象">
             <span></span>
-            <v-tree ref="rightTree" :tree-data="PrisonareaObjtree" :default-expand-all="false" v-on:handle-node-click="handleObjectNodeClick"></v-tree>
+            <v-tree ref="rightTree" :draggable="true" :tree-data="PrisonareaObjtree" :default-expand-all="true" v-on:handle-node-click="handleObjectNodeClick" v-on:handle-drag-end="handleDragEnd" v-on:allow-drag="allowDrag"></v-tree>
           </div>
 
           <div class="d line-word" title="属性">
@@ -191,6 +191,13 @@
         .then(function () {});
     },
     methods: {
+      handleDragEnd(draggingNode, dropNode, dropType, ev) {
+        console.log('tree drag end: ', dropNode && dropNode.label, dropType);
+      },
+      allowDrag(draggingNode) {
+        console.log(draggingNode);
+        return false;
+      },
       handleNodeClick(data, checked, indeterminate) {
         this.PrisonareaObjtree = [data];
       },
@@ -219,15 +226,8 @@
       },
       draw(type) {
         if (this.backgroundImage !== null) {
-          if (this.objectInfo.name) {
-            this.shapeType = type;
-            this.startDraw();
-          } else {
-            this.$alert('请在右侧选择一个对象', {
-              confirmButtonText: '确定',
-              showClose: false
-            });
-          }
+          this.shapeType = type;
+          this.startDraw();
         } else {
           this.checkBackgroundImage();
         }
@@ -251,18 +251,18 @@
       let _this = this;
       var canvasContainerRect = this.$refs.canvasContainer.getBoundingClientRect();
       this.drawObj = new Draw('canvas', canvasContainerRect.width, canvasContainerRect.height, function (uuid) {
-        let tree = _this.$refs.rightTree;
-        let node = tree.getCurrentNode();
-        let data = {
-          label: '矩形',
-          icon: 'el-icon-news',
-          isWarning: false,
-          type: 'custom',
-          name: '矩形',
-          position: '矩形',
-          shapeId: uuid
-        }
-        tree.append(data, node);
+        // let tree = _this.$refs.rightTree;
+        // let node = tree.getCurrentNode();
+        // let data = {
+        //   label: '矩形',
+        //   icon: 'el-icon-news',
+        //   isWarning: false,
+        //   type: 'custom',
+        //   name: '矩形',
+        //   position: '矩形',
+        //   shapeId: uuid
+        // }
+        // tree.append(data, node);
       });
       this.cameraImg.src = camera0;
     }

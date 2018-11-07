@@ -111,14 +111,18 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="所属监区" prop="criPriCode">
-                        <el-input style="width: 220px;" v-model="form.criPriCode" clearable></el-input>
+                        <el-select v-model="form.criPriCode" @change="getRoomsByPrisonRegion">
+                            <el-option v-for="item in prisonRegions" :key="item.priCode" :label="item.priName" :value="item.priCode"></el-option>
+                        </el-select>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="所属监舍" prop="criPaiCode">
-                        <el-input style="width: 220px;" v-model="form.criPaiCode" clearable></el-input>
+                        <el-select v-model="form.criPaiCode">
+                            <el-option v-for="item in rooms" :key="item.paiCode" :label="item.paiName" :value="item.paiCode"></el-option>
+                        </el-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -195,6 +199,7 @@ export default {
         return {
             labelPosition: "right",
             saveType: "add",
+            rooms: [],
             sex: [{
                 "value" : "男"
                 }, {
@@ -246,7 +251,7 @@ export default {
                     { required: true, message: '请选择当前状态', trigger: 'blur' }
                 ],
                 criPriCode: [
-                    { required: true, message: '请输入所属监区', trigger: 'blur' }
+                    { required: true, message: '请选择所属监区', trigger: 'blur' }
                 ],
                 criPaiCode: [
                     { required: true, message: '请输入所属监舍', trigger: 'blur' }
@@ -296,6 +301,20 @@ export default {
             
             this.$post(url, data).then((respnose) => {
                 this.form = respnose.data;
+                this.getRoomsByPrisonRegion(this.form.criPriCode);
+            }).catch((error) => {
+                console.log(error);
+            }).then(() => {
+                // todo something...
+            });
+        },
+        /** 根据监区查找所有监舍 */
+        getRoomsByPrisonRegion: function(priCode) {
+            let data = { "priCode" : priCode };
+            let url = this.$store.state.env + "/prisonRegion.action?method=getRoomsByPrisonRegion";
+            
+            this.$post(url, data).then((respnose) => {
+                this.rooms = respnose.data;
             }).catch((error) => {
                 console.log(error);
             }).then(() => {
@@ -303,7 +322,7 @@ export default {
             });
         }
     },
-    props: [ 'superviseType', 'criState', 'state' ]
+    props: [ 'superviseType', 'criState', 'state', 'prisonRegions' ]
 }
 </script>
 

@@ -68,9 +68,12 @@ export default class Action {
             self.shape.x = self.mouseStart.x;
             self.shape.y = self.mouseStart.y;
             self.uuid = self.shape.uuid = UUID.v4();
+            //绘制图形，并绑定事件
             self.layer.renderShape(self.shape.type, self.shape).on('click', function() {
                 self.uuid = this.getAttr('uuid');
-            });
+            }).on('mouseover', function() {
+                console.log(this.getAttr('uuid'));
+            });;
 
             self.stage.on('contentMousemove', self.mouseMove);
             self.stage.on('contentMouseup', self.mouseUp);
@@ -87,7 +90,7 @@ export default class Action {
     mouseUp() {
         self.setDrawState(false);
         self.layer.hideMask();
-        self.layer.finished(self.uuid, self.shape.type);
+        self.layer.finished(self.uuid, self.shape.type);//禁止调整大小和移动
         self.stage.off('contentMousedown');
         self.stage.off('contentMousemove');
         self.stage.off('contentMouseup');

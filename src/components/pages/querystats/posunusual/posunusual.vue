@@ -142,7 +142,7 @@
     methods: {
       /** 获取预警事件类型 */
       getWarningTypes : function() {
-        this.$ajxj.get('/getWarningTypes').then((respnose) => {
+        this.$get('/getWarningTypes').then((respnose) => {
           this.warningTypes = respnose.data;
         }).catch((error) => {
           console.log(error);
@@ -152,7 +152,8 @@
       },
       /** 获取服刑人员类型 */
       getPrisonerTypes : function() {
-        this.$ajxj.get('/getPrisonerTypes').then((respnose) => {
+		    let url = this.$store.state.env + "/earlyWarning.action?method=getSuperviseType";
+        this.$get(url).then((respnose) => {
           this.prisonerTypes = respnose.data;
         }).catch((error) => {
           console.log(error);
@@ -163,12 +164,13 @@
       /** 获取定位异常清单 */
       getPosunusualItems : function() {
         let data = {
-          params: this.params,
-          currPage: this.$refs.posunusualPagination.index,
+          params: JSON.stringify(this.params),
+          pageIndex: this.$refs.posunusualPagination.index,
           pageSize: this.$refs.posunusualPagination.pageSize
         }
-
-        this.$ajxj.post('/getPosunusualItems', data).then((respnose) => {
+        
+        let url = this.$store.state.env + "/earlyWarning.action?method=getEarlyWarnings";
+        this.$post(url, data).then((respnose) => {
           this.count = respnose.data.totalRows;
           this.ppuTableDatas = respnose.data.items;
         }).catch((error) => {
@@ -195,7 +197,8 @@
       },
       /** 查看服刑人员信息 */
       showPrisoner : function(row) {
-        this.$ajxj.post('/getPrisonerInfo', { prisonerNum : row.prisonerNum }).then((respnose) => {
+		    let url = this.$store.state.env + "/earlyWarning.action?method=getPrisonerInfo";
+        this.$post(url, { prisonerNum : row.prisonerNum }).then((respnose) => {
           this.prisonerInfo = respnose.data;
         }).catch((error) => {
           console.log(error);
@@ -209,7 +212,7 @@
       }
     },
     mounted() {
-      this.getWarningTypes();
+      // this.getWarningTypes();
       this.getPrisonerTypes();
       this.getPosunusualItems();
     },

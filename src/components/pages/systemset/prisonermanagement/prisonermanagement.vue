@@ -20,7 +20,7 @@
       </section>
       <section>
         <el-dialog :title="dialogTitle" :visible.sync="showDialog" width="800px" :before-close="beforeClose">
-          <prisonerInfo ref="prisonerInfo" :superviseType="superviseType" :criState="criState" :state="state"></prisonerInfo>
+          <prisonerInfo ref="prisonerInfo" :superviseType="superviseType" :criState="criState" :state="state" :prisonRegions="prisonRegions"></prisonerInfo>
         </el-dialog>
       </section>
       <section class="el-table-wrap">
@@ -93,13 +93,15 @@
         multipleSelection: [],
         superviseType: [],
         criState: [],
-        state: []
+        state: [],
+        prisonRegions: []
       }
     },
     mounted() {
       this.getState();
       this.getCriState();
       this.getSuperviseType();
+      this.getAllPrisonRegions();
       this.getTableDatas();
     },
     methods: {
@@ -130,6 +132,17 @@
         let url = this.$store.state.env + "/systemCode.action?method=getSuperviseType";
         this.$get(url).then((response) => {
           this.superviseType = response.data;
+        }).catch((error) => {
+          console.log(error);
+        }).then((error) => {
+          console.log(error);
+        });
+      },
+      /** 获取所有监区列表 */
+      getAllPrisonRegions: function() {
+        let url = this.$store.state.env + "/prisonRegion.action?method=getAllPrisonRegions";
+        this.$get(url).then((response) => {
+          this.prisonRegions = response.data;
         }).catch((error) => {
           console.log(error);
         }).then((error) => {

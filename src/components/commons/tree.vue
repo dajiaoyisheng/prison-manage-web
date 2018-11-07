@@ -1,5 +1,5 @@
 <template>
-  <el-tree ref="tree" :data="treeData" node-key="id" @node-click="handleNodeClick" :default-expand-all="defaultExpandAll" :expand-on-click-node="false" :check-on-click-node="true" :check-strictly="true">
+  <el-tree ref="tree" :data="treeData" node-key="id" @node-click="handleNodeClick" :default-expand-all="defaultExpandAll" :expand-on-click-node="false" :check-on-click-node="true" :check-strictly="true" @node-drag-end="handleDragEnd" @node-drag-enter="handleDragEnter" :draggable="draggable" :allow-drop="allowDrop" :allow-drag="allowDrag">
       <span class="custom-tree-node" slot-scope="{ node, data }">
         <span> <i :class="node.icon"></i>{{ node.label }}</span>
       </span>
@@ -8,6 +8,10 @@
 <script>
 export default {
     props: {
+      draggable: {
+        type: Boolean,
+        default: false
+      },
       treeData: {
         type: Array,
         default () {
@@ -33,7 +37,19 @@ export default {
       },
       append(data, parentNode) {
         return this.$refs.tree.append(data, parentNode);
-      }
+      },
+      allowDrop(draggingNode, dropNode, type) {
+        this.$emit('allow-drop', draggingNode, dropNode, type);
+      },
+      allowDrag(draggingNode) {
+        return this.$emit('allow-drag', draggingNode);
+      },
+      handleDragEnd(draggingNode, dropNode, dropType, ev) {
+        this.$emit('handle-drag-end', draggingNode, dropNode, dropType, ev);
+      },
+      handleDragEnter(draggingNode, dropNode, ev) {
+        this.$emit('handle-drag-enter', draggingNode, dropNode, ev);
+      },
     }
   };
 </script>
