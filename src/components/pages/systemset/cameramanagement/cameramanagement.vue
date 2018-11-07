@@ -104,8 +104,7 @@
     methods: {
       /** 获取所属区域 */
       getPrisonSubRegions: function () {
-        let url = this.$store.state.env + "/prisonRegion.action?method=getPrisonRegionTree";
-        this.$get(url).then((res) => {
+        this.$get(this.urlconfig.cmGetPrisonSubRegions).then((res) => {
           this.prisonSubRegions = res.data;
         }).catch((error) => {
           console.log(error);
@@ -115,8 +114,7 @@
       },
       /** 获取摄像头类型 */
       getCameraTypes: function () {
-        let url = this.$store.state.env + "/systemCode.action?method=getCameraType";
-        this.$get(url).then((res) => {
+        this.$get(this.urlconfig.cmGetCameraTypes).then((res) => {
           this.cameraTypes = res.data;
         }).catch((error) => {
           console.log(error);
@@ -131,8 +129,7 @@
           'pageSize': this.$refs.pagination.limit,
           "params": JSON.stringify(this.params)
         }
-        let url = this.$store.state.env + "/cameraInfo.action?method=getCameraList";
-        this.$post(url, data).then((res) => {
+        this.$post(this.urlconfig.cmGetCameraList, data).then((res) => {
           this.count = res.data.totalRows;
           this.cameraList = res.data.items;
         }).catch((error) => {
@@ -144,8 +141,7 @@
       /** 保存摄像头信息 */
       saveCameraInfo: function () {
         let data = this.changeRow;
-        let url = this.$store.state.env + "/cameraInfo.action?method=saveCameraInfo";
-        this.$post(url, data).then((res) => {
+        this.$post(this.urlconfig.cmSaveCameraInfo, data).then((res) => {
           alert("保存成功");
         }).catch((error) => {
           console.log(error);
@@ -197,12 +193,12 @@
         // if (this.changeRow.length === 0) { // 第一次操作时
         //   this.changeRow.push(this.tempSaveData);
         // } else {
-          let index = this.changeRow.findIndex(item => item.ciId === this.tempRow.ciId);
-          if (index > -1) {
-            this.changeRow[index] = this.tempSaveData;
-          } else {
-            this.changeRow.push(this.tempSaveData);
-          }
+        let index = this.changeRow.findIndex(item => item.ciId === this.tempRow.ciId);
+        if (index > -1) {
+          this.changeRow[index] = this.tempSaveData;
+        } else {
+          this.changeRow.push(this.tempSaveData);
+        }
         // }
       },
       // 根据value找到对应的labal
