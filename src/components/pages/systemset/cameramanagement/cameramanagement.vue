@@ -143,7 +143,7 @@
       },
       /** 保存摄像头信息 */
       saveCameraInfo: function () {
-        let data = this.changeRow
+        let data = this.changeRow;
         let url = this.$store.state.env + "/cameraInfo.action?method=saveCameraInfo";
         this.$post(url, data).then((res) => {
           alert("保存成功");
@@ -194,16 +194,16 @@
           "ciId": this.tempRow.ciId,
           "paiCode": this.tempRow.paiCode
         }
-        if (this.changeRow.length === 0) { // 第一次操作时
-          this.changeRow.push(this.tempSaveData);
-        } else {
+        // if (this.changeRow.length === 0) { // 第一次操作时
+        //   this.changeRow.push(this.tempSaveData);
+        // } else {
           let index = this.changeRow.findIndex(item => item.ciId === this.tempRow.ciId);
           if (index > -1) {
             this.changeRow[index] = this.tempSaveData;
           } else {
             this.changeRow.push(this.tempSaveData);
           }
-        }
+        // }
       },
       // 根据value找到对应的labal
       getCascaderObj(val, opt) {

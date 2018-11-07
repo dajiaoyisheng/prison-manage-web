@@ -37,22 +37,17 @@
       <section class="pp-r-t">
         <span>监区:</span>
         <el-select size="small" v-model="area" placeholder="请选择">
-          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+          <el-option v-for="item in areas" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
         <span>监舍:</span>
         <el-select size="small" v-model="monitoringHouse" placeholder="请选择">
-          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-          </el-option>
-        </el-select>
-        <span>房间:</span>
-        <el-select size="small" v-model="room" placeholder="请选择">
-          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+          <el-option v-for="item in houses" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
         <span>监管类型:</span>
         <el-select size="small" v-model="supervisionType" placeholder="请选择">
-          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+          <el-option v-for="item in visiontype" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
         <span>服刑人员:</span>
@@ -130,17 +125,17 @@
                 </el-option>
               </el-select>
             </div>
-            <div class="div-select">
+            <!-- <div class="div-select">
               <span>房间:</span>
               <el-select size="small" v-model="room" placeholder="请选择">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
-            </div>
+            </div> -->
             <div class="div-select">
               <span>监管类型:</span>
               <el-select size="small" v-model="supervisionType" placeholder="请选择">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                <el-option v-for="item in visiontype" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
             </div>
@@ -308,7 +303,6 @@
         // searchPrams: {},
         area: '', //监区
         monitoringHouse: '', //监舍
-        room: '',
         supervisionType: '',
         prisoner: '',
         numbering: '',
@@ -334,7 +328,6 @@
         video: video,
         currentPos: currentPos,
         input: '',
-        loading: false,
         pPositionData: [],
 
         pageSize: 10, //每页显示20条数据
@@ -342,44 +335,38 @@
         count: 0, //总记录数
 
         pPTableData: [],
-        options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
+        options: [],
+        // 接口数据
+        areas: [],
+        houses: [],
+        visiontype: [],
+
         value: '',
         currentPage3: 1,
         page: 1,
         activeName: 'second',
         value6: '',
-        value7: ''
+        value7: '',
       }
     },
     created: function () {
       let area = this.$route.query.area;
       let searchParam = {};
-      this.getPPositionData('', searchParam);
+      // this.getPPositionData('', searchParam);
       this.getTableData('', searchParam);
+
+      this.getAreaData();
+      this.getHouseData();
+      this.getVisiontypeData();
     },
     computed: {
-      searchPrams: function(){
+      searchPrams: function () {
         return {
-        area: this.area,
-        monitoringHouse: this.monitoringHouse, //监舍
-        room: this.room,
-        supervisionType: this.supervisionType,
-        prisoner: this.prisoner,}
+          area: this.area,
+          monitoringHouse: this.monitoringHouse, //监舍
+          supervisionType: this.supervisionType,
+          prisoner: this.prisoner,
+        }
       }
     },
     mounted: function () {
@@ -391,14 +378,14 @@
       //   prisoner: this.prisoner,
       // }
       // this.$store.state.setNavFull("full")
-      
+
       // 判断进入此页面是否是要看视频
     },
     methods: {
       search() {
-        console.log('param', this.searchPrams)
-        this.getPPositionData('', this.searchPrams);
-        this.getTableData('', this.searchPrams);
+        this.$post(this.urlconfig.ppSearch,this.searchPrams).then(res => {
+          this.visiontype = res.data;
+        })
       },
       //从page组件传递过来的当前page
       pageChange(page, type) {
@@ -406,11 +393,29 @@
         if (type === 'curevent') { // 当前历史事件
           this.getTableData(page, this.searchPrams);
         } else {
-          this.getPPositionData(page, this.searchPrams);
+          // this.getPPositionData(page, this.searchPrams);
         }
       },
+      // 获取监区数据
+      getAreaData() {
+        this.$get(this.urlconfig.ppGetAreaData).then(res => {
+          this.areas = res.data
+        })
+      },
+      // 获取监舍数据
+      getHouseData() {
+        this.$get(this.urlconfig.ppGetHouseData).then(res => {
+          this.houses = res.data
+        })
+      },
+      // 获取监管类型数据
+      getVisiontypeData() {
+        this.$get(this.urlconfig.ppGetVisiontypeData).then(res => {
+          this.visiontype = res.data;
+        })
+      },
+
       getTableData(p, searchParam) {
-        console.log('getTableData')
         Object.assign(searchParam, {
           page: p
         });

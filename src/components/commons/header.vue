@@ -160,13 +160,16 @@
     height: 20px;
   }
 
-  .el-menu>li>a {
+  /* .el-menu>li>a {
     width: 48px;
     height: 16px;
-    font-size: 16px;
     font-family: MicrosoftYaHei;
-    /* color: rgba(255, 255, 255, 1); */
     line-height: 15px;
+  } */
+  
+  /* 点击导航菜单时下面显示的横线 */
+  .el-menu--horizontal>.el-menu-item.is-active {
+    border-bottom: none;
   }
 
   .el-menu--horizontal .el-menu-item:not(.is-disabled):focus,
@@ -217,4 +220,5 @@
   .nav-wrap .el-menu--horizontal>.el-submenu .el-submenu__title {
     line-height: 64px;
   }
+
 </style>

@@ -5,15 +5,19 @@ import router from './router';
 import axios from './axios';
 Vue.prototype.$ajxj = axios;
 // 对get,post进行了封装
-import {
-  post,
-  get
-} from './axios'
+import { post, get } from './axios'
 Vue.prototype.$post = post;
 Vue.prototype.$get = get;
-
 import 'es6-promise/auto'
-import store from './vuex/store'
+import store from './vuex/store';
+// 调用,env根据环境赋值
+store.commit("env");
+console.log(store.commit("env"));
+
+Vue.prototype.storeEnv = store.state.env;
+import urlconfig from './axios/urlconfig';
+Vue.prototype.urlconfig = urlconfig;
+
 import 'element-ui/lib/theme-chalk/index.css';
 import Element from 'element-ui';
 Vue.use(Element);
