@@ -1,17 +1,17 @@
 import axios from 'axios';
-
 import qs from "qs";
-
 import {
   Message
 } from 'element-ui';
-import store from '@/vuex/store'
+import store from '@/vuex/store';
+store.commit("env");
+console.log(store.state.env);
 // axios 配置
-// axios.defaults.baseURL = process.env.BASE_API, // 设置超时时间为3s
+axios.defaults.baseURL = store.state.env;
+let baseURL =  store.state.env;
 axios.defaults.timeout = 3000; // 设置超时时间为3s
 // 配置axios发送请求时携带cookie
 axios.defaults.withCredentials = false;
-
 // 设置content-type
 // 这里处理的是 针对SpringMVC Controller 无法正确获得请求参数的问题
 // axios.interceptors.request.use(
@@ -87,7 +87,7 @@ axios.interceptors.response.use(response => {
 export function get(url, params = {}) {
   console.log(`$get方法->接口:${url}的参数:`, params);
   return new Promise((resolve, reject) => {
-    axios.get(url, {
+    axios.get(`${baseURL}${url}`, {
         params: params
       })
       .then(response => {
@@ -108,7 +108,7 @@ export function get(url, params = {}) {
 export function post(url, data = {}) {
   console.log(`$post方法->接口:${url}的参数:`, data);
   return new Promise((resolve, reject) => {
-    axios.post(url, data)
+    axios.post(`${baseURL}${url}`, data)
       .then(response => {
         resolve(response);
       }, err => {

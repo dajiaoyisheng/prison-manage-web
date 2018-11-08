@@ -42,13 +42,13 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="ciId"        label="摄像头编号"       min-width="80px" align="center"></el-table-column>
-          <el-table-column prop="ciName"      label="摄像头名称"       min-width="80px" align="center"></el-table-column>
-          <el-table-column prop="ciType"      label="摄像头类型"       min-width="140px" align="center"></el-table-column>
-          <el-table-column prop="ciNearid"    label="相邻摄像头"       min-width="140px" align="center"></el-table-column>
-          <el-table-column prop="realtimeUri" label="实时视频服务地址"  min-width="140px" align="center"></el-table-column>
-          <el-table-column prop="replayUri"   label="回放视频服务地址"  min-width="140px" align="center"></el-table-column>
-          <el-table-column prop="ciMemo"      label="备注" min-width="120px" align="center"></el-table-column>
+          <el-table-column prop="ciId" label="摄像头编号" min-width="80px" align="center"></el-table-column>
+          <el-table-column prop="ciName" label="摄像头名称" min-width="80px" align="center"></el-table-column>
+          <el-table-column prop="ciType" label="摄像头类型" min-width="140px" align="center"></el-table-column>
+          <el-table-column prop="ciNearid" label="相邻摄像头" min-width="140px" align="center"></el-table-column>
+          <el-table-column prop="realtimeUri" label="实时视频服务地址" min-width="140px" align="center"></el-table-column>
+          <el-table-column prop="replayUri" label="回放视频服务地址" min-width="140px" align="center"></el-table-column>
+          <el-table-column prop="ciMemo" label="备注" min-width="120px" align="center"></el-table-column>
           <el-table-column label="操作" fixed="right" width="120px" align="center">
             <template slot-scope="scope">
               <el-button @click.native.prevent="showVideo(scope.$index, scope.row)" type="text">实时视频</el-button>
@@ -75,20 +75,20 @@
     },
     data() {
       return {
-        cameraId: null,       // 摄像头ID
-        isShowVideo: false,   // 是否弹出视频
-        count: 0,             // 查询总数
+        cameraId: null, // 摄像头ID
+        isShowVideo: false, // 是否弹出视频
+        count: 0, // 查询总数
         prisonSubRegions: [], // 区域树形
-        cameraTypes: [],      // 摄像头类型
-        cameraList: [],       // 摄像头列表
-        current: null,        // 修改当前节点
-        currentIndex: "",     // 当前节点索引
-        paramsPaiCode: [],    // 筛选当前所在区域
+        cameraTypes: [], // 摄像头类型
+        cameraList: [], // 摄像头列表
+        current: null, // 修改当前节点
+        currentIndex: "", // 当前节点索引
+        paramsPaiCode: [], // 筛选当前所在区域
         savePaiCodeTable: [], // table当前所在区域
-        paiCodeTable: [],     // table当前所在区域所选value
+        paiCodeTable: [], // table当前所在区域所选value
         changeRow: [],
         tempSaveData: {},
-        tempRow: [],          // 保存一下当前点击的所在区域的数据
+        tempRow: [], // 保存一下当前点击的所在区域的数据
         vals: [],
         params: {
           paiCode: "",
@@ -107,7 +107,9 @@
       /** 获取所属区域 */
       getPrisonSubRegions: function () {
         this.$get(this.urlconfig.cmGetPrisonSubRegions).then((res) => {
-          this.prisonSubRegions = res.data;
+          if (res.status === 0) {
+            this.prisonSubRegions = res.data;
+          }
         }).catch((error) => {
           console.log(error);
         }).then(() => {
@@ -117,7 +119,9 @@
       /** 获取摄像头类型 */
       getCameraTypes: function () {
         this.$get(this.urlconfig.cmGetCameraTypes).then((res) => {
-          this.cameraTypes = res.data;
+          if (res.status === 0) {
+            this.cameraTypes = res.data;
+          }
         }).catch((error) => {
           console.log(error);
         }).then(() => {
@@ -132,8 +136,10 @@
           "params": JSON.stringify(this.params)
         }
         this.$post(this.urlconfig.cmGetCameraList, data).then((res) => {
-          this.count = res.data.totalRows;
-          this.cameraList = res.data.items;
+          if (res.status === 0) {
+            this.count = res.data.totalRows;
+            this.cameraList = res.data.items;
+          }
         }).catch((error) => {
           console.log(error);
         }).then(() => {
@@ -142,9 +148,13 @@
       },
       /** 保存摄像头信息 */
       saveCameraInfo: function () {
-        let data = { "saveItems" : JSON.stringify(this.changeRow) };
+        let data = {
+          "saveItems": JSON.stringify(this.changeRow)
+        };
         this.$post(this.urlconfig.cmSaveCameraInfo, data).then((res) => {
-          alert("保存成功");
+          if (res.status === 0) {
+            this.$message.success(response.statusinfo);
+          }
         }).catch((error) => {
           console.log(error);
         }).then(() => {
@@ -157,7 +167,7 @@
         this.isShowVideo = true;
       },
       /** 关闭视频操作 */
-      beforeClose: function() {
+      beforeClose: function () {
         this.cameraId = null;
         this.isShowVideo = false;
       },
@@ -230,6 +240,7 @@
       }
     }
   }
+
 </script>
 
 <style scoped>
@@ -252,4 +263,5 @@
   .tree-wrap-self {
     display: none;
   }
+
 </style>

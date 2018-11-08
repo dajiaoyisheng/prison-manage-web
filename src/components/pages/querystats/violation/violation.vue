@@ -110,36 +110,39 @@
     },
     created: function () {
       this.getTableDatas();
+      this.getPreWarnType();
     },
     mounted() {
-      // 获取预警事件类型
-	  let url = this.$store.state.env + "/violationWarning.action?method=getWarningEventTypes";
-      this.$get(url).then((respnose) => {
-        this.warningEventTypes = respnose.data;
-      })
+
     },
     methods: {
       pageChange(page) {
         this.currentPage = page
         this.getTableDatas(page)
       },
+      // 获取预警事件类型
+      getPreWarnType() {
+        this.$get(this.urlconfig.qvGetPreWarnType).then((res) => {
+          if (res.status === 0) {
+            this.warningEventTypes = res.data;
+          }
+        })
+      },
       // 获取表格数据
       getTableDatas(page) {
-      /*  this.parame = {
-          "page": page || 1,
-          "startTime": this.parame.startTime,
-          "endTime": this.parame.endTime,
-          "warningEventType": this.parame.warningEventType,
-          "prisonerName": this.parame.prisonerName,
-        } */
-		 let data = {
+        /*  this.parame = {
+            "page": page || 1,
+            "startTime": this.parame.startTime,
+            "endTime": this.parame.endTime,
+            "warningEventType": this.parame.warningEventType,
+            "prisonerName": this.parame.prisonerName,
+          } */
+        let data = {
           params: JSON.stringify(this.parame),
           pageIndex: this.pagination.currentPage,
           pageSize: this.pagination.pageSize
         }
-        
-		let url = this.$store.state.env + "/violationWarning.action?method=getViolationWarnings";
-        this.$post(url, data).then((res) => {
+        this.$post(this.urlconfig.qvGetTableDatas, data).then((res) => {
           this.count = res.data.totalRows;
           this.ppuTableDatas = res.data.items;
           this.pagination.totalRows = res.data.totalRows;

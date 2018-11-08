@@ -62,8 +62,7 @@
                 <el-table-column fixed="right" label="操作" align="center" width="200px">
                   <template slot-scope="scope">
                     <el-button style="padding: 0px 15px;" class="el-icon-edit" type="text" @click="initModifyUser(scope.row)">修改</el-button>
-                    <el-button style="padding: 0px 15px;" class="el-icon-delete" type="text"
-                      @click.native.prevent="deleteUser(scope.$index, scope.row)">删除</el-button>
+                    <el-button style="padding: 0px 15px;" class="el-icon-delete" type="text" @click.native.prevent="deleteUser(scope.$index, scope.row)">删除</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -105,9 +104,11 @@
           pageSize: this.$refs.loggerPagination.pageSize
         }
 
-        this.$ajxj.post('/getLoggers', data).then((respnose) => {
-          this.count = respnose.data.count;
-          this.loggerList = respnose.data.data;
+        this.$post('/getLoggers', data).then((res) => {
+          if (res.status === 0) {
+            this.count = res.data.count;
+            this.loggerList = res.data.data;
+          }
         }).catch((error) => {
           console.log(error);
         }).then(() => {
@@ -122,9 +123,11 @@
           pageSize: this.$refs.userPagination.pageSize
         }
 
-        this.$ajxj.post('/getUsers', data).then((respnose) => {
-          this.count = respnose.data.count;
-          this.userList = respnose.data.data;
+        this.$post('/getUsers', data).then((res) => {
+          if (res.status === 0) {
+            this.count = res.data.count;
+            this.userList = res.data.data;
+          }
         }).catch((error) => {
           console.log(error);
         }).then(() => {
@@ -156,10 +159,11 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$ajxj.post('/deleteUser', row.guid).then((respnose) => {
-            this.userList.splice(index, 1);
-
-            alert("删除成功");
+          this.$post('/deleteUser', row.guid).then((res) => {
+            if (res.status === 0) {
+              this.userList.splice(index, 1);
+              this.$message.success(response.statusinfo);
+            }
           }).catch((error) => {
             console.log(error);
           }).then(() => {

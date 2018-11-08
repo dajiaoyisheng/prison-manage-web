@@ -1,7 +1,8 @@
 <template>
   <div id="pointname">
     <section v-if="pnAside" class="pn-left">
-      <el-tree :data="treeData" node-key="id" @node-click="handleNodeClick" default-expand-all :expand-on-click-node="false" highlight-current="true">
+      <el-tree :data="treeData" node-key="id" @node-click="handleNodeClick" default-expand-all :expand-on-click-node="false"
+        highlight-current="true">
         <span class="custom-tree-node" slot-scope="{ node, data }">
           <span v-if="data.isWarning == false"><i :class="node.icon"></i>{{ node.label }}</span>
           <span v-if="data.isWarning == true"><i><img :src="images.warning"></i>{{ node.label }}</span>
@@ -19,7 +20,8 @@
     <section class="pn-right" :class="{'pn-right-show': !pnAside, 'pn-right-hidden': pnAside}">
       <section class="pn-right-header">
         <span style="font-size: 14px;">服刑人员:</span>
-        <el-input size="small" class="pn-right-header-input" v-model="parameter.keyword" placeholder="请输入服刑人员姓名或编号" clearable></el-input>
+        <el-input size="small" class="pn-right-header-input" v-model="parameter.keyword" placeholder="请输入服刑人员姓名或编号"
+          clearable></el-input>
         <el-button size="mini" class="search-btn" @click="doQuery()">查询</el-button>
       </section>
       <section class="pn-right-main" v-bind:style="{'left': pnMainAsideLeft + 'px'}">
@@ -29,11 +31,11 @@
               <el-card class="box-card">
                 <div slot="header" class="pn-card-label">未识别人员列表(<span style="color: red;">{{ topTableData.length }}人</span>)</div>
                 <el-table :data="topTableData" stripe style="width: 100%" height="269">
-                  <el-table-column prop="criCode"      label="编号"              min-width="100px" align="center"></el-table-column>
-                  <el-table-column prop="criName"      label="姓名"              min-width="100px" align="center"></el-table-column>
-                  <el-table-column prop="warningType"  label="预警事件类型"       min-width="120px"></el-table-column>
-                  <el-table-column prop="paiCode"      label="最后一次被定位区域"  min-width="230px"></el-table-column>
-                  <el-table-column prop="cpcLoctime"   label="最后一次被定位时间"  min-width="200px"></el-table-column>
+                  <el-table-column prop="criCode" label="编号" min-width="100px" align="center"></el-table-column>
+                  <el-table-column prop="criName" label="姓名" min-width="100px" align="center"></el-table-column>
+                  <el-table-column prop="warningType" label="预警事件类型" min-width="120px"></el-table-column>
+                  <el-table-column prop="paiCode" label="最后一次被定位区域" min-width="230px"></el-table-column>
+                  <el-table-column prop="cpcLoctime" label="最后一次被定位时间" min-width="200px"></el-table-column>
                   <el-table-column label="视频" width="100px" fixed="right" align="center">
                     <template slot-scope="scope">
                       <el-button class="btn" @click="showVideo('topTableData', scope.$index, scope.row)" type="text">
@@ -49,11 +51,11 @@
               <el-card class="box-card">
                 <div slot="header" class="pn-card-label"><span>已识别人员列表({{ bottomTableData.length }}人)</span></div>
                 <el-table :data="bottomTableData" stripe style="width: 100%" height="390">
-                  <el-table-column prop="criCode"       label="编号"     min-width="100px" align="center"></el-table-column>
-                  <el-table-column prop="criName"       label="姓名"     min-width="100px" align="center"></el-table-column>
-                  <el-table-column prop="paiCode"       label="当前区域" min-width="230px"></el-table-column>
-                  <el-table-column prop="cpcLoctime"    label="识别时间" min-width="200px"></el-table-column>
-                  <el-table-column prop="cpoLoctype"    label="识别方法" min-width="100px"></el-table-column>
+                  <el-table-column prop="criCode" label="编号" min-width="100px" align="center"></el-table-column>
+                  <el-table-column prop="criName" label="姓名" min-width="100px" align="center"></el-table-column>
+                  <el-table-column prop="paiCode" label="当前区域" min-width="230px"></el-table-column>
+                  <el-table-column prop="cpcLoctime" label="识别时间" min-width="200px"></el-table-column>
+                  <el-table-column prop="cpoLoctype" label="识别方法" min-width="100px"></el-table-column>
                   <el-table-column label="视频" width="100px" fixed="right" align="center">
                     <template slot-scope="scope">
                       <el-button class="btn" @click="showVideo('bottomTableData', scope.$index, scope.row)" type="text">
@@ -105,9 +107,9 @@
           warning: warning
         },
         bottomPagination: {
-            pageSize : 10,
-            currentPage : 1,
-            totalRows : 100
+          pageSize: 10,
+          currentPage: 1,
+          totalRows: 100
         },
         parameter: {
           keyword: '',
@@ -123,10 +125,11 @@
     },
     methods: {
       /** 获取人员点名导航树 */
-      getPrisonareatree : function() {
-        let url = this.$store.state.env + "/prisonRegion.action?method=getPrisonRegionTree"; 
-        this.$get(url).then((response) => {
-          this.treeData = response.data;
+      getPrisonareatree: function () {
+        this.$get(this.urlconfig.pnGetPrisonareatree).then((res) => {
+          if (res.status === 0) {
+            this.treeData = res.data;
+          }
         }).catch((error) => {
           console.log(error);
         }).then(() => {
@@ -134,46 +137,48 @@
         });
       },
       /** 获取点名列表信息 */
-      getTabledatas : function() {
-          let data = { "parameter" : JSON.stringify(this.parameter) };
-          let url = this.$store.state.env + "/pointName.action?method=getPointNameDatas";
-
-          this.$post(url, data).then((response) => {
-            this.topTableData = response.data.unidentified;
-            this.bottomTableData = response.data.identified;
-          }).catch((error) => {
-            console.log(error);
-          }).then(() => {
-            // todo somthing...
-          });
+      getTabledatas: function () {
+        let data = {
+          "parameter": JSON.stringify(this.parameter)
+        };
+        this.$post(this.urlconfig.pnGetTabledatas, data).then((res) => {
+          if (res.status === 0) {
+            this.topTableData = res.data.unidentified;
+            this.bottomTableData = res.data.identified;
+          }
+        }).catch((error) => {
+          console.log(error);
+        }).then(() => {
+          // todo somthing...
+        });
       },
       /** 点击树节点获取列表信息 */
-      handleNodeClick : function(data) {
+      handleNodeClick: function (data) {
         this.parameter.nodeType = data.nodeType;
         this.parameter.nodeId = data.id;
         this.getTabledatas();
       },
       /** 根据条件查询列表信息 */
-      doQuery : function() {
+      doQuery: function () {
         this.getTabledatas();
       },
       /** 显示监控视频区域 */
-      showVideo : function(name, index, row) {
+      showVideo: function (name, index, row) {
         this.pnAside = false;
-        this.pnAsideLeft=0;
-        this.pnMainAsideLeft=7;
+        this.pnAsideLeft = 0;
+        this.pnMainAsideLeft = 7;
         this.pnMainAside = true;
         this.cameras = row.cameras;
       },
       /** 关闭监控视频区域 */
-      closeVideo : function() {
-        this.pnAside=true;
-        this.pnAsideLeft=250;
-        this.pnMainAsideLeft=257
+      closeVideo: function () {
+        this.pnAside = true;
+        this.pnAsideLeft = 250;
+        this.pnMainAsideLeft = 257
         this.pnMainAside = false;
       },
       /** 初始化定时刷新任务 */
-      initSetInterval : function() {
+      initSetInterval: function () {
         this.timmer = setInterval(() => {
           this.getTabledatas();
         }, 5000);
@@ -194,6 +199,7 @@
       tablePagination
     }
   }
+
 </script>
 
 <style scoped>
@@ -293,6 +299,7 @@
   .pn-card-label {
     color: black;
   }
+
 </style>
 
 <style>
@@ -311,4 +318,5 @@
   #pointname .el-card__body {
     padding-bottom: 0px;
   }
+
 </style>

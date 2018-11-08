@@ -146,7 +146,7 @@
 
   .right-main .monitor-house .right .house-floor {
     margin-bottom: 20px;
-  } 
+  }
 
   .banner {
     background: #fff;
@@ -202,20 +202,23 @@
       }
     },
     created: function () {
-      var _this = this;
-      this.$ajxj.get('/getPrisonareatree')
-        .then(function (res) {
-          _this.treeData = res.data;
+      this.$get('/getPrisonareatree')
+        .then(res => {
+          if (res.status === 0) {
+            this.treeData = res.data;
+          }
         })
         .catch(function (error) {
           console.log(error);
         })
         .then(function () {});
 
-      this.$ajxj.get('/pPositionData')
-        .then((res)=> {
-          this.pPositionData = res.data.data;
-          this.page = res.data.total
+      this.$get('/pPositionData')
+        .then((res) => {
+          if (res.status === 0) {
+            this.pPositionData = res.data.data;
+            this.page = res.data.total
+          }
         }).catch(function (error) {
           console.log(error);
         }).then(function () {});

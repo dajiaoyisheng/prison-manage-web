@@ -15,10 +15,10 @@
       <el-main>
         <section class="cal-main-params">
           <span>时间:</span>
-          <el-time-picker v-if="this.tabId == 'tab-0'" size="mini" style="width: 16.5%; margin: 0px 15px 0px 5px;" is-range v-model="params.rangeTime"
-                          range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间"></el-time-picker>
-          <el-date-picker v-if="this.tabId == 'tab-1'" size="mini" style="width: 18%; margin: 0px 0px 0px 0px;" type="daterange" v-model="params.rangeDate" 
-                          range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+          <el-time-picker v-if="this.tabId == 'tab-0'" size="mini" style="width: 16.5%; margin: 0px 15px 0px 5px;"
+            is-range v-model="params.rangeTime" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间"></el-time-picker>
+          <el-date-picker v-if="this.tabId == 'tab-1'" size="mini" style="width: 18%; margin: 0px 0px 0px 0px;" type="daterange"
+            v-model="params.rangeDate" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
           <span>日期类型:</span>
           <el-select size="mini" v-model="params.psDatetype" placeholder="请选择">
             <el-option v-for="item in dateTypes" :key="item.sCode" :label="item.sName" :value="item.sCode"></el-option>
@@ -48,15 +48,15 @@
                 </el-col>
               </el-row>
               <el-table :data="dailyDates" stripe style="width: 100%">
-                <el-table-column prop="psStarttime"   label="开始时间"></el-table-column>
-                <el-table-column prop="psEndtime"     label="结束时间"></el-table-column>
-                <el-table-column prop="psDatetype"    label="日期类型"></el-table-column>
+                <el-table-column prop="psStarttime" label="开始时间"></el-table-column>
+                <el-table-column prop="psEndtime" label="结束时间"></el-table-column>
+                <el-table-column prop="psDatetype" label="日期类型"></el-table-column>
                 <el-table-column label="时长">
                   <template slot-scope="scope">{{ scope.row.psDuration }}小时</template>
                 </el-table-column>
-                <el-table-column prop="psMatter"      label="事项"></el-table-column>
-                <el-table-column prop="psArea"        label="区域"></el-table-column>
-                <el-table-column prop="psAlerttype"   label="动作"></el-table-column>
+                <el-table-column prop="psMatter" label="事项"></el-table-column>
+                <el-table-column prop="psArea" label="区域"></el-table-column>
+                <el-table-column prop="psAlerttype" label="动作"></el-table-column>
                 <el-table-column prop="psPersonrange" label="适用范围"></el-table-column>
                 <el-table-column label="操作" width="100">
                   <template slot-scope="scope">
@@ -76,14 +76,14 @@
                 </el-col>
               </el-row>
               <el-table :data="specialDates" stripe style="width: 100%">
-                <el-table-column prop="psStarttime"     label="开始时间" width="100"></el-table-column>
-                <el-table-column prop="psEndtime"       label="结束时间" width="100"></el-table-column>
-                <el-table-column prop="psDatetype"      label="日期类型"></el-table-column>
-                <el-table-column prop="psDuration"      label="时长" width="120"></el-table-column>
-                <el-table-column prop="psMatter"        label="事项" width="100"></el-table-column>
-                <el-table-column prop="psArea"          label="区域" width="100"></el-table-column>
-                <el-table-column prop="psAlerttype"     label="动作" width="100"></el-table-column>
-                <el-table-column prop="psPersonrange"   label="适用范围"></el-table-column>
+                <el-table-column prop="psStarttime" label="开始时间" width="100"></el-table-column>
+                <el-table-column prop="psEndtime" label="结束时间" width="100"></el-table-column>
+                <el-table-column prop="psDatetype" label="日期类型"></el-table-column>
+                <el-table-column prop="psDuration" label="时长" width="120"></el-table-column>
+                <el-table-column prop="psMatter" label="事项" width="100"></el-table-column>
+                <el-table-column prop="psArea" label="区域" width="100"></el-table-column>
+                <el-table-column prop="psAlerttype" label="动作" width="100"></el-table-column>
+                <el-table-column prop="psPersonrange" label="适用范围"></el-table-column>
               </el-table>
               <div class="el-pagination-wrap text-center">
                 <v-tablePagination :total="pagination.totalRows" @change="query" ref="specialPagination"></v-tablePagination>
@@ -129,10 +129,11 @@
     },
     methods: {
       /** 获取日期类型 */
-      getDateTypes: function() {
-        let url = this.$store.state.env + "/systemCode.action?method=getDateType";
-        this.$get(url).then((respnose) => {
-          this.dateTypes = respnose.data;
+      getDateTypes: function () {
+        this.$get(this.urlconfig.scmGetDateTypes).then((res) => {
+          if (res.status === 0) {
+            this.dateTypes = res.data;
+          }
         }).catch((error) => {
           console.log(error);
         }).then(() => {
@@ -140,10 +141,11 @@
         });
       },
       /** 获取区间字典 */
-      getAreas: function() {
-        let url = this.$store.state.env + "/systemCode.action?method=getAreaType";
-        this.$get(url).then((respnose) => {
-          this.areas = respnose.data;
+      getAreas: function () {
+        this.$get(this.urlconfig.scmGetAreas).then((res) => {
+          if (res.status === 0) {
+            this.areas = res.data;
+          }
         }).catch((error) => {
           console.log(error);
         }).then(() => {
@@ -151,10 +153,11 @@
         });
       },
       /** 获取动作字典 */
-      getOptions: function() {
-        let url = this.$store.state.env + "/systemCode.action?method=getActionType";
-        this.$get(url).then((respnose) => {
-          this.options = respnose.data;
+      getOptions: function () {
+        this.$get(this.urlconfig.scmGetOptions).then((res) => {
+          if (res.status === 0) {
+            this.options = res.data;
+          }
         }).catch((error) => {
           console.log(error);
         }).then(() => {
@@ -162,10 +165,11 @@
         });
       },
       /** 获取适用范围字典 */
-      getScopes: function() {
-        let url = this.$store.state.env + "/systemCode.action?method=getPersonRange";
-        this.$get(url).then((respnose) => {
-          this.scopes = respnose.data;
+      getScopes: function () {
+        this.$get(this.urlconfig.scmGetScopes).then((res) => {
+          if (res.status === 0) {
+            this.scopes = res.data;
+          }
         }).catch((error) => {
           console.log(error);
         }).then(() => {
@@ -173,17 +177,17 @@
         });
       },
       /** 获取日常作息时间列表 */
-      getDailyDates: function() {
+      getDailyDates: function () {
         let data = {
           "params": JSON.stringify(this.params),
           "pageSize": this.$refs.dailyPagination.limit,
           "pageIndex": this.$refs.dailyPagination.index
         }
-
-        let url = this.$store.state.env + "/spriSchedule.action?method=getDailyDates";
-        this.$post(url, data).then((respnose) => {
-          this.dailyDates = respnose.data.items;
-          this.pagination.totalRows = respnose.data.totalRows;
+        this.$post(this.urlconfig.scmGetDailyDates, data).then((res) => {
+          if (res.status === 0) {
+            this.dailyDates = res.data.items;
+            this.pagination.totalRows = res.data.totalRows;
+          }
         }).catch((error) => {
           console.log(error);
         }).then(() => {
@@ -191,17 +195,17 @@
         });
       },
       /** 获取特殊人员作息时间 */
-      getSpecialDates: function() {
+      getSpecialDates: function () {
         let data = {
           "params": JSON.stringify(this.params),
           "pageSize": this.$refs.specialPagination.limit,
           "pageIndex": this.$refs.specialPagination.index
         }
-
-        let url = this.$store.state.env + "/spriSchedule.action?method=getSpecialDates";
-        this.$post(url, data).then((respnose) => {
-          this.specialDates = respnose.data.items;
-          this.pagination.totalRows = respnose.data.totalRows;
+        this.$post(this.urlconfig.scmGetSpecialDates, data).then((res) => {
+          if (res.status === 0) {
+            this.specialDates = res.data.items;
+            this.pagination.totalRows = res.data.totalRows;
+          }
         }).catch((error) => {
           console.log(error);
         }).then(() => {
@@ -209,7 +213,7 @@
         });
       },
       /** 根据条件查询作息列表 */
-      query: function() {
+      query: function () {
         if (this.tabId == 'tab-0') {
           this.getDailyDates();
         } else if (this.tabId == 'tab-1') {
@@ -217,7 +221,7 @@
         }
       },
       /** 切换页签操作 */
-      changeTabs: function(tab, event) {
+      changeTabs: function (tab, event) {
         this.clear();
         this.tabId = event.target.getAttribute('id');
 
@@ -230,13 +234,15 @@
         }
       },
       /** 删除作息时间 */
-      deleteDailyDate: function(index, row) {
+      deleteDailyDate: function (index, row) {
         this.$confirm('确认删除？').then(() => {
-          let data = {"psId" : row.psId};
-          let url = this.$store.state.env + "/spriSchedule.action?method=deleteDailyDate";
-
-          this.$post(url, data).then((respnose) => {
-            this.query();
+          let data = {
+            "psId": row.psId
+          };
+          this.$post(this.urlconfig.scmDeleteDailyDate, data).then((res) => {
+            if (res.status === 0) {
+              this.query();
+            }
           }).catch((error) => {
             console.log(error);
           }).then(() => {
@@ -247,7 +253,7 @@
         });
       },
       /** 关闭增加作息窗口前操作 */
-      addDialogClose: function(done) {
+      addDialogClose: function (done) {
         this.$confirm('确认关闭？').then(() => {
           done();
           this.$refs.addDialog.resetForm('form');
@@ -257,7 +263,7 @@
         });
       },
       /** 关闭节假日窗口前操作 */
-      holidyDialogClose: function(done) {
+      holidyDialogClose: function (done) {
         this.$confirm('确认关闭？').then(() => {
           done();
           this.$refs.holidyDialog.initTableData();
@@ -275,10 +281,10 @@
         this.params.psPersonrange = "";
       },
       /** 保存节假日管理弹层 */
-      listenMsgFromeChild: function(type, data) {
+      listenMsgFromeChild: function (type, data) {
         if (type === "save") {
           console.log("保存", data);
-            this.isShowHolidyDialog = false;
+          this.isShowHolidyDialog = false;
         } else {
           console.log("取消", data);
           this.isShowHolidyDialog = false;
@@ -298,6 +304,7 @@
       'v-tablePagination': tablePagination
     }
   }
+
 </script>
 
 <style scoped>
@@ -340,6 +347,7 @@
   .cal-header-toolbar {
     padding-left: 40px;
   }
+
 </style>
 
 <style>
@@ -363,4 +371,5 @@
   #calendarmanagement .el-dialog__body {
     padding: 10px 20px;
   }
+
 </style>

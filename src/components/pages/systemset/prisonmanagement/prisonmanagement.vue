@@ -179,11 +179,12 @@
       }
     },
     created: function () {
-      var _this = this;
       // 犯人总数
-      this.$ajxj.get('/getPrisonareatree')
-        .then(function (res) {
-          _this.Prisonareatree = _this.PrisonareaObjtree = res.data;
+      this.$get('/getPrisonareatree')
+        .then(res=> {
+          if(res.status === 0){
+            this.Prisonareatree = this.PrisonareaObjtree = res.data;
+          }
         })
         .catch(function (error) {
           console.log(error);

@@ -122,18 +122,20 @@
 
       },
       initTableData: function () {
-        this.$get('/getHolidayDates').then(respnose => {
-          this.tableData = respnose.data;
+        this.$get('/getHolidayDates').then(res => {
+          if (res.status === 0) {
+            this.tableData = res.data;
+          }
         }).catch(error => {}).then(() => {
           //console.log(error);
         });
       },
       // initShowEventsData: function () {        
-        // if (!this.clickDate || !this.clickDayEvent) {
-        //   return this.demoEvents;
-        // }
-        // return isBeginEndDate(this.clickDate, this.clickDayEvent.beginDate, this.clickDayEvent.endDate) ? [this.clickDayEvent] :
-        //   this.demoEvents;
+      // if (!this.clickDate || !this.clickDayEvent) {
+      //   return this.demoEvents;
+      // }
+      // return isBeginEndDate(this.clickDate, this.clickDayEvent.beginDate, this.clickDayEvent.endDate) ? [this.clickDayEvent] :
+      //   this.demoEvents;
       // },
       addRow: function () {
         var newRow = {
@@ -148,7 +150,7 @@
         this.tableData.splice(index, 1);
       },
       save: function () {
-        alert("成功保存:" + this.tableData.length + "条");
+        this.$message.success("成功保存:" + this.tableData.length + "条")
       },
       // 向父组件中传值
       sentMsgToParent: function (type) {

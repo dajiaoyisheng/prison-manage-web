@@ -116,10 +116,11 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         let data = { "saveItme": JSON.stringify(this.form) };
-                        let url = this.$store.state.env + "/spriSchedule.action?method=saveDailyDates";
-                        this.$post(url, data).then((respnose) => {
-                            alert("保存成功");
-                            this.resetForm('form');
+                        this.$post(this.urlconfig.scmSubmitForm, data).then((res) => {
+                            if (res.status === 0) {
+                                this.$message.success(response.statusinfo);
+                                this.resetForm('form');
+                            }
                         }).catch((error) => {
                             console.log(error);
                         }).then(() => {

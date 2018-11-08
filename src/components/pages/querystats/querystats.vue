@@ -179,16 +179,17 @@
       }
     },
     created: function () {
-      var _this = this;
       // 犯人总数
-      this.$ajxj.get('/getPrisonersData')
-        .then(function (res) {
-          _this.areasDetail = res.data.data
-          let temArray = [];
-          _this.areasDetail.map(function (val) {
-            temArray.push(val.pNumItem)
-          })
-          _this.personnum = eval(temArray.join('+'))
+      this.$get('/getPrisonersData')
+        .then(res => {
+          if (res.status === 0) {
+            this.areasDetail = res.data.data
+            let temArray = [];
+            this.areasDetail.map(function (val) {
+              temArray.push(val.pNumItem)
+            })
+            this.personnum = eval(temArray.join('+'))
+          }
         })
         .catch(function (error) {
           // handle error
@@ -198,26 +199,30 @@
           // always executed
         });
       // 人员分类
-      this.$ajxj.get('/getBenchChartPie')
+      this.$get('/getBenchChartPie')
         .then(function (res) {
-          // _this.loading = false;
-          _this.benchChartPieData = res.data
+          if (res.status === 0) {
+            this.benchChartPieData = res.data
+          }
+          // this.loading = false;
         }).catch(function (error) {
           console.log(error);
         }).then(function () {});
       // 预警事件分类
-      this.$ajxj.get('/getBenchChartbarData')
+      this.$get('/getBenchChartbarData')
         .then(function (res) {
-          // _this.loading = false;
-          _this.benchChartbarData = res.data
+          if (res.status === 0) {
+            this.benchChartbarData = res.data
+          }
         }).catch(function (error) {
           console.log(error);
         }).then(function () {});
       // 人员状态
-      this.$ajxj.get('/prisonersStutas')
+      this.$get('/prisonersStutas')
         .then(function (res) {
-          // _this.loading = false;
-          _this.prisonersStutas = res.data.data
+          if (res.status === 0) {
+            this.prisonersStutas = res.data.data
+          }
         }).catch(function (error) {
           console.log(error);
         }).then(function () {});

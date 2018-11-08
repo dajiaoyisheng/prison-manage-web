@@ -3,7 +3,7 @@
 import Vue from 'vue';
 import router from './router';
 import axios from './axios';
-Vue.prototype.$ajxj = axios;
+// Vue.prototype.$ajxj = axios;
 // 对get,post进行了封装
 import { post, get } from './axios'
 Vue.prototype.$post = post;

@@ -294,7 +294,7 @@
           right: "5%",
           itemWidth: 10,
           itemHeight: 10,
-          itemGap: 20,          
+          itemGap: 20,
           textStyle: {
             padding: [0, 0, 0, 10], // 文字块的内边距
           }
@@ -306,30 +306,38 @@
       getPSum() {
         this.$get(this.urlconfig.wkGetPrisonersData)
           .then((res) => {
-            this.areasDetail = res.data.prisonsers;
-            this.personnum = res.data.personnum;
+            if (res.status === 0) {
+              this.areasDetail = res.data.prisonsers;
+              this.personnum = res.data.personnum;
+            }
           })
       },
       // 人员分类
       getPClass() {
         this.$get(this.urlconfig.wkGetBenchChartPie)
           .then((res) => {
-            this.benchChartPieData = res.data.pieData;
+            if (res.status === 0) {
+              this.benchChartPieData = res.data.pieData;
+            }
           })
       },
       // 人员状态 pStatus
       getPStatus() {
         this.$get(this.urlconfig.wkGetPStatus)
           .then((res) => {
-            this.pStatus = res.data
+            if (res.status === 0) {
+              this.pStatus = res.data
+            }
           })
       },
       // 预警事件分类
       getPreWarningClass() {
         this.$get(this.urlconfig.wkGetBenchChartbarData)
           .then((res) => {
-            this.benchChartbarData = res.data;
-            this.preWarningDetil = res.data.detils;
+            if (res.status === 0) {
+              this.benchChartbarData = res.data;
+              this.preWarningDetil = res.data.detils;
+            }
           })
       },
 
@@ -564,12 +572,13 @@
   }
 
   .p-status-wrap {
-    display: table;
+    /* display: table; */
   }
 
   ul.p-status {
-    display: table-cell;
-    vertical-align: middle;
+    /* display: table-cell;
+    vertical-align: middle; */
+    margin-top: 74px;
     padding-left: 8%;
   }
 
@@ -591,10 +600,15 @@
     text-align: left;
   }
 
+  ul.p-status li:nth-child(even) {
+    border-bottom: 1px solid #e0e3ec;
+    text-align: right;
+  }
+
   ul.p-status li:nth-child(1),
   ul.p-status li:nth-child(2),
-  ul.p-status li:nth-child(7),
-  ul.p-status li:nth-child(8) {
+  ul.p-status li:nth-child(5),
+  ul.p-status li:nth-child(6) {
     height: 40px;
   }
 
@@ -603,16 +617,13 @@
     line-height: 20px;
   }
 
-  ul.p-status li:nth-child(7) {
+  ul.p-status li:nth-child(5),
+  ul.p-status li:nth-child(6) {
     border-bottom: none;
   }
 
-  ul.p-status li:nth-child(even) {
-    border-bottom: 1px solid #e0e3ec;
-    text-align: right;
-  }
-
   ul.p-status li:last-child {
+    height: 40px;
     border-bottom: none;
   }
 

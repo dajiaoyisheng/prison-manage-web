@@ -36,10 +36,10 @@
     </section>
     <section class="puu-items">
       <el-table :data="ppuTableDatas" stripe style="width: 100%;">
-        <el-table-column prop="startTime"    label="预警开始时间" min-width="170px"></el-table-column>
-        <el-table-column prop="endTime"      label="预警结束时间" min-width="170px"></el-table-column>
-        <el-table-column prop="timeLen"      label="预警时长"     min-width="120px"  align="center"></el-table-column>
-        <el-table-column prop="prisonerName" label="服刑人员姓名" min-width="120px"  align="center">
+        <el-table-column prop="startTime" label="预警开始时间" min-width="170px"></el-table-column>
+        <el-table-column prop="endTime" label="预警结束时间" min-width="170px"></el-table-column>
+        <el-table-column prop="timeLen" label="预警时长" min-width="120px" align="center"></el-table-column>
+        <el-table-column prop="prisonerName" label="服刑人员姓名" min-width="120px" align="center">
           <template slot-scope="scope">
             <el-popover placement="top" width="240" trigger="hover" @show="showPrisoner(scope.row)">
               <el-row style="margin-bottom: 0px;">
@@ -67,7 +67,7 @@
             </el-popover>
           </template>
         </el-table-column>
-        <el-table-column prop="prisonerNum"  label="服刑人员编码"  min-width="120px" align="center">
+        <el-table-column prop="prisonerNum" label="服刑人员编码" min-width="120px" align="center">
           <template slot-scope="scope">
             <el-popover placement="top" width="240" trigger="hover" @show="showPrisoner(scope.row)">
               <el-row style="margin-bottom: 0px;">
@@ -95,9 +95,9 @@
             </el-popover>
           </template>
         </el-table-column>
-        <el-table-column prop="prisonerType" label="服刑人员类型"  min-width="120px" align="center"></el-table-column>
-        <el-table-column prop="warningEventType"  label="预警事件类型"  min-width="120px" align="center"></el-table-column>
-        <el-table-column prop="warningArea"  label="预警所在区域"  min-width="170px"></el-table-column>
+        <el-table-column prop="prisonerType" label="服刑人员类型" min-width="120px" align="center"></el-table-column>
+        <el-table-column prop="warningEventType" label="预警事件类型" min-width="120px" align="center"></el-table-column>
+        <el-table-column prop="warningArea" label="预警所在区域" min-width="170px"></el-table-column>
         <el-table-column label="预警视频" fixed="right" width="120px" align="center">
           <template slot-scope="scope">
             <el-button style="padding: 0px 15px;" @click="showVideo(scope.$index, scope.row)" size="mini" type="text">
@@ -141,10 +141,11 @@
     },
     methods: {
       /** 获取预警事件类型 */
-      getWarningEventTypes : function() {
-		let url = this.$store.state.env + "/earlyWarning.action?method=getWarningEventTypes";
-        this.$get(url).then((respnose) => {
-          this.warningEventTypes = respnose.data;
+      getWarningEventTypes: function () {
+        this.$get(this.urlconfig.qpwGetWarningEventTypes).then((res) => {
+          if (res.status === 0) {
+            this.warningEventTypes = res.data;
+          }
         }).catch((error) => {
           console.log(error);
         }).then(() => {
@@ -152,10 +153,11 @@
         });
       },
       /** 获取服刑人员类型 */
-      getSuperviseTypes : function() {
-		    let url = this.$store.state.env + "/earlyWarning.action?method=getSuperviseType";
-        this.$get(url).then((respnose) => {
-          this.superviseTypes = respnose.data;
+      getSuperviseTypes: function () {
+        this.$get(this.urlconfig.qpwGetSuperviseTypes).then((res) => {
+          if (res.status === 0) {
+            this.superviseTypes = res.data;
+          }
         }).catch((error) => {
           console.log(error);
         }).then(() => {
@@ -163,17 +165,17 @@
         });
       },
       /** 获取定位异常清单 */
-      getPosunusualItems : function() {
+      getPosunusualItems: function () {
         let data = {
           params: JSON.stringify(this.params),
           pageIndex: this.$refs.posunusualPagination.index,
           pageSize: this.$refs.posunusualPagination.pageSize
         }
-        
-        let url = this.$store.state.env + "/earlyWarning.action?method=getEarlyWarnings";
-        this.$post(url, data).then((respnose) => {
-          this.count = respnose.data.totalRows;
-          this.ppuTableDatas = respnose.data.items;
+        this.$post(this.urlconfig.qpwGetPosunusualItems, data).then((res) => {
+          if (res.status === 0) {
+            this.count = res.data.totalRows;
+            this.ppuTableDatas = res.data.items;
+          }
         }).catch((error) => {
           console.log(error);
         }).then(() => {
@@ -181,7 +183,7 @@
         });
       },
       /** 清空查询条件信息 */
-      clear : function () {
+      clear: function () {
         this.params = {
           startTime: new Date(new Date().setHours(0, 0, 0, 0)),
           endTime: new Date(new Date().setHours(24, 0, 0, 0)),
@@ -191,16 +193,19 @@
         }
       },
       /** 查看预警视频信息 */
-      showVideo : function(index, row) {
+      showVideo: function (index, row) {
         this.$router.push({
-          path : "/personnelposition"
+          path: "/personnelposition"
         });
       },
       /** 查看服刑人员信息 */
-      showPrisoner : function(row) {
-		    let url = this.$store.state.env + "/earlyWarning.action?method=getPrisonerInfo";
-        this.$post(url, { prisonerNum : row.prisonerNum }).then((respnose) => {
-          this.prisonerInfo = respnose.data;
+      showPrisoner: function (row) {
+        this.$post(this.urlconfig.qpwGetShowPrisoner, {
+          prisonerNum: row.prisonerNum
+        }).then((res) => {
+          if (res.status === 0) {
+            this.prisonerInfo = res.data;
+          }
         }).catch((error) => {
           console.log(error);
         }).then(() => {
@@ -208,7 +213,7 @@
         });
       },
       /** 切换分页操作处理 */
-      changeCurrent : function() {
+      changeCurrent: function () {
         this.getPosunusualItems();
       }
     },
@@ -221,6 +226,7 @@
       tablePagination
     }
   }
+
 </script>
 
 <style scoped>
@@ -260,4 +266,5 @@
     left: 0px;
     right: 0px
   }
+
 </style>

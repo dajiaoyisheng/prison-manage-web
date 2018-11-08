@@ -104,17 +104,17 @@
               <span>剩余时长:</span>
               <el-input size="small" v-model="baseInfo.lastPrisonTerm" placeholder="请输入内容"></el-input>
             </div>
-            <div >
+            <div>
               <span>监区:</span>
-			  <el-input size="small" v-model="baseInfo.regionArea" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="baseInfo.regionArea" placeholder="请输入内容"></el-input>
             </div>
-            <div >
+            <div>
               <span>监舍:</span>
-			  <el-input size="small" v-model="baseInfo.monitoringHouse" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="baseInfo.monitoringHouse" placeholder="请输入内容"></el-input>
             </div>
-            <div >
+            <div>
               <span>监管类型:</span>
-			  <el-input size="small" v-model="baseInfo.superviseValue" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="baseInfo.superviseValue" placeholder="请输入内容"></el-input>
             </div>
             <div>
               <span>责任预警:</span>
@@ -278,27 +278,27 @@
     data() {
       return {
         // searchPrams: {},
-		baseInfo:{
-			numbering  :'',
-			name     :'',
-			sex      :'',
-			famousFamily   :'',
-			birth      :'',
-			educationalLevel :'',
-			maritalStatus      :'',
-			crime         :'',
-			prisonTerm     :'',
-			hasPrisonTerm   :'',
-			lastPrisonTerm   :'',
-			regionArea        :'',
-			prisonHouse          :'',
-			superviseValue      :'',
-			dutyWarning      :'',
-			birthplace            :'',
-			city:'',
-			familyContact       :'',
-			phone     :''
-		},
+        baseInfo: {
+          numbering: '',
+          name: '',
+          sex: '',
+          famousFamily: '',
+          birth: '',
+          educationalLevel: '',
+          maritalStatus: '',
+          crime: '',
+          prisonTerm: '',
+          hasPrisonTerm: '',
+          lastPrisonTerm: '',
+          regionArea: '',
+          prisonHouse: '',
+          superviseValue: '',
+          dutyWarning: '',
+          birthplace: '',
+          city: '',
+          familyContact: '',
+          phone: ''
+        },
         area: '', //监区
         monitoringHouse: '', //监舍
         supervisionType: '',
@@ -352,7 +352,7 @@
       }
     },
     mounted: function () {
-	 
+
       // this.searchPrams = {
       //   area: this.area,
       //   monitoringHouse: this.monitoringHouse, //监舍
@@ -366,8 +366,10 @@
     },
     methods: {
       search() {
-        this.$post(this.urlconfig.ppSearch,this.searchPrams).then(res => {
-          this.pPositionData = res.data;
+        this.$post(this.urlconfig.ppSearch, this.searchPrams).then(res => {
+          if (res.status === 0) {
+            this.pPositionData = res.data;
+          }
         })
       },
       //从page组件传递过来的当前page
@@ -382,19 +384,25 @@
       // 获取监区数据
       getAreaData() {
         this.$get(this.urlconfig.ppGetAreaData).then(res => {
-          this.areas = res.data
+          if (res.status === 0) {
+            this.areas = res.data
+          }
         })
       },
       // 获取监舍数据
       getHouseData() {
         this.$get(this.urlconfig.ppGetHouseData).then(res => {
-          this.houses = res.data
+          if (res.status === 0) {
+            this.houses = res.data
+          }
         })
       },
       // 获取监管类型数据
       getVisiontypeData() {
         this.$get(this.urlconfig.ppGetVisiontypeData).then(res => {
-          this.visiontype = res.data;
+          if (res.status === 0) {
+            this.visiontype = res.data;
+          }
         })
       },
 
@@ -404,9 +412,11 @@
         });
         this.$post('/pPTableData', searchParam)
           .then((res) => {
-            this.count = res.data.total;
-            this.pPTableData = res.data.data
-            this.page = res.data.total
+            if (res.status === 0) {
+              this.count = res.data.total;
+              this.pPTableData = res.data.data
+              this.page = res.data.total
+          }
           })
       },
       getPPositionData(p, searchParam) {
@@ -415,9 +425,10 @@
         });
         this.$get('/pPositionData', searchParam)
           .then((res) => {
-            // this.loading = false;
+            if (res.status === 0) {
             this.pPositionData = res.data.data
             this.page = res.data.total
+          }
           })
       },
       playvideo(index, row, type) {
@@ -431,55 +442,66 @@
       handleClick(tab, event) {
         console.log(tab, event);
       },
-	  refreshPrisonerData(guid){
-		console.log(guid);
-		let currParam = {prisonerId : guid};
-		this.getPrisonerBaseInfo(currParam);
-		this.getPrisonerPhotos(currParam);
-		this.getTodayWarnings(currParam);
-		this.getCurrActiveArea(currParam);
-		this.getHisActiveTrack(currParam);
-	  },
-	  //获取人员基本信息
-	  getPrisonerBaseInfo(param) {
-        this.$get(this.urlconfig.ppGetPrisoner,param).then(res => {
-          this.baseInfo = res.data;
+      refreshPrisonerData(guid) {
+        console.log(guid);
+        let currParam = {
+          prisonerId: guid
+        };
+        this.getPrisonerBaseInfo(currParam);
+        this.getPrisonerPhotos(currParam);
+        this.getTodayWarnings(currParam);
+        this.getCurrActiveArea(currParam);
+        this.getHisActiveTrack(currParam);
+      },
+      //获取人员基本信息
+      getPrisonerBaseInfo(param) {
+        this.$get(this.urlconfig.ppGetPrisoner, param).then(res => {
+          if (res.status === 0) {
+            this.baseInfo = res.data;
+          }
         })
       },
-	  //获取人员照片信息
-	  getPrisonerPhotos(param) {
-        this.$get(this.urlconfig.ppGetPrionserPhoto,param).then(res => {
-          //this.baseInfo = res.data;
+      //获取人员照片信息
+      getPrisonerPhotos(param) {
+        this.$get(this.urlconfig.ppGetPrionserPhoto, param).then(res => {
+          if (res.status === 0) {
+            //this.baseInfo = res.data;
+          }
         })
       },
-	  //获取当前预警事件信息
-	  getTodayWarnings(param) {
-		param.pageIndex = 1;
-		param.pageSize = 10;
-        this.$get(this.urlconfig.ppGetTodayWarnings,param).then(res => {
-			this.count = res.data.totalRows;
+      //获取当前预警事件信息
+      getTodayWarnings(param) {
+        param.pageIndex = 1;
+        param.pageSize = 10;
+        this.$get(this.urlconfig.ppGetTodayWarnings, param).then(res => {
+          if (res.status === 0) {
+            this.count = res.data.totalRows;
             this.pPTableData = res.data.items;
             this.page = res.data.totalRows;
+          }
         })
       },
-	  //获取当前活动区域
-	  getCurrActiveArea(param) {
-        this.$get(this.urlconfig.ppGetCurrActiveArea,param).then(res => {
-          //this.baseInfo = res.data;
+      //获取当前活动区域
+      getCurrActiveArea(param) {
+        this.$get(this.urlconfig.ppGetCurrActiveArea, param).then(res => {
+          if (res.status === 0) {
+            //this.baseInfo = res.data;
+          }
         })
       },
-	  //获取历史活动区域
-	  getHisActiveTrack(param) {
-		param.pageIndex = 1;
-		param.pageSize = 10;
-		param.startTime =new Date(new Date().setHours(10, 0, 0, 0));
-		param.endTime =new Date(new Date().setHours(20, 0, 0, 0));
-        this.$get(this.urlconfig.ppGetHisActiveTrack,param).then(res => {
-			this.pPHisTrackData = res.data.items;
+      //获取历史活动区域
+      getHisActiveTrack(param) {
+        param.pageIndex = 1;
+        param.pageSize = 10;
+        param.startTime = new Date(new Date().setHours(10, 0, 0, 0));
+        param.endTime = new Date(new Date().setHours(20, 0, 0, 0));
+        this.$get(this.urlconfig.ppGetHisActiveTrack, param).then(res => {
+          if (res.status === 0) {
+            this.pPHisTrackData = res.data.items;
             this.page = res.data.totalRows;
+          }
         })
       },
-	  
     }
   }
 
