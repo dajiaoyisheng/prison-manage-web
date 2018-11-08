@@ -25,9 +25,14 @@
           </el-col>
         </el-row>
       </section>
+      <section>
+        <el-dialog title="实时视频" :visible.sync="isShowVideo" width="800px" :before-close="beforeClose">
+          <cameraVideo :cameraId="cameraId"></cameraVideo>
+        </el-dialog>
+      </section>
       <section class="el-table-wrap">
         <el-table :data="cameraList" stripe style="width: 100%;">
-          <el-table-column prop="paiPath" label="所在区域" min-width="140px" align="center">
+          <el-table-column prop="paiPath" label="所在区域" min-width="200px" align="center">
             <template slot-scope="scope">
               <div @click="changePaiCode(scope.$index, scope.row)">
                 <el-cascader :change-on-select="true" v-show="current === scope.$index" @blur="current=null" v-model="paiCodeTable"
@@ -37,13 +42,13 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="ciId" label="摄像头编号" min-width="80px" align="center"></el-table-column>
-          <el-table-column prop="ciName" label="摄像头名称" min-width="80px" align="center"></el-table-column>
-          <el-table-column prop="ciType" label="摄像头类型" min-width="140px" align="center"></el-table-column>
-          <el-table-column prop="ciNearid" label="相邻摄像头" min-width="140px" align="center"></el-table-column>
-          <el-table-column prop="realtimeUri" label="实时视频服务地址" min-width="140px" align="center"></el-table-column>
-          <el-table-column prop="replayUri" label="回放视频服务地址" min-width="140px" align="center"></el-table-column>
-          <el-table-column prop="ciMemo" label="备注" min-width="120px" align="center"></el-table-column>
+          <el-table-column prop="ciId"        label="摄像头编号"       min-width="80px" align="center"></el-table-column>
+          <el-table-column prop="ciName"      label="摄像头名称"       min-width="80px" align="center"></el-table-column>
+          <el-table-column prop="ciType"      label="摄像头类型"       min-width="140px" align="center"></el-table-column>
+          <el-table-column prop="ciNearid"    label="相邻摄像头"       min-width="140px" align="center"></el-table-column>
+          <el-table-column prop="realtimeUri" label="实时视频服务地址"  min-width="140px" align="center"></el-table-column>
+          <el-table-column prop="replayUri"   label="回放视频服务地址"  min-width="140px" align="center"></el-table-column>
+          <el-table-column prop="ciMemo"      label="备注" min-width="120px" align="center"></el-table-column>
           <el-table-column label="操作" fixed="right" width="120px" align="center">
             <template slot-scope="scope">
               <el-button @click.native.prevent="showVideo(scope.$index, scope.row)" type="text">实时视频</el-button>
@@ -54,12 +59,6 @@
           <table-pagination :total="count" @change="getCameraList" ref="pagination"></table-pagination>
         </div>
       </section>
-      <section class="movie-wrap">
-        <video width="320" height="240" controls="controls">
-          <source src="movie.ogg" type="video/ogg">
-          <source src="movie.mp4" type="video/mp4"> Your browser does not support the video tag.
-        </video>
-      </section>
     </section>
   </div>
 </template>
@@ -67,26 +66,29 @@
 <script>
   import video from '@/assets/video.png';
   import tablePagination from '@/components/commons/tablePage.vue';
+  import cameraVideo from '@/components/pages/systemset/cameramanagement/showVideo.vue';
 
   export default {
     components: {
+      cameraVideo,
       tablePagination
     },
     data() {
       return {
-        count: 0, // 查询总数
+        cameraId: null,       // 摄像头ID
+        isShowVideo: false,   // 是否弹出视频
+        count: 0,             // 查询总数
         prisonSubRegions: [], // 区域树形
-        cameraTypes: [], // 摄像头类型
-        cameraList: [], // 摄像头列表
-        current: null, // 修改当前节点
-        currentIndex: "", // 当前节点索引
-        paramsPaiCode: [], // 筛选当前所在区域
+        cameraTypes: [],      // 摄像头类型
+        cameraList: [],       // 摄像头列表
+        current: null,        // 修改当前节点
+        currentIndex: "",     // 当前节点索引
+        paramsPaiCode: [],    // 筛选当前所在区域
         savePaiCodeTable: [], // table当前所在区域
-        paiCodeTable: [], // table当前所在区域所选value
-        // tempPaiCodeRow: [], // 保存一下当前点击的所在区域的数据
+        paiCodeTable: [],     // table当前所在区域所选value
         changeRow: [],
         tempSaveData: {},
-        tempRow: [], // 保存一下当前点击的所在区域的数据
+        tempRow: [],          // 保存一下当前点击的所在区域的数据
         vals: [],
         params: {
           paiCode: "",
@@ -151,9 +153,15 @@
       },
       /** 查看视频操作 */
       showVideo: function (index, row) {
-        this.$el.querySelector(".movie-wrap").scrollIntoView();
-        // ...
+        this.cameraId = row.ciId;
+        this.isShowVideo = true;
       },
+      /** 关闭视频操作 */
+      beforeClose: function() {
+        this.cameraId = null;
+        this.isShowVideo = false;
+      },
+      /** 改变所在区域路径 */
       changePaiPathFilter(value) {
         // 查询时的参数
         this.params.paiCode = value[value.length - 1];
@@ -190,18 +198,15 @@
           "ciId": this.tempRow.ciId,
           "paiCode": this.tempRow.paiCode
         }
-        // if (this.changeRow.length === 0) { // 第一次操作时
-        //   this.changeRow.push(this.tempSaveData);
-        // } else {
+
         let index = this.changeRow.findIndex(item => item.ciId === this.tempRow.ciId);
         if (index > -1) {
           this.changeRow[index] = this.tempSaveData;
         } else {
           this.changeRow.push(this.tempSaveData);
         }
-        // }
       },
-      // 根据value找到对应的labal
+      /** 根据value找到对应的labal */
       getCascaderObj(val, opt) {
         return val.map(function (value) {
           for (var itm of opt) {
@@ -225,7 +230,6 @@
       }
     }
   }
-
 </script>
 
 <style scoped>
@@ -248,5 +252,4 @@
   .tree-wrap-self {
     display: none;
   }
-
 </style>

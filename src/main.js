@@ -12,8 +12,6 @@ import 'es6-promise/auto'
 import store from './vuex/store';
 // 调用,env根据环境赋值
 store.commit("env");
-console.log(store.commit("env"));
-
 Vue.prototype.storeEnv = store.state.env;
 import urlconfig from './axios/urlconfig';
 Vue.prototype.urlconfig = urlconfig;

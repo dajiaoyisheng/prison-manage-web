@@ -17,7 +17,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item,index) in pPositionData" :key="item.name">
+          <tr v-for="(item,index) in pPositionData" :key="item.name" @click="refreshPrisonerData(item.guid)">
             <td>
               <div class="cell">{{index+1}}</div>
             </td>
@@ -62,104 +62,81 @@
           <div class="pp-r-d-l-l fl">
             <div>
               <span>编号:</span>
-              <el-input size="small" v-model="numbering" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="baseInfo.numbering" placeholder="请输入内容"></el-input>
             </div>
             <div>
               <span>姓名:</span>
-              <el-input size="small" v-model="name" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="baseInfo.name" placeholder="请输入内容"></el-input>
             </div>
             <div>
               <span>性别:</span>
-              <el-input size="small" v-model="sex" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="baseInfo.sex" placeholder="请输入内容"></el-input>
             </div>
             <div>
               <span>民族:</span>
-              <el-input size="small" v-model="famousFamily" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="baseInfo.famousFamily" placeholder="请输入内容"></el-input>
             </div>
             <div>
               <span>出生日期:</span>
-              <el-input size="small" v-model="birth" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="baseInfo.birth" placeholder="请输入内容"></el-input>
             </div>
             <div>
               <span>文化程度:</span>
-              <el-input size="small" v-model="educationalLevel" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="baseInfo.educationalLevel" placeholder="请输入内容"></el-input>
             </div>
             <div>
               <span>婚姻状况:</span>
-              <el-input size="small" v-model="maritalStatus" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="baseInfo.maritalStatus" placeholder="请输入内容"></el-input>
             </div>
             <div>
               <span>罪名:</span>
-              <el-input size="small" v-model="crime" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="baseInfo.crime" placeholder="请输入内容"></el-input>
             </div>
             <div>
               <span>刑期:</span>
-              <el-input size="small" v-model="prisonTerm" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="baseInfo.prisonTerm" placeholder="请输入内容"></el-input>
             </div>
             <div>
               <span>已服刑时长:</span>
-              <el-input size="small" v-model="hasPrisonTerm" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="baseInfo.hasPrisonTerm" placeholder="请输入内容"></el-input>
             </div>
             <div>
               <span>剩余时长:</span>
-              <el-input size="small" v-model="lastPrisonTerm" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="baseInfo.lastPrisonTerm" placeholder="请输入内容"></el-input>
             </div>
-            <div class="div-select">
+            <div >
               <span>监区:</span>
-              <el-select size="small" v-model="area" placeholder="请选择">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                </el-option>
-              </el-select>
+			  <el-input size="small" v-model="baseInfo.regionArea" placeholder="请输入内容"></el-input>
             </div>
-            <div class="div-select">
+            <div >
               <span>监舍:</span>
-              <el-select size="small" v-model="monitoringHouse" placeholder="请选择">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                </el-option>
-              </el-select>
+			  <el-input size="small" v-model="baseInfo.monitoringHouse" placeholder="请输入内容"></el-input>
             </div>
-            <div class="div-select">
-              <span>楼层:</span>
-              <el-select size="small" v-model="floor" placeholder="请选择">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                </el-option>
-              </el-select>
-            </div>
-            <!-- <div class="div-select">
-              <span>房间:</span>
-              <el-select size="small" v-model="room" placeholder="请选择">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                </el-option>
-              </el-select>
-            </div> -->
-            <div class="div-select">
+            <div >
               <span>监管类型:</span>
-              <el-select size="small" v-model="supervisionType" placeholder="请选择">
-                <el-option v-for="item in visiontype" :key="item.value" :label="item.label" :value="item.value">
-                </el-option>
-              </el-select>
+			  <el-input size="small" v-model="baseInfo.superviseValue" placeholder="请输入内容"></el-input>
             </div>
             <div>
               <span>责任预警:</span>
-              <el-input size="small" v-model="dutyWarning" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="baseInfo.dutyWarning" placeholder="请输入内容"></el-input>
             </div>
             <div>
               <span>籍贯:</span>
-              <el-input size="small" v-model="birthplace" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="baseInfo.birthplace" placeholder="请输入内容"></el-input>
               <span>省</span>
             </div>
             <div>
               <span></span>
-              <el-input size="small" v-model="city" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="baseInfo.city" placeholder="请输入内容"></el-input>
               <span>市</span>
             </div>
             <div>
               <span>家庭联系人:</span>
-              <el-input size="small" v-model="familyContact" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="baseInfo.familyContact" placeholder="请输入内容"></el-input>
             </div>
             <div>
               <span>联系电话:</span>
-              <el-input size="small" v-model="phone" placeholder="请输入内容"></el-input>
+              <el-input size="small" v-model="baseInfo.phone" placeholder="请输入内容"></el-input>
             </div>
           </div>
           <div class="pp-r-d-l-r fr">
@@ -203,15 +180,15 @@
           <p class="h-line">当日预警事件</p>
           <section class="el-table-wrap clearfix">
             <el-table :data="pPTableData" stripe style="width: 100%">
-              <el-table-column prop="starttime" label="预警开始时间">
+              <el-table-column prop="startTime" label="预警开始时间">
               </el-table-column>
-              <el-table-column prop="endtime" label="预警结束时间">
+              <el-table-column prop="endTime" label="预警结束时间">
               </el-table-column>
-              <el-table-column prop="during" label="预警时长">
+              <el-table-column prop="timeLen" label="预警时长">
               </el-table-column>
-              <el-table-column prop="tyle" label="预警事件">
+              <el-table-column prop="warningEventType" label="预警事件">
               </el-table-column>
-              <el-table-column prop="area" label="所在区域">
+              <el-table-column prop="warningArea" label="所在区域">
               </el-table-column>
               <el-table-column label="监控视频">
                 <template slot-scope="scope">
@@ -246,14 +223,14 @@
                   </span>
                 </section>
                 <section class="el-table-wrap clearfix">
-                  <el-table :data="pPTableData" stripe style="width: 100%">
-                    <el-table-column prop="starttime" label="进时间">
+                  <el-table :data="pPHisTrackData" stripe style="width: 100%">
+                    <el-table-column prop="startTime" label="进时间">
                     </el-table-column>
-                    <el-table-column prop="endtime" label="出时间">
+                    <el-table-column prop="endTime" label="出时间">
                     </el-table-column>
-                    <el-table-column prop="during" label="区域">
+                    <el-table-column prop="areaName" label="区域">
                     </el-table-column>
-                    <el-table-column prop="tyle" label="停留时间">
+                    <el-table-column prop="stayTimeLen" label="停留时间">
                     </el-table-column>
                     <el-table-column label="监控视频">
                       <template slot-scope="scope">
@@ -301,27 +278,31 @@
     data() {
       return {
         // searchPrams: {},
+		baseInfo:{
+			numbering  :'',
+			name     :'',
+			sex      :'',
+			famousFamily   :'',
+			birth      :'',
+			educationalLevel :'',
+			maritalStatus      :'',
+			crime         :'',
+			prisonTerm     :'',
+			hasPrisonTerm   :'',
+			lastPrisonTerm   :'',
+			regionArea        :'',
+			prisonHouse          :'',
+			superviseValue      :'',
+			dutyWarning      :'',
+			birthplace            :'',
+			city:'',
+			familyContact       :'',
+			phone     :''
+		},
         area: '', //监区
         monitoringHouse: '', //监舍
         supervisionType: '',
         prisoner: '',
-        numbering: '',
-        name: '',
-        sex: '',
-        famousFamily: '', //民族
-        birth: '',
-        educationalLevel: '',
-        maritalStatus: '',
-        crime: '',
-        prisonTerm: '', //刑期
-        hasPrisonTerm: '',
-        lastPrisonTerm: '',
-        floor: '',
-        dutyWarning: '',
-        birthplace: '',
-        city: '',
-        familyContact: '',
-        phone: '',
         starttime: new Date(new Date().setHours(0, 0, 0, 0)),
         endtime: new Date(new Date().setHours(24, 0, 0, 0)),
 
@@ -335,6 +316,7 @@
         count: 0, //总记录数
 
         pPTableData: [],
+        pPHisTrackData: [],
         options: [],
         // 接口数据
         areas: [],
@@ -353,7 +335,7 @@
       let area = this.$route.query.area;
       let searchParam = {};
       // this.getPPositionData('', searchParam);
-      this.getTableData('', searchParam);
+      //this.getTableData('', searchParam);
 
       this.getAreaData();
       this.getHouseData();
@@ -370,6 +352,7 @@
       }
     },
     mounted: function () {
+	 
       // this.searchPrams = {
       //   area: this.area,
       //   monitoringHouse: this.monitoringHouse, //监舍
@@ -384,7 +367,7 @@
     methods: {
       search() {
         this.$post(this.urlconfig.ppSearch,this.searchPrams).then(res => {
-          this.visiontype = res.data;
+          this.pPositionData = res.data;
         })
       },
       //从page组件传递过来的当前page
@@ -447,7 +430,56 @@
       },
       handleClick(tab, event) {
         console.log(tab, event);
-      }
+      },
+	  refreshPrisonerData(guid){
+		console.log(guid);
+		let currParam = {prisonerId : guid};
+		this.getPrisonerBaseInfo(currParam);
+		this.getPrisonerPhotos(currParam);
+		this.getTodayWarnings(currParam);
+		this.getCurrActiveArea(currParam);
+		this.getHisActiveTrack(currParam);
+	  },
+	  //获取人员基本信息
+	  getPrisonerBaseInfo(param) {
+        this.$get(this.urlconfig.ppGetPrisoner,param).then(res => {
+          this.baseInfo = res.data;
+        })
+      },
+	  //获取人员照片信息
+	  getPrisonerPhotos(param) {
+        this.$get(this.urlconfig.ppGetPrionserPhoto,param).then(res => {
+          //this.baseInfo = res.data;
+        })
+      },
+	  //获取当前预警事件信息
+	  getTodayWarnings(param) {
+		param.pageIndex = 1;
+		param.pageSize = 10;
+        this.$get(this.urlconfig.ppGetTodayWarnings,param).then(res => {
+			this.count = res.data.totalRows;
+            this.pPTableData = res.data.items;
+            this.page = res.data.totalRows;
+        })
+      },
+	  //获取当前活动区域
+	  getCurrActiveArea(param) {
+        this.$get(this.urlconfig.ppGetCurrActiveArea,param).then(res => {
+          //this.baseInfo = res.data;
+        })
+      },
+	  //获取历史活动区域
+	  getHisActiveTrack(param) {
+		param.pageIndex = 1;
+		param.pageSize = 10;
+		param.startTime =new Date(new Date().setHours(10, 0, 0, 0));
+		param.endTime =new Date(new Date().setHours(20, 0, 0, 0));
+        this.$get(this.urlconfig.ppGetHisActiveTrack,param).then(res => {
+			this.pPHisTrackData = res.data.items;
+            this.page = res.data.totalRows;
+        })
+      },
+	  
     }
   }
 

@@ -98,7 +98,7 @@
           enterable: true,
           trigger: 'item',
           position: 'inside',
-          extraCssText:'z-index: 99',
+          extraCssText: 'z-index: 99',
           formatter: function (params) {
             let pieItem1 = params[0] || params;
             let content =
@@ -116,7 +116,8 @@
           orient: 'vertical',
           top: "middle",
           right: "5%",
-          itemWidth: 14  // 图例标记的图形宽度,高度默认是14
+          itemWidth: 10, // 图例标记的图形宽度,高度默认是14
+          itemHeight: 10
         },
 
         // pie 圆心位置
@@ -127,8 +128,8 @@
           },
           itemStyle: { // 饼图白色间隙
             normal: {
-                borderWidth: 4,
-                borderColor: '#ffffff',
+              borderWidth: 4,
+              borderColor: '#ffffff',
             },
             // emphasis: {
             //     borderWidth: 0,
@@ -136,7 +137,7 @@
             //     shadowOffsetX: 0,
             //     shadowColor: 'rgba(0, 0, 0, 0.5)'
             // }
-        }
+          }
         }
       };
       return {
@@ -222,7 +223,7 @@
           enterable: true, // 鼠标是否可进入tooltip
           position: ['20%', '20%'],
           trigger: 'axis', // 触发方式
-          extraCssText:'z-index: 99',
+          extraCssText: 'z-index: 99',
           // axisPointer: { // 坐标轴指示器，坐标轴触发有效
           //   type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
           // },
@@ -287,7 +288,8 @@
         },
         legend: {
           right: "5%",
-          itemWidth: 14
+          itemWidth: 10,
+          itemHeight: 10
         }
       };
     },
@@ -389,7 +391,7 @@
 
   .contentWrap .l,
   .contentWrap .r {
-    width: 49%;
+    width: 49.17%;
   }
 
   .contentWrap .l .item,
@@ -417,7 +419,6 @@
     border: 1px solid #e0e3ec;
     display: inline-block;
     position: relative;
-
     overflow: hidden;
     cursor: pointer;
   }
@@ -473,13 +474,14 @@
   }
 
   .bench-item-header {
-    height: 30px;
-    line-height: 30px;
+    height: 35px;
+    line-height: 35px;
     background-color: #fcfcfc;
-    font-size: 12px;
+    font-size: 14px;
+    color: #666;
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
-    padding-left: 2%;
+    padding-left: 20px;
   }
 
 
@@ -494,7 +496,7 @@
   }
 
   .bench-item-left {
-    left: 5%;
+    left: 9%;
   }
 
   .bench-item-left .num-big {
@@ -509,15 +511,19 @@
   .bench-item-right ul {
     display: table-cell;
     vertical-align: middle;
+    font-size: 14px;
   }
 
+  .bench-item-right ul li:nth-child(9),
+  .bench-item-right ul li:nth-child(10) {
+    margin-bottom: 0;
+  }
 
   .bench-item-right {
-    width: 60%;
-    height: 191px;
+    width: 55%;
+    height: 193px;
     border: 1px solid #e6e6e6;
-    right: 4%;
-    padding: 21px 5%;
+    right: 10%;
     text-align: center;
   }
 
@@ -552,19 +558,37 @@
   ul.p-status {
     display: table-cell;
     vertical-align: middle;
+    padding-left: 8%;
   }
 
   ul.p-status li {
     float: left;
-    width: 49%;
+    width: 45%;
     height: 60px;
     line-height: 60px;
     text-align: center;
   }
 
+  ul.p-status li a {
+    margin-left: 10px;
+  }
+
   ul.p-status li:nth-child(odd) {
     border-bottom: 1px solid #e0e3ec;
     border-right: 1px solid #e0e3ec;
+    text-align: left;
+  }
+
+  ul.p-status li:nth-child(1),
+  ul.p-status li:nth-child(2),
+  ul.p-status li:nth-child(7),
+  ul.p-status li:nth-child(8) {
+    height: 40px;
+  }
+
+  ul.p-status li:nth-child(1),
+  ul.p-status li:nth-child(2) {
+    line-height: 20px;
   }
 
   ul.p-status li:nth-child(7) {
@@ -573,6 +597,7 @@
 
   ul.p-status li:nth-child(even) {
     border-bottom: 1px solid #e0e3ec;
+    text-align: right;
   }
 
   ul.p-status li:last-child {
@@ -606,6 +631,7 @@
   .fontcolor num-color {
     color: #fff;
   }
+
   /* tooltip上的数字因背景色显示的不清楚 */
   .num-color.text-decoration {
     color: #0099ff;
@@ -626,11 +652,6 @@
 
   .text-decoration {
     text-decoration: underline;
-  }
-
-  .word-width {
-    display: inline-block;
-    width: 2em;
   }
 
 </style>

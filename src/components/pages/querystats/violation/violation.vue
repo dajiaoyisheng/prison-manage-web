@@ -16,8 +16,8 @@
             </el-col>
             <el-col :span="5">
               <span>预警事件类型：</span>
-              <el-select size="small" v-model="parame.warningType" placeholder="请选择">
-                <el-option v-for="item in warningTypes" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              <el-select size="small" v-model="parame.warningEventType" placeholder="请选择">
+                <el-option v-for="item in warningEventTypes" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
             </el-col>
             <el-col :span="7">
@@ -45,7 +45,7 @@
               </router-link>
             </template>
           </el-table-column>
-          <el-table-column prop="warningType" label="预警事件类型">
+          <el-table-column prop="warningEventType" label="预警事件类型">
           </el-table-column>
           <el-table-column prop="warningArea" label="预警所在区域">
           </el-table-column>
@@ -54,7 +54,7 @@
           <el-table-column prop="warningTv" label="预警视频">
             <template slot-scope="scope">
               <div class="operating">
-                <router-link tag="span" to="/systemset/prisonermanagement/operation">
+                <router-link tag="span" to="/personnelposition">
                   <img class="v-align-m" :src="images.video" alt=""><span> 查看</span>
                 </router-link>
               </div>
@@ -93,11 +93,11 @@
         parame: {
           startTime: new Date(new Date().setHours(0, 0, 0, 0)),
           endTime: new Date(new Date().setHours(24, 0, 0, 0)),
-          warningType: '',
+          warningEventType: '',
           prisonerName: '',
         },
-        warningType: [],
-        warningTypes: [],
+        warningEventType: [],
+        warningEventTypes: [],
         pagination: {
           pageSize: 10,
           currentPage: 1,
@@ -113,8 +113,9 @@
     },
     mounted() {
       // 获取预警事件类型
-      this.$get('/getWarningTypes').then((respnose) => {
-        this.warningTypes = respnose.data;
+	  let url = this.$store.state.env + "/violationWarning.action?method=getWarningEventTypes";
+      this.$get(url).then((respnose) => {
+        this.warningEventTypes = respnose.data;
       })
     },
     methods: {
@@ -124,14 +125,21 @@
       },
       // 获取表格数据
       getTableDatas(page) {
-        this.parame = {
+      /*  this.parame = {
           "page": page || 1,
           "startTime": this.parame.startTime,
           "endTime": this.parame.endTime,
-          "warningType": this.parame.warningType,
+          "warningEventType": this.parame.warningEventType,
           "prisonerName": this.parame.prisonerName,
+        } */
+		 let data = {
+          params: JSON.stringify(this.parame),
+          pageIndex: this.pagination.currentPage,
+          pageSize: this.pagination.pageSize
         }
-        this.$post('/getPosunusualItems', this.parame).then((res) => {
+        
+		let url = this.$store.state.env + "/violationWarning.action?method=getViolationWarnings";
+        this.$post(url, data).then((res) => {
           this.count = res.data.totalRows;
           this.ppuTableDatas = res.data.items;
           this.pagination.totalRows = res.data.totalRows;
@@ -145,7 +153,7 @@
         this.parame = {
           startTime: '',
           endTime: '',
-          warningType: '',
+          warningEventType: '',
           prisonerName: ''
         };
         this.getTableDatas();

@@ -1,7 +1,7 @@
 <template>
   <div id="pointname">
     <section v-if="pnAside" class="pn-left">
-      <el-tree :data="treeData" node-key="id" @node-click="handleNodeClick" default-expand-all :expand-on-click-node="false">
+      <el-tree :data="treeData" node-key="id" @node-click="handleNodeClick" default-expand-all :expand-on-click-node="false" highlight-current="true">
         <span class="custom-tree-node" slot-scope="{ node, data }">
           <span v-if="data.isWarning == false"><i :class="node.icon"></i>{{ node.label }}</span>
           <span v-if="data.isWarning == true"><i><img :src="images.warning"></i>{{ node.label }}</span>
@@ -185,8 +185,9 @@
       this.initSetInterval();
     },
     beforeDestroy() {
-      if (timmer != null) {
+      if (this.timmer != null) {
         clearInterval(this.timmer);
+        this.timmer = null;
       }
     },
     components: {

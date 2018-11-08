@@ -12,6 +12,19 @@ let urlconfig = {
   ppGetVisiontypeData: `${storeEnv}/criminalPosition.action?method=getSuperviseTypes`,
   // 搜索
   ppSearch: `${storeEnv}/criminalPosition.action?method=getPrisonerList`,
+  
+  //人员基本信息
+  ppGetPrisoner: `${storeEnv}/criminalPosition.action?method=getPrionserByNum`,
+  //人员照片信息
+  ppGetPrionserPhoto: `${storeEnv}/criminalPosition.action?method=getPrionserPhoto`,
+  //当前预警信息
+  ppGetTodayWarnings: `${storeEnv}/criminalPosition.action?method=getTodayWarnings`,
+  //当前活动全区域
+  ppGetCurrActiveArea: `${storeEnv}/criminalPosition.action?method=getCurrActiveArea`,
+   //历史活动区域
+  ppGetHisActiveTrack: `${storeEnv}/criminalPosition.action?method=getHisActiveTrack`,
+  
+  
   // 人员定位end
   
   // 摄像头管理begin

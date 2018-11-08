@@ -222,6 +222,11 @@ div.content-wrap {
   color: #0a74bb;
 }
 
+.word-width {
+  display: inline-block;
+  width: 2em;
+}
+
 /* 表格begin */
 table {
   width: 100%;

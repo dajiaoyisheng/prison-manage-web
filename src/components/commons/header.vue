@@ -157,7 +157,8 @@
 
   .logo {
     width: 20px;
-    height: 20px;
+    height: 17px;
+    margin-right: 10px;
   }
 
   /* .el-menu>li>a {
@@ -166,10 +167,23 @@
     font-family: MicrosoftYaHei;
     line-height: 15px;
   } */
-  
+
   /* 点击导航菜单时下面显示的横线 */
   .el-menu--horizontal>.el-menu-item.is-active {
     border-bottom: none;
+  }
+
+  /* 二级菜单 */
+  .el-submenu__title {
+    border-bottom-color: none !important;
+  }
+
+  .el-menu--horizontal>.el-submenu.is-active .el-submenu__title {
+    border-bottom: none;
+  }
+
+  .el-submenu.is-active .el-submenu__title {
+    border-bottom-color: none;
   }
 
   .el-menu--horizontal .el-menu-item:not(.is-disabled):focus,
@@ -195,30 +209,58 @@
   } */
 
   .nav-wrap .nav-input {
-    /* outline: none; */
+    outline: none;
     width: 15%;
     height: 60px;
-    line-height: 60px;
+    line-height: 64px;
     float: left;
     text-align: right;
   }
 
-  .nav-wrap .nav-input input {
-    border-radius: 14px;
-    width: 70%;
-  }
-
   img.heard-icon-btn {
-    width: 15px;
-    height: 15px;
+    width: 11px;
+    height: 11px;
   }
-
 </style>
 // 写在下面是因为:写在scoped中设置不生效
 <style>
   /* 调整带有二级菜单的一级菜单位置偏下的问题 */
   .nav-wrap .el-menu--horizontal>.el-submenu .el-submenu__title {
     line-height: 64px;
+  }
+
+  .nav-wrap .el-input--mini .el-input__inner {
+    width: 150px;
+    height: 30px;
+    border-radius: 15px;
+    background-color: rgb(47, 50, 60);
+    outline: none;
+    color: rgb(144, 147, 153);
+    border-color: rgb(144, 147, 153);
+  }
+
+
+  .nav-wrap .el-menu--horizontal>.el-submenu .el-submenu__icon-arrow {
+    display: none;
+  }
+
+  .el-menu--popup-bottom-start {
+    margin-top: 0px;
+  }
+
+  .el-menu--popup {
+    min-width: 160px;
+    padding: 20px 0;
+    border-radius: 0px;
+    opacity: .95;
+  }
+
+  .el-menu--horizontal .el-menu .el-menu-item, .el-menu--horizontal .el-menu .el-submenu__title {
+    padding: 0 20px;
+  }
+
+  .el-menu--horizontal>.el-submenu.is-active .el-submenu__title {
+    border-bottom: none;
   }
 
 </style>

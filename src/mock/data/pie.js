@@ -6,9 +6,9 @@ let labelMap = {
   };
 let pieData = Mock.mock({
   "columns": ['level', 'pNumber'],
-  "rows|3-10": [function () {
+  "rows|5": [function () {
     return {
-      "level": Mock.mock('@cword(3, 5)'),
+      "level": Mock.mock('@cword(3)'),
       'pNumber': Mock.mock('@natural(60, 2000)'),
     }
   }]

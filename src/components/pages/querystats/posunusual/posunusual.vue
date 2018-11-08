@@ -12,14 +12,14 @@
         </el-col>
         <el-col :span="5">
           <span class="puu-params-label">事件类型:</span>
-          <el-select size="mini" v-model="params.warningType" placeholder="请选择">
-            <el-option v-for="item in warningTypes" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          <el-select size="mini" v-model="params.warningEventType" placeholder="请选择">
+            <el-option v-for="item in warningEventTypes" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-col>
         <el-col :span="4">
           <span class="puu-params-label">人员类型:</span>
-          <el-select size="mini" v-model="params.prisonerType" placeholder="请选择">
-            <el-option v-for="item in prisonerTypes" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          <el-select size="mini" v-model="params.superviseType" placeholder="请选择">
+            <el-option v-for="item in superviseTypes" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-col>
         <el-col :span="5">
@@ -96,7 +96,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="prisonerType" label="服刑人员类型"  min-width="120px" align="center"></el-table-column>
-        <el-table-column prop="warningType"  label="预警事件类型"  min-width="120px" align="center"></el-table-column>
+        <el-table-column prop="warningEventType"  label="预警事件类型"  min-width="120px" align="center"></el-table-column>
         <el-table-column prop="warningArea"  label="预警所在区域"  min-width="170px"></el-table-column>
         <el-table-column label="预警视频" fixed="right" width="120px" align="center">
           <template slot-scope="scope">
@@ -125,8 +125,8 @@
         params: {
           startTime: new Date(new Date().setHours(0, 0, 0, 0)),
           endTime: new Date(new Date().setHours(24, 0, 0, 0)),
-          warningType: "",
-          prisonerType: "",
+          warningEventType: "",
+          superviseType: "",
           prisonerName: ""
         },
         images: {
@@ -134,16 +134,17 @@
         },
         count: 0,
         prisonerInfo: {},
-        warningTypes: [],
-        prisonerTypes: [],
+        warningEventTypes: [],
+        superviseTypes: [],
         ppuTableDatas: []
       }
     },
     methods: {
       /** 获取预警事件类型 */
-      getWarningTypes : function() {
-        this.$get('/getWarningTypes').then((respnose) => {
-          this.warningTypes = respnose.data;
+      getWarningEventTypes : function() {
+		let url = this.$store.state.env + "/earlyWarning.action?method=getWarningEventTypes";
+        this.$get(url).then((respnose) => {
+          this.warningEventTypes = respnose.data;
         }).catch((error) => {
           console.log(error);
         }).then(() => {
@@ -151,10 +152,10 @@
         });
       },
       /** 获取服刑人员类型 */
-      getPrisonerTypes : function() {
+      getSuperviseTypes : function() {
 		    let url = this.$store.state.env + "/earlyWarning.action?method=getSuperviseType";
         this.$get(url).then((respnose) => {
-          this.prisonerTypes = respnose.data;
+          this.superviseTypes = respnose.data;
         }).catch((error) => {
           console.log(error);
         }).then(() => {
@@ -184,8 +185,8 @@
         this.params = {
           startTime: new Date(new Date().setHours(0, 0, 0, 0)),
           endTime: new Date(new Date().setHours(24, 0, 0, 0)),
-          warningType: "",
-          prisonerType: "",
+          warningEventType: "",
+          superviseType: "",
           prisonerName: ""
         }
       },
@@ -212,8 +213,8 @@
       }
     },
     mounted() {
-      // this.getWarningTypes();
-      this.getPrisonerTypes();
+      this.getWarningEventTypes();
+      this.getSuperviseTypes();
       this.getPosunusualItems();
     },
     components: {
