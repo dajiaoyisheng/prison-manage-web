@@ -3,12 +3,7 @@
       <el-row style="margin-bottom: 0px; padding-left: 20px;">
         <el-col :span="6">
           <el-tabs v-model="parameter.activeTab" @tab-click="queryStatistics">
-            <el-tab-pane label="今天"   name="today"></el-tab-pane>
-            <el-tab-pane label="本周"   name="week"></el-tab-pane>
-            <el-tab-pane label="本月"   name="month"></el-tab-pane>
-            <el-tab-pane label="本季"   name="quarter"></el-tab-pane>
-            <el-tab-pane label="本年"   name="year"></el-tab-pane>
-            <el-tab-pane label="自定义" name="other"></el-tab-pane>
+            <el-tab-pane v-for="(item, index) in activeTabs" :key="index" :label="item.label" :name="item.name"></el-tab-pane>
           </el-tabs>
         </el-col>
         <el-col :span="9" v-if="parameter.activeTab == 'other'" style="line-height: 50px;">
@@ -56,15 +51,15 @@
             </div>
             <div>
               <el-table :data="tableData" stripe style="width: 100%" height="240">
-                <el-table-column prop="warningEvent" label="违规预警事件"></el-table-column>
+                <el-table-column prop="name"         label="违规预警事件"></el-table-column>
                 <el-table-column label="预警次数"     width="150" align="center">
                   <template slot-scope="scope">
-                    <span @click="showVideo(scope.$index, scope.row)" class="num-color" style="cursor: pointer;">{{ scope.row.warningTimes }}</span>
+                    <span @click="showVideo(scope.$index, scope.row)" class="num-color" style="cursor: pointer;">{{ scope.row.times }}</span>
                   </template>
                 </el-table-column>
                 <el-table-column label="预警人数"     width="150" align="center">
                   <template slot-scope="scope">
-                    <span @click="showVideo(scope.$index, scope.row)" class="num-color" style="cursor: pointer;">{{ scope.row.warningCount }}</span>
+                    <span @click="showVideo(scope.$index, scope.row)" class="num-color" style="cursor: pointer;">{{ scope.row.pers }}</span>
                   </template>
                 </el-table-column>
               </el-table>
@@ -90,7 +85,7 @@
             <div slot="header" class="clearfix">
               <span>预警区域排名TOP5（按预警数）</span>
               <el-select size="mini" style="float: right; padding: 3px 0" v-model="parameter.area" placeholder="请选择" @change="queryAreaOrder()">
-                <el-option v-for="item in areas" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                <el-option v-for="item in areas" :key="item.priCode" :label="item.priName" :value="item.priCode"></el-option>
               </el-select>
             </div>
             <div>
@@ -112,8 +107,9 @@
           activeTab: 'today',
           startTime: '',
           endTime: '',
-          area: '1'
+          area: ''
         },
+        activeTabs: [],
         tableData: [],
         list: [],
         areas: [],
@@ -214,9 +210,21 @@
       }
     },
     methods: {
+      /** 获取时期类型 */
+      getAllPeriodTypes: function() {
+        let url = this.$store.state.env + "/warningStatistics.action?method=getAllPeriodTypes";
+        this.$get(url).then((res) => {
+          this.activeTabs = res.data;
+        }).catch((error) => {
+          console.log(error);
+        }).then(() => {
+          // todo somthing...
+        });
+      },
       /** 获取区间字典 */
-      getPrisonDatas : function() {
-        this.$ajxj.get('/getPrisonDatas').then((respnose) => {
+      getPrisonDatas: function() {
+        let url = this.$store.state.env + "/prisonRegion.action?method=getAllPrisonRegions";
+        this.$get(url).then((respnose) => {
             this.areas = respnose.data;
         }).catch((error) => {
           console.log(error);
@@ -225,14 +233,15 @@
         });
       },
       /** 获取预警统计 */
-      queryStatistics : function() {
+      queryStatistics: function() {
         if (this.parameter.activeTab != 'other') {
           this.doQuery();
         }
       },
       /** 查询预警统计 */
-      doQuery : function() {
-        this.$ajxj.post('/getPrewarningstatsDatas', this.parameter).then((respnose) => {
+      doQuery: function() {
+        let url = this.$store.state.env + "/warningStatistics.action?method=getPrewarningstatsDatas";
+        this.$post(url, this.parameter).then((respnose) => {
           this.list = respnose.data.list;
           this.tableData = respnose.data.tableData;
           this.option1.series[0].data = respnose.data.option1.xAxisData;
@@ -246,8 +255,9 @@
         });
       },
       /** 获取预警区域排名 */
-      queryAreaOrder : function() {
-        this.$ajxj.post('/queryAreaOrder', this.parameter).then((respnose) => {
+      queryAreaOrder: function() {
+        let url = this.$store.state.env + "/warningStatistics.action?method=queryAreaOrder";
+        this.$post(url, this.parameter).then((respnose) => {
           this.option2.series[0].data = respnose.data.option2.xAxisData;
           this.option2.yAxis.data = respnose.data.option2.yAxisData;
         }).catch((error) => {
@@ -257,13 +267,14 @@
         });
       },
       /** 跳转预警统计 */
-      showVideo : function(index, row) {
+      showVideo: function(index, row) {
         this.$router.push({
           path: "/personnelposition"
         });
       },
     },
     mounted() {
+      this.getAllPeriodTypes();
       this.getPrisonDatas();
       this.queryStatistics();
     }

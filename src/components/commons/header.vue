@@ -64,13 +64,23 @@
         <el-input class="nav-input fl clearfix" size="mini" placeholder="请输入内容" suffix-icon="el-icon-search" v-model="input">
         </el-input>
         <!-- </el-menu-item> -->
-        <el-menu-item index="username">
+        <!-- <el-menu-item index="username">
           <span>admin</span>
           <img class="heard-icon-btn" :src="downopen" alt="">
-        </el-menu-item>
+        </el-menu-item> -->
+        <el-submenu index="username">
+          <template slot="title">
+            {{username}}
+            <img class="heard-icon-arrow" :src="downopen" alt="">
+          </template>
+          <el-menu-item index="2-1">选项1</el-menu-item>
+          <el-menu-item index="2-2">选项2</el-menu-item>
+          <el-menu-item index="2-3">选项3</el-menu-item>
+        </el-submenu>
+
         <el-menu-item index="login">
           <span>退出</span>
-          <img class="heard-icon-btn" :src="loginout" alt="">
+          <img class="heard-icon-outlogin" :src="loginout" alt="">
         </el-menu-item>
         <!-- <div>admin</div>
         <div>退出</div> -->
@@ -89,6 +99,7 @@
     data() {
       return {
         logo: logo,
+        username: "admin",
         name: name,
         loginout: loginout,
         downopen: downopen,
@@ -133,7 +144,12 @@
   }
 
   .nav-wrap .navWrapFull .el-menu-item {
-    padding: 0 1.5%;
+    padding: 0 2%;
+  }
+
+  
+  .nav-wrap .navWrapFull .el-submenu {
+    padding: 0 2%;
   }
 
   .logoWrap {
@@ -193,16 +209,9 @@
   }
 
   .nav-wrap .el-menu-item {
-    padding: 0 0.8%;
+    padding: 0 1.3%;
   }
 
-  .el-submenu__title {
-    padding: 0 15px;
-  }
-
-  .navWrapFull .el-submenu__title {
-    padding: 0 20px;
-  }
 
   /* .el-menu--horizontal>.el-menu-item a {
     color: rgba(255, 255, 255, 1);
@@ -210,23 +219,44 @@
 
   .nav-wrap .nav-input {
     outline: none;
-    width: 15%;
+    width: 13%;
     height: 60px;
     line-height: 64px;
     float: left;
     text-align: right;
+    margin-right: 0.8%;
   }
 
-  img.heard-icon-btn {
+  .nav-wrap .navWrapFull .nav-input {
+    margin-right: 2%;
+  }
+
+  img.heard-icon-arrow {
     width: 11px;
     height: 11px;
   }
+
+  img.heard-icon-outlogin {
+    width: 15px;
+    height: 15px;
+  }
+
+  
+
 </style>
 // 写在下面是因为:写在scoped中设置不生效
 <style>
   /* 调整带有二级菜单的一级菜单位置偏下的问题 */
   .nav-wrap .el-menu--horizontal>.el-submenu .el-submenu__title {
     line-height: 64px;
+  }
+
+  .nav-wrap .el-submenu__title {
+    padding: 0;
+  }
+  
+  .nav-wrap .el-menu--horizontal>.el-submenu {
+    padding: 0 1.9%;
   }
 
   .nav-wrap .el-input--mini .el-input__inner {
@@ -255,7 +285,8 @@
     opacity: .95;
   }
 
-  .el-menu--horizontal .el-menu .el-menu-item, .el-menu--horizontal .el-menu .el-submenu__title {
+  .el-menu--horizontal .el-menu .el-menu-item,
+  .el-menu--horizontal .el-menu .el-submenu__title {
     padding: 0 20px;
   }
 

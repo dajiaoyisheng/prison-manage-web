@@ -64,10 +64,10 @@ axios.interceptors.response.use(response => {
       type: 'error',
       duration: 5 * 1000
     })
-  } else {
-    return response.data
-  }
+  } 
+  return response.data
 }, error => {
+  store.commit("hideLoading");
   // 对响应错误做点什么
   // 如果路由改变提示信息提示
   Message({

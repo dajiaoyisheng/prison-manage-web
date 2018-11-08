@@ -13,12 +13,12 @@ const store = new Vuex.Store({
       // 开发环境配置
       if (process.env.NODE_ENV === "development") {
         // 车
-        // state.env = "http://10.2.20.82:80/bi/hawkeye";
-        state.env = "http://10.2.20.69:9797/bi/hawkeye";
+        state.env = "http://10.2.20.82:80/bi/hawkeye";
+        // state.env = "http://10.2.20.69:9797/bi/hawkeye";
       }
       // 生产环境配置
       else if (process.env.NODE_ENV === "production") {
-        state.env = "http://10.2.20.82:80/bi/hawkeye";
+        state.env = "http://localhost:80/bi/hawkeye";
       }
       return state.env
     },

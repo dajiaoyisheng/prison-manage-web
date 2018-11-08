@@ -73,7 +73,7 @@
                 <el-button style="float: right; padding: 3px 0" type="text" @click="closeVideo()">关闭</el-button>
               </div>
               <div>
-                <iframe v-for="camera in cameras" :key="camera" style="height: 370px; width: 750px;" :src="'http://www.baidu.com?id=' + camera"></iframe>
+                <iframe v-for="camera in cameras" :key="camera" style="height: 370px; width: 750px;" :src="'../ws_rtsp/rtspPlay.jsp?id=' + camera"></iframe>
               </div>
             </el-card>
           </el-aside>

@@ -37,5 +37,18 @@ let urlconfig = {
   // 保存摄像头信息
   cmSaveCameraInfo: `${storeEnv}/cameraInfo.action?method=saveCameraInfo`,
   // 摄像头管理end
+  
+  
+  //工作台begin
+  //犯人总数
+  wkGetPrisonersData:`${storeEnv}/workBench.action?method=getPrisonersData`,
+  //人员分类
+  wkGetBenchChartPie:`${storeEnv}/workBench.action?method=getSupervisePrisoners`,
+  //预警事件分类
+  wkGetBenchChartbarData:`${storeEnv}/workBench.action?method=getWarnTypePrisoners`,
+  //人员状态
+  wkGetPStatus:`${storeEnv}/workBench.action?method=getStatusPrisoners`,
+  //工作台end
+  
 }
 export default urlconfig

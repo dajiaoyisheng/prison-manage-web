@@ -117,7 +117,11 @@
           top: "middle",
           right: "5%",
           itemWidth: 10, // 图例标记的图形宽度,高度默认是14
-          itemHeight: 10
+          itemHeight: 10,
+          itemGap: 20, // 图例每项之间的间隔。横向布局时为水平间隔，纵向布局时为纵向间隔。
+          textStyle: {
+            padding: [0, 0, 0, 10], // 文字块的内边距
+          }
         },
 
         // pie 圆心位置
@@ -237,8 +241,8 @@
               detil_num_str = detil_num_str +
                 // 要求数字居右?太丑 class="text-right"
                 `<div>
-                    <a class="fontcolor wordspacing num-color text-decoration" href="/#/querystats/violation?warnclass=${item.detil}">${item.number}</a>
                     <a class="fontcolor wordspacing num-color text-decoration" href="/#/querystats/violation?warnclass=${item.detil}">${item.pNumber}</a>
+                    <a class="fontcolor wordspacing num-color text-decoration" href="/#/querystats/violation?warnclass=${item.detil}">${item.number}</a>
                   </div>`;
             });
             var barItem1 = params[0] || params;
@@ -289,14 +293,18 @@
         legend: {
           right: "5%",
           itemWidth: 10,
-          itemHeight: 10
+          itemHeight: 10,
+          itemGap: 20,          
+          textStyle: {
+            padding: [0, 0, 0, 10], // 文字块的内边距
+          }
         }
       };
     },
     methods: {
       // 犯人总数
       getPSum() {
-        this.$get('/getPrisonersData')
+        this.$get(this.urlconfig.wkGetPrisonersData)
           .then((res) => {
             this.areasDetail = res.data.prisonsers;
             this.personnum = res.data.personnum;
@@ -304,23 +312,23 @@
       },
       // 人员分类
       getPClass() {
-        this.$get('/getBenchChartPie')
+        this.$get(this.urlconfig.wkGetBenchChartPie)
           .then((res) => {
             this.benchChartPieData = res.data.pieData;
           })
       },
       // 人员状态 pStatus
       getPStatus() {
-        this.$get('/getPStatus')
+        this.$get(this.urlconfig.wkGetPStatus)
           .then((res) => {
             this.pStatus = res.data
           })
       },
       // 预警事件分类
       getPreWarningClass() {
-        this.$get('/getBenchChartbarData')
+        this.$get(this.urlconfig.wkGetBenchChartbarData)
           .then((res) => {
-            this.benchChartbarData = res.data.barData;
+            this.benchChartbarData = res.data;
             this.preWarningDetil = res.data.detils;
           })
       },
@@ -335,7 +343,7 @@
               targetValue = item.value; // 对相应的图例赋值
             }
           })
-          return `${name} ${targetValue}`;
+          return `${name}  ${targetValue}`; // 此处用空格调间距(api没找到配置项)
         };
         return options
       },
@@ -365,13 +373,13 @@
       //获取数据
       getList() {
         // ?pageSize=${this.pageSize}&currentPage=${this.currentPage}
-        this.$post(`/pPTableData`, {
+        /*this.$post(`/pPTableData`, {
             currentPage: this.currentPage
           })
           .then((res) => {
             this.count = 124;
             this.items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-          })
+          })*/
       },
 
       //从page组件传递过来的当前page
@@ -430,6 +438,10 @@
   .picS:nth-child(even) {
     float: right;
   }
+
+  /* .pie-legend-name {
+    margin-right: 10px;
+  } */
 
   .curImageLayer:after {
     position: absolute;

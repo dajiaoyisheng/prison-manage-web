@@ -142,7 +142,7 @@
       },
       /** 保存摄像头信息 */
       saveCameraInfo: function () {
-        let data = this.changeRow;
+        let data = { "saveItems" : JSON.stringify(this.changeRow) };
         this.$post(this.urlconfig.cmSaveCameraInfo, data).then((res) => {
           alert("保存成功");
         }).catch((error) => {
