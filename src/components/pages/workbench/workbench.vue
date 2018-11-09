@@ -572,14 +572,15 @@
   }
 
   .p-status-wrap {
-    /* display: table; */
+    position: relative;
   }
 
   ul.p-status {
-    /* display: table-cell;
-    vertical-align: middle; */
-    margin-top: 74px;
-    padding-left: 8%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
   }
 
   ul.p-status li {
@@ -607,18 +608,19 @@
 
   ul.p-status li:nth-child(1),
   ul.p-status li:nth-child(2),
-  ul.p-status li:nth-child(5),
-  ul.p-status li:nth-child(6) {
+  ul.p-status li:nth-last-child(1),
+  ul.p-status li:nth-last-child(2) {
     height: 40px;
   }
+
 
   ul.p-status li:nth-child(1),
   ul.p-status li:nth-child(2) {
     line-height: 20px;
   }
 
-  ul.p-status li:nth-child(5),
-  ul.p-status li:nth-child(6) {
+  ul.p-status li:nth-last-child(1),
+  ul.p-status li:nth-last-child(2) {
     border-bottom: none;
   }
 

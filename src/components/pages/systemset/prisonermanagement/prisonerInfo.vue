@@ -239,38 +239,47 @@
         },
         rules: {
           criCode: [{
+          	required: true,
             message: '请输入罪犯编号',
             trigger: 'change'
           }],
           criIdcard: [{
+            required: true,
             message: '请输入身份证号',
             trigger: 'change'
           }],
           criName: [{
+            required: true,
             message: '请输入姓名',
             trigger: 'change'
           }],
           criCurstate: [{
+            required: true,
             message: '请选择当前状态',
             trigger: 'blur'
           }],
           criPriCode: [{
+            required: true,
             message: '请选择所属监区',
             trigger: 'blur'
           }],
           criPaiCode: [{
+            required: true,
             message: '请输入所属监舍',
             trigger: 'blur'
           }],
           criFrontCode: [{
+            required: true,
             message: '请输入身前视觉码编号',
             trigger: 'blur'
           }],
           criBackCode: [{
+            required: true,
             message: '请输入身后视觉码编号',
             trigger: 'blur'
           }],
           criState: [{
+            required: true,
             message: '请选择当前状态',
             trigger: 'blur'
           }]

@@ -68,7 +68,7 @@
               </el-card>
             </section>
           </el-main>
-          <el-aside class="pn-right-main-aside" style="width: 400px" v-if="pnMainAside">
+          <el-aside class="pn-right-main-aside" style="width: 800px" v-if="pnMainAside">
             <el-card class="box-card">
               <div slot="header">
                 <span class="pn-card-label">监控视频</span>

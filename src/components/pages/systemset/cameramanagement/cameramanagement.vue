@@ -26,7 +26,7 @@
         </el-row>
       </section>
       <section>
-        <el-dialog title="实时视频" :visible.sync="isShowVideo" width="800px" :before-close="beforeClose">
+        <el-dialog title="实时视频" :visible.sync="isShowVideo" width="900px" :before-close="beforeClose">
           <cameraVideo :cameraId="cameraId"></cameraVideo>
         </el-dialog>
       </section>
