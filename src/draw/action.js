@@ -4,7 +4,7 @@ import Layer from './layer';
 
 let self = {};
 export default class Action {
-    constructor(canvasId, width, height, mouseupCallback) {
+    constructor(canvasId, width, height, clickCallback, mouseoverCallback, mouseupCallback) {
         this.uuid = UUID.v4();
         this.stage = new Konva.Stage({
             container: canvasId,
@@ -16,7 +16,9 @@ export default class Action {
         this.layer = new Layer(this.width, this.height);
         this.stage.add(this.layer);
 
+        this.clickCallback = clickCallback;
         this.mouseupCallback = mouseupCallback;
+        this.mouseoverCallback = mouseoverCallback;
 
         this.mouseStart = this.mouseEnd = {
             x: 0,
@@ -69,11 +71,7 @@ export default class Action {
             self.shape.y = self.mouseStart.y;
             self.uuid = self.shape.uuid = UUID.v4();
             //绘制图形，并绑定事件
-            self.layer.renderShape(self.shape.type, self.shape).on('click', function() {
-                self.uuid = this.getAttr('uuid');
-            }).on('mouseover', function() {
-                console.log(this.getAttr('uuid'));
-            });;
+            self.layer.renderShape(self.shape.type, self.shape).on('click', self.clickCallback).on('mouseover', self.mouseoverCallback);
 
             self.stage.on('contentMousemove', self.mouseMove);
             self.stage.on('contentMouseup', self.mouseUp);

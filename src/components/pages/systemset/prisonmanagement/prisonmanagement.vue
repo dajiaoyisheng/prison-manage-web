@@ -251,7 +251,11 @@
     mounted() {
       let _this = this;
       var canvasContainerRect = this.$refs.canvasContainer.getBoundingClientRect();
-      this.drawObj = new Draw('canvas', canvasContainerRect.width, canvasContainerRect.height, function (uuid) {
+      this.drawObj = new Draw('canvas', canvasContainerRect.width, canvasContainerRect.height, function() {
+        console.log(this.getAttr('uuid'));
+      }, function() {
+        console.log(this.getAttr('uuid'));
+      }, function (uuid) {
         // let tree = _this.$refs.rightTree;
         // let node = tree.getCurrentNode();
         // let data = {
