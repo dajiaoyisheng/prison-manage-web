@@ -1,7 +1,7 @@
 {
   "name": "Intelligence-Prison",
   "version": "1.0.0",
-  "description": "监狱智能监控系统",
+  "description": "智能监控系统",
   "author": "caoqiang",
   "private": true,
   "scripts": {

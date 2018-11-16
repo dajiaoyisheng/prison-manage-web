@@ -299,9 +299,9 @@
           familyContact: '',
           phone: ''
         },
-        area: '', //监区
+        area: '01', //监区
         monitoringHouse: '', //监舍
-        supervisionType: '',
+        supervisionType: '00',
         prisoner: '',
         starttime: new Date(new Date().setHours(0, 0, 0, 0)),
         endtime: new Date(new Date().setHours(24, 0, 0, 0)),
@@ -352,7 +352,7 @@
       }
     },
     mounted: function () {
-
+		this.search();
       // this.searchPrams = {
       //   area: this.area,
       //   monitoringHouse: this.monitoringHouse, //监舍

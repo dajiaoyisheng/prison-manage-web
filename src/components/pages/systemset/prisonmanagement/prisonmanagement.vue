@@ -48,7 +48,7 @@
 
       <div class="main">
         <div class="l fl inbl">
-          <div v-if="isDrawCamera">
+          <!-- <div v-if="isDrawCamera">
             <p class="h-line">摄像头设置</p>
             <div class="camera-list">
               <span v-for="camera in cameraList" :key="camera" @click="draw('camera')">
@@ -58,7 +58,7 @@
                 <span class="name" v-text="camera.name"></span>
               </span>
             </div>
-          </div>
+          </div> -->
           <div ref="canvasContainer" class="actionImage">
             <!-- 画图区域 -->
             <div ref="canvas" id="canvas"></div>
@@ -67,7 +67,14 @@
         <div class="r fr inbl">
           <div class="t line-word" title="对象">
             <span></span>
-            <v-tree ref="rightTree" :draggable="true" :tree-data="PrisonareaObjtree" :default-expand-all="true" v-on:handle-node-click="handleObjectNodeClick" v-on:handle-drag-end="handleDragEnd" v-on:allow-drag="allowDrag"></v-tree>
+            <v-tree ref="rightTree" 
+             :draggable="true" 
+             :tree-data="PrisonareaObjtree" 
+             :default-expand-all="true" 
+             v-on:handle-node-click="handleObjectNodeClick" 
+             v-on:handle-drag-start="handleDragStart"
+             v-on:handle-drag-end="handleDragEnd">
+            </v-tree>
           </div>
 
           <div class="d line-word" title="属性">
@@ -77,7 +84,7 @@
             </p>
             <p>
               <span>编码:</span>
-              <span class="value" v-text="objectInfo.code"></span>
+              <span class="value" v-text="objectInfo.pri_code"></span>
             </p>
             <p>
               <span>名称:</span>
@@ -175,15 +182,19 @@
         PrisonareaObjtree: [],
         objectInfo: {}, //选中的父对象
         message: '监区管理',
-        cameraImg: new Image()
+        cameraImg: new Image(),
+        startDragNode: false,//是否拖动节点
+        draggingNode: null,//被拖动的节点
+        mouseOveredGraph: null,//鼠标移动到图形上的uuid
+        relationships: {},//存储对象和图形的关系
       }
     },
     created: function () {
-      // 犯人总数
+      // 加载监狱树
       this.$get('/getPrisonareatree')
         .then(res=> {
           if(res.status === 0){
-            this.Prisonareatree = this.PrisonareaObjtree = res.data;
+            this.Prisonareatree = res.data;
           }
         })
         .catch(function (error) {
@@ -192,21 +203,49 @@
         .then(function () {});
     },
     methods: {
+      //拖拽节点开始
+      handleDragStart(node, ev) {
+        this.startDragNode = true;
+      },
+      //拖拽节点结束
       handleDragEnd(draggingNode, dropNode, dropType, ev) {
-        console.log('tree drag end: ', dropNode && dropNode.label, dropType);
+        //拖拽的对象
+        this.draggingNode = draggingNode;
       },
-      allowDrag(draggingNode) {
-        console.log(draggingNode);
-        return false;
-      },
+      //点击左侧树节点
       handleNodeClick(data, checked, indeterminate) {
         this.PrisonareaObjtree = [data];
       },
+      //点击右侧树节点
       handleObjectNodeClick(data, checked, indeterminate) {
         this.objectInfo = data;
       },
       submitUpload() {
         this.$refs.upload.submit();
+      },
+      setNodeRelationed(nodes, pri_code) {
+        let _this = this;
+        for (let i = 0;i < nodes.length; i++) {
+          let element = nodes[i];
+          if (element.pri_code == pri_code) {
+            element['relationed'] = 'relationed';
+          }
+          if (element.children) {
+            _this.setNodeRelationed(element.children, pri_code);
+          }
+        }
+      },
+      deleteNodeRelationed(nodes, pri_code) {
+        let _this = this;
+        for (let i = 0;i < nodes.length; i++) {
+          let element = nodes[i];
+          if (element.pri_code == pri_code) {
+            delete element['relationed'];
+          }
+          if (element.children) {
+            _this.deleteNodeRelationed(element.children, pri_code);
+          }
+        }
       },
       handleFileListChange(file, fileList) {
         let _this = this;
@@ -254,20 +293,44 @@
       this.drawObj = new Draw('canvas', canvasContainerRect.width, canvasContainerRect.height, function() {
         console.log(this.getAttr('uuid'));
       }, function() {
-        console.log(this.getAttr('uuid'));
-      }, function (uuid) {
-        // let tree = _this.$refs.rightTree;
-        // let node = tree.getCurrentNode();
-        // let data = {
-        //   label: '矩形',
-        //   icon: 'el-icon-news',
-        //   isWarning: false,
-        //   type: 'custom',
-        //   name: '矩形',
-        //   position: '矩形',
-        //   shapeId: uuid
-        // }
-        // tree.append(data, node);
+        //如果是监区对象拖拽的情况下设置图形和对象的关系
+        if (_this.startDragNode) {
+          let uuid = this.getAttr('uuid');
+          _this.startDragNode = false;
+          _this.mouseOveredGraph = uuid;
+          if (_this.relationships[uuid] == undefined) {
+            _this.relationships[uuid] = _this.draggingNode;
+            _this.$message({
+              type: 'success',
+              message: '关联成功!'
+            });
+          } else {
+            _this.$confirm('当前区域已经和图形关联，当前操作会替换已有关联关系，是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              let pri_code = _this.relationships[uuid]["data"]["pri_code"];
+              _this.deleteNodeRelationed(_this.PrisonareaObjtree, pri_code);
+              _this.PrisonareaObjtree = JSON.parse(JSON.stringify(_this.PrisonareaObjtree));
+              _this.relationships[uuid] = _this.draggingNode;
+              _this.$message({
+                type: 'success',
+                message: '关联成功!'
+              });
+            }).catch(() => {
+              _this.$message({
+                type: 'info',
+                message: '已取消操作'
+              });          
+            });
+          }
+
+          //设置当前节点数据
+          let pri_code = _this.draggingNode.data.pri_code;
+          _this.setNodeRelationed(_this.PrisonareaObjtree, pri_code);
+          _this.PrisonareaObjtree = JSON.parse(JSON.stringify(_this.PrisonareaObjtree));
+        }
       });
       this.cameraImg.src = camera0;
     }

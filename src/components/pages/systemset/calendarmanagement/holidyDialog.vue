@@ -162,7 +162,7 @@
       }
     },
     mounted() {
-      this.initTableData();
+      // this.initTableData();
     },
     props: ['dateTypes']
   }

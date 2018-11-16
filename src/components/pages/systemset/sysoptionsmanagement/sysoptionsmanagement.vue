@@ -13,13 +13,13 @@
         <el-row>
           <el-col :span="15">
             <span>无法定位允许最长时间：</span>
-            <el-input-number size="mini" v-model="optionMaxTime" controls-position="right" :min="1" :max="3600"></el-input-number>秒
+            <el-input-number size="mini" v-model="optionMaxTime" controls-position="right" :min="1" :max="3600"></el-input-number>分
           </el-col>
         </el-row>
         <div>
           <el-col :span="15">
             <span>允许在卫生间中停留的最长时间：</span>
-            <el-input-number size="mini" v-model="stayMaxTime" controls-position="right" :min="1" :max="3600"></el-input-number>秒
+            <el-input-number size="mini" v-model="stayMaxTime" controls-position="right" :min="1" :max="3600"></el-input-number>分
           </el-col>
         </div>
       </el-main>
@@ -60,7 +60,7 @@
           let data = this.createModel();
           this.$post(this.urlconfig.ssoSaveSysOptions, data).then((res) => {
             if (res.status === 0) {
-              this.$message.success(response.statusinfo);
+              this.$message.success(res.statusinfo);
             }
           }).catch((error) => {
             console.log(error);
@@ -97,7 +97,6 @@
       this.getSysOptions();
     }
   }
-
 </script>
 
 <style scoped>
@@ -122,5 +121,4 @@
   .el-input-number {
     margin-right: 5px;
   }
-
 </style>

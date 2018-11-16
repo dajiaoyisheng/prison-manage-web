@@ -41,6 +41,18 @@
       </el-row>
       <el-row>
         <el-col :span="12">
+          <el-form-item label="民族" prop="criNation">
+            <el-input style="width: 220px;" v-model="form.criNation" clearable></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="婚姻状态" prop="criMarryStatus">
+            <el-input style="width: 220px;" v-model="form.criMarryStatus" clearable></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="12">
           <el-form-item label="籍贯" prop="criOrigin">
             <el-input style="width: 220px;" v-model="form.criOrigin" clearable></el-input>
           </el-form-item>
@@ -235,7 +247,9 @@
           criTel2: "",
           criContact3: "",
           criTel3: "",
-          criState: ""
+          criState: "",
+          criNation: "",
+          criMarryStatus: ""
         },
         rules: {
           criCode: [{
@@ -295,9 +309,10 @@
               "saveType": this.saveType,
               "saveItem": JSON.stringify(this.form)
             };
+
             this.$post(this.urlconfig.spiSubmitForm, data).then((res) => {
               if (res.status === 0) {
-                this.$message.success(response.statusinfo);
+                this.$message.success(res.statusinfo);
                 this.resetForm('form');
               }
             }).catch((error) => {
@@ -318,9 +333,7 @@
       /** 查询服刑人员信息 */
       queryPrisonerInfo: function (saveType, criId) {
         this.saveType = saveType;
-        let data = {
-          "criId": criId
-        };
+        let data = { "criId": criId };
         this.$post(this.urlconfig.spiQueryPrisonerInfo, data).then((res) => {
           if (res.status === 0) {
             this.form = res.data;
@@ -334,9 +347,7 @@
       },
       /** 根据监区查找所有监舍 */
       getRoomsByPrisonRegion: function (priCode) {
-        let data = {
-          "priCode": priCode
-        };
+        let data = { "priCode": priCode};
         this.$post(this.urlconfig.spiGetRoomsByPrisonRegion, data).then((res) => {
           if (res.status === 0) {
             this.rooms = res.data;
@@ -350,7 +361,6 @@
     },
     props: ['superviseType', 'criState', 'state', 'prisonRegions']
   }
-
 </script>
 
 <style scoped>
@@ -361,5 +371,4 @@
   #prisonInfo .el-dialog__body {
     padding-bottom: 0px;
   }
-
 </style>

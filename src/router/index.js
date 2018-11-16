@@ -21,8 +21,6 @@ const prisonmanagement = () =>
   import('@/components/pages/systemset/prisonmanagement/prisonmanagement.vue')
 const prisonermanagement = () =>
   import('@/components/pages/systemset/prisonermanagement/prisonermanagement.vue')
-const operation = () =>
-  import('@/components/pages/systemset/prisonermanagement/operation.vue')
 const cameramanagement = () =>
   import('@/components/pages/systemset/cameramanagement/cameramanagement.vue')
 const servermanagement = () =>
@@ -92,11 +90,6 @@ const router = new Router({
         component: prisonermanagement
       },
       {
-        path: '/systemset/prisonermanagement/operation',
-        name: 'operation',
-        component: operation
-      },
-      {
         path: '/systemset/cameramanagement',
         name: 'cameramanagement',
         component: cameramanagement
@@ -128,7 +121,7 @@ const router = new Router({
 
 
 router.beforeEach((to, from, next) => {
-  if (to.path === '/tvmonitor' || to.path === '/personnelposition' || to.path === '/pointname' || to.path === '/systemset/prisonmanagement' || to.path === '/systemset/prisonermanagement/operation' || to.path === '/systemset/cameramanagement' || to.path === '/systemset/systemmanagement' || to.path === '/querystats/posunusual') {
+  if (to.path === '/tvmonitor' || to.path === '/personnelposition' || to.path === '/pointname' || to.path === '/systemset/prisonmanagement' || to.path === '/systemset/cameramanagement' || to.path === '/systemset/systemmanagement' || to.path === '/querystats/posunusual') {
     store.state.isFullNavWrap = true;
   } else {
     store.state.isFullNavWrap = false;
@@ -156,9 +149,6 @@ router.beforeEach((to, from, next) => {
     
     next()
   } else if (to.path === '/systemset/prisonermanagement') {
-    
-    next()
-  } else if (to.path === '/systemset/prisonermanagement/operation') {
     
     next()
   } else if (to.path === '/systemset/cameramanagement') {

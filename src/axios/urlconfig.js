@@ -29,6 +29,14 @@ let urlconfig = {
   pnGetPrisonareatree: `/prisonRegion.action?method=getPrisonRegionTree`,
   // 获取点名列表信息
   pnGetTabledatas: `/pointName.action?method=getPointNameDatas`,
+  // 获取历史点名时间
+  pnGetPnTimes: `/pointName.action?method=getPointNameTimes`,
+  // 获取历史点名记录
+  pnGetPnHis: `/pointName.action?method=getPointNameHis`,
+  // 执行立即点名操作
+  pnPointNameNow: `/pointName.action?method=pointNameNow`,
+  // 执行立即点名操作
+  pnSavePointName: `/pointName.action?method=savePointName`,
   // 人员点名end
 
   // 查询统计begin
@@ -63,9 +71,9 @@ let urlconfig = {
   // 系统设置begin
   // 日历管理begi
   // 保存作息表单
-  scmSubmitForm: `/spriSchedule.action?method=saveDailyDates`,
+  scmSubmitForm: `/priSchedule.action?method=saveDailyDates`,
   // 删除作息时间
-  scmDeleteDailyDate: `/spriSchedule.action?method=deleteDailyDate`,
+  scmDeleteDailyDate: `/priSchedule.action?method=deleteDailyDate`,
   // 获取日期类型
   scmGetDateTypes: `/systemCode.action?method=getDateType`,
   // 获取区间字典
@@ -75,9 +83,9 @@ let urlconfig = {
   // 获取适用范围字典
   scmGetScopes: `/systemCode.action?method=getPersonRange`,
   // 获取日常作息时间列表
-  scmGetDailyDates: `/spriSchedule.action?method=getDailyDates`,
+  scmGetDailyDates: `/priSchedule.action?method=getDailyDates`,
   // 获取特殊人员作息时间
-  scmGetSpecialDates: `/spriSchedule.action?method=getSpecialDates`,
+  scmGetSpecialDates: `/priSchedule.action?method=getSpecialDates`,
   // 日历管理end
   // 人员管理begin
   // 提交新增用户

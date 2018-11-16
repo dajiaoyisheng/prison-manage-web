@@ -20,21 +20,20 @@
       </section>
       <section>
         <el-dialog :title="dialogTitle" :visible.sync="showDialog" width="800px" :before-close="beforeClose">
-          <prisonerInfo ref="prisonerInfo" :superviseType="superviseType" :criState="criState" :state="state"
-            :prisonRegions="prisonRegions"></prisonerInfo>
+          <prisonerInfo ref="prisonerInfo" :superviseType="superviseType" :criState="criState" :state="state" :prisonRegions="prisonRegions"></prisonerInfo>
         </el-dialog>
       </section>
       <section class="el-table-wrap">
         <el-table :data="tableData" @selection-change="handleSelectionChange" style="width: 100%">
-          <el-table-column type="selection" width="55"></el-table-column>
-          <el-table-column prop="criName" label="服刑人员姓名"></el-table-column>
-          <el-table-column prop="criCode" label="服刑人员编码"></el-table-column>
+          <el-table-column type="selection"         width="55"></el-table-column>
+          <el-table-column prop="criName"           label="服刑人员姓名"></el-table-column>
+          <el-table-column prop="criCode"           label="服刑人员编码"></el-table-column>
           <el-table-column label="服刑人员年龄">
             <template slot-scope="scope">{{ scope.row.criBirthday }}岁</template>
           </el-table-column>
-          <el-table-column prop="criSupervisetype" label="服刑人员类型"></el-table-column>
-          <el-table-column prop="criStartdate" label="入监时间"></el-table-column>
-          <el-table-column prop="criAccusation" label="涉案罪名"></el-table-column>
+          <el-table-column prop="criSupervisetype"  label="服刑人员类型"></el-table-column>
+          <el-table-column prop="criStartdate"      label="入监时间"></el-table-column>
+          <el-table-column prop="criAccusation"     label="涉案罪名"></el-table-column>
           <el-table-column label="服刑时长">
             <template slot-scope="scope">{{ scope.row.criPrisonterm }}个月</template>
           </el-table-column>
@@ -153,6 +152,7 @@
           'pageSize': this.$refs.pagination.limit,
           "keyWord": this.params.keyWord
         }
+
         this.$post(this.urlconfig.spmGetTableDatas, data).then((res) => {
           this.count = res.data.totalRows;
           this.tableData = res.data.items;
@@ -181,12 +181,10 @@
             criIds = this.multipleSelection.map((item, index) => item.criId);
           }
 
-          let data = {
-            "criIds": JSON.stringify(criIds)
-          }
+          let data = { "criIds": JSON.stringify(criIds) }
           this.$post(this.urlconfig.spmHandleDelete, data).then((res) => {
             if (res.status === 0) {
-              this.$message.success(response.statusinfo);
+              this.$message.success(res.statusinfo);
               this.getTableDatas();
             }
           }).catch((error) => {
@@ -234,7 +232,6 @@
       }
     }
   }
-
 </script>
 
 <style scoped>
@@ -254,12 +251,10 @@
     transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
     width: 100%;
   }
-
 </style>
 
 <style>
   #prisonermanagement .el-dialog__body {
     padding: 10px 20px;
   }
-
 </style>

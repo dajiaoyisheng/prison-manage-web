@@ -110,7 +110,7 @@
           psArea: "01",
           psAlerttype: "01",
           psPersonrange: "",
-          rangeTime: [new Date(0, 0, 0, 0, 0, 0), new Date(0, 0, 0, 23, 59, 59)],
+          rangeTime: [new Date(0, 0, 0, 1, 0, 0), new Date(0, 0, 0, 23, 59, 59)],
           rangeDate: [new Date(), new Date()]
         },
         pagination: {
@@ -266,7 +266,7 @@
       holidyDialogClose: function (done) {
         this.$confirm('确认关闭？').then(() => {
           done();
-          this.$refs.holidyDialog.initTableData();
+          // this.$refs.holidyDialog.initTableData();
         }).catch((error) => {
           console.log(error);
         });

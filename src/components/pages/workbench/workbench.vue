@@ -4,7 +4,7 @@
       <section class="l fl">
         <section class="item">
           <div class="bench-item-header">
-            <span>犯人总数</span>
+            <span>犯人员总数</span>
           </div>
           <div class="bench-item">
             <div class="bench-item-left v-c">

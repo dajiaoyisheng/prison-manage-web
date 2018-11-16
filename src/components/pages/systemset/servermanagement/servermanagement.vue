@@ -75,8 +75,7 @@
                 <span>特殊作息来源服务地址</span>
                 <el-button style="color: #666; float: right; padding: 3px 0" type="text" icon="el-icon-plus" @click="addServerInfo()">新增</el-button>
               </div>
-              <div class="sm-main-item-content" v-for="(item, key) in specialItems" :key="key" v-bind:class="{'active' : key!=0}"
-                @mouseenter="enter('username', key)" @mouseleave="leave">
+              <div class="sm-main-item-content" v-for="(item, key) in specialItems" :key="key" v-bind:class="{'active' : key!=0}" @mouseenter="enter('username', key)" @mouseleave="leave">
                 <el-row class="item">
                   <el-col :span="6"><span>服务地址：</span></el-col>
                   <el-col :span="14">
@@ -142,7 +141,7 @@
           let data = this.createModel();
           this.$post(this.urlconfig.ssmSaveServerInfo, data).then((res) => {
             if (res.status === 0) {
-              this.$message.success(response.statusinfo);
+              this.$message.success(res.statusinfo);
             }
           }).catch((error) => {
             console.log(error);
@@ -252,5 +251,4 @@
     border-top: 1px solid #ebeef5;
     padding-top: 10px;
   }
-
 </style>
