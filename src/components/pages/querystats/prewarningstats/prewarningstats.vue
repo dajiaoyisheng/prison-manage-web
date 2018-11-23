@@ -51,17 +51,15 @@
           </div>
           <div>
             <el-table :data="tableData" stripe style="width: 100%" height="240">
-              <el-table-column prop="name" label="违规预警事件"></el-table-column>
-              <el-table-column label="预警次数" width="150" align="center">
+              <el-table-column label="违规预警事件" prop="name"></el-table-column>
+              <el-table-column label="预警次数"     width="150" align="center">
                 <template slot-scope="scope">
-                  <span @click="showVideo(scope.$index, scope.row)" class="num-color" style="cursor: pointer;">{{
-                    scope.row.times }}</span>
+                  <span @click="showVideo(scope.$index, scope.row)" class="num-color" style="cursor: pointer;">{{ scope.row.times }}</span>
                 </template>
               </el-table-column>
-              <el-table-column label="预警人数" width="150" align="center">
+              <el-table-column label="预警人数"     width="150" align="center">
                 <template slot-scope="scope">
-                  <span @click="showVideo(scope.$index, scope.row)" class="num-color" style="cursor: pointer;">{{
-                    scope.row.pers }}</span>
+                  <span @click="showVideo(scope.$index, scope.row)" class="num-color" style="cursor: pointer;">{{ scope.row.pers }}</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -86,8 +84,7 @@
         <el-card class="box-card pws-card">
           <div slot="header" class="clearfix">
             <span>预警区域排名TOP5（按预警数）</span>
-            <el-select size="mini" style="float: right; padding: 3px 0" v-model="parameter.area" placeholder="请选择"
-              @change="queryAreaOrder()">
+            <el-select size="mini" style="float: right; padding: 3px 0" v-model="parameter.area" placeholder="请选择" @change="queryAreaOrder()">
               <el-option v-for="item in areas" :key="item.priCode" :label="item.priName" :value="item.priCode"></el-option>
             </el-select>
           </div>
@@ -236,6 +233,9 @@
         this.$get(this.urlconfig.qpwGetPrisonDatas).then((res) => {
           if (res.status === 0) {
             this.areas = res.data;
+            if ((this.areas != null) && (this.areas.length > 0)) {
+              this.parameter.area = this.areas[0].priCode;
+            }
           }
         }).catch((error) => {
           console.log(error);
@@ -292,7 +292,6 @@
       this.queryStatistics();
     }
   }
-
 </script>
 
 <style scoped>
@@ -341,7 +340,6 @@
     border-radius: 5px;
     border: 1px solid #FF5809;
   }
-
 </style>
 
 <style>
@@ -356,5 +354,4 @@
   #prewarningstats .pws-card-first-times {
     line-height: 25px;
   }
-
 </style>

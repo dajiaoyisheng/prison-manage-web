@@ -9,7 +9,7 @@ console.log(store.state.env);
 // axios 配置
 axios.defaults.baseURL = store.state.env;
 let baseURL =  store.state.env;
-axios.defaults.timeout = 3000; // 设置超时时间为3s
+axios.defaults.timeout = 10000; // 设置超时时间为3s
 // 配置axios发送请求时携带cookie
 axios.defaults.withCredentials = false;
 // 设置content-type

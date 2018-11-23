@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ul class="paging-ul">
+    <ul class="paging-ul" v-if="total">
       <!-- prev -->
       <li :class="['paging-item', 'paging-item--prev', {'paging-item--disabled' : index === 1}]" @click="prev">
         <img class="ver-align" :src="prevPage" alt="">
@@ -10,13 +10,13 @@
       <li :class="['paging-item', 'paging-item--first', {'paging-item--disabled' : index === 1}]" v-if="showPrevMore"
         @click="first">1</li>
 
-      <li :class="['paging-item', 'paging-item--more']" v-if="showPrevMore">...</li>
+      <li :class="['paging-item', 'paging-item--more']" v-if="showPrevMore">&middot;&middot;&middot;</li>
 
       <li :class="['paging-item', {'paging-item--current' : index === pager}]" v-for="pager in pagers" :key="pager"
         @click="go(pager)">{{
         pager }}</li>
 
-      <li :class="['paging-item', 'paging-item--more']" v-if="showNextMore">...</li>
+      <li :class="['paging-item', 'paging-item--more']" v-if="showNextMore">&middot;&middot;&middot;</li>
 
       <!-- last -->
       <!-- <li :class="['paging-item', 'paging-item--last', {'paging-item--disabled' : index === pages}]" @click="last">last</li> -->

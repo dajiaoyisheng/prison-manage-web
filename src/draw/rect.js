@@ -5,15 +5,17 @@ import Transformer from './transformer';
  */
 class Rect {
     constructor(shape) {
-        let lineWidth = shape.lineWidth || 1;
-        let strokeStyle = shape.strokeStyle || '#f00';
-        let fillStyle = shape.fillStyle || '#00BFF3';
+        let lineWidth = shape.lineWidth || shape.strokeWidth || 1;
+        let strokeStyle = shape.strokeStyle || shape.stroke || '#f00';
+        let fillStyle = shape.fillStyle || shape.fill || '#00BFF3';
         let uuid = shape.uuid;
+        let name = shape.name || "PerfectRect" + uuid;
+        let points = shape.points || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
         let rect = new Konva.Line({
-            name: "PerfectRect" + uuid,
+            name: name,
             type: "Rect",
-            points: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            points: points,
             fill: fillStyle,
             stroke: strokeStyle,
             strokeWidth: parseInt(lineWidth),

@@ -15,24 +15,20 @@
       <el-main>
         <section class="cal-main-params">
           <span>时间:</span>
-          <el-time-picker v-if="this.tabId == 'tab-0'" size="mini" style="width: 16.5%; margin: 0px 15px 0px 5px;"
-            is-range v-model="params.rangeTime" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间"></el-time-picker>
-          <el-date-picker v-if="this.tabId == 'tab-1'" size="mini" style="width: 18%; margin: 0px 0px 0px 0px;" type="daterange"
-            v-model="params.rangeDate" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+          <el-time-picker v-if="tabId=='tab-0'" v-model="params.rangeTime" range-separator="至" size="mini" style="width:16.5%; margin:0px 15px 0px 5px;" is-range></el-time-picker>
+          <el-date-picker v-if="tabId=='tab-1'" v-model="params.rangeDate" range-separator="至" size="mini" style="width:18%; margin:0px 0px 0px 0px;" type="daterange"></el-date-picker>
           <span>日期类型:</span>
           <el-select size="mini" v-model="params.psDatetype" placeholder="请选择">
             <el-option v-for="item in dateTypes" :key="item.sCode" :label="item.sName" :value="item.sCode"></el-option>
-          </el-select>
-          <span>区域:</span>
-          <el-select size="mini" v-model="params.psArea" placeholder="请选择">
-            <el-option v-for="item in areas" :key="item.sCode" :label="item.sName" :value="item.sCode"></el-option>
           </el-select>
           <span>动作:</span>
           <el-select size="mini" v-model="params.psAlerttype" placeholder="请选择">
             <el-option v-for="item in options" :key="item.sCode" :label="item.sName" :value="item.sCode"></el-option>
           </el-select>
-          <span>服刑人员姓名/编号:</span>
-          <el-input size="mini" class="pp-input" v-model="params.psPersonrange" placeholder="请输入姓名或编号" clearable></el-input>
+          <span>规则类型:</span>
+          <el-select size="mini" v-model="params.ruleType" placeholder="请选择">
+            <el-option v-for="item in ruleTypes" :key="item.sCode" :label="item.sName" :value="item.sCode"></el-option>
+          </el-select>
           <el-button size="mini" type="primary" class="search-btn" @click="query()">查询</el-button>
           <el-button size="mini" type="primary" class="search-btn" @click="clear()">清空</el-button>
         </section>
@@ -41,27 +37,33 @@
             <el-tab-pane label="日常作息时间">
               <el-row style="line-height: 30px;">
                 <el-col :span="2" :offset="22">
-                  <el-button title="增加作息" type="text" icon="el-icon-circle-plus-outline" @click="addDialog=true">增加作息</el-button>
-                  <el-dialog title="增加作息" :visible.sync="addDialog" width="670px" :before-close="addDialogClose">
-                    <v-addDialog :dateTypes="dateTypes" :options="options" :areas="areas" :scopes="scopes" ref="addDialog"></v-addDialog>
+                  <el-button title="增加作息" type="text" icon="el-icon-circle-plus-outline" @click="addDialogInit">增加作息</el-button>
+                  <el-dialog title="增加作息" :visible.sync="addDialog" width="800px" :before-close="addDialogClose">
+                    <v-addDialog :dateTypes="dateTypes" :options="options" :ruleTypes="ruleTypes" ref="addDialog"></v-addDialog>
                   </el-dialog>
                 </el-col>
               </el-row>
               <el-table :data="dailyDates" stripe style="width: 100%">
-                <el-table-column prop="psStarttime" label="开始时间"></el-table-column>
-                <el-table-column prop="psEndtime" label="结束时间"></el-table-column>
-                <el-table-column prop="psDatetype" label="日期类型"></el-table-column>
+                <el-table-column type="expand">
+                  <template slot-scope="props">
+                    <el-form label-position="left" inline class="demo-table-expand">
+                      <el-form-item style="width: 65%;"  label="区域："><span>{{ props.row.psArea }}</span></el-form-item>
+                      <el-form-item style="width: 25%;"  label="日期类型："><span>{{ props.row.psDatetype }}</span></el-form-item>
+                      <el-form-item style="width: 90%;"  label="适用范围："><span>{{ props.row.psPersonrange }}</span></el-form-item>
+                    </el-form>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="psStarttime"   label="开始时间"></el-table-column>
+                <el-table-column prop="psEndtime"     label="结束时间"></el-table-column>
                 <el-table-column label="时长">
                   <template slot-scope="scope">{{ scope.row.psDuration }}小时</template>
                 </el-table-column>
-                <el-table-column prop="psMatter" label="事项"></el-table-column>
-                <el-table-column prop="psArea" label="区域"></el-table-column>
-                <el-table-column prop="psAlerttype" label="动作"></el-table-column>
-                <el-table-column prop="psPersonrange" label="适用范围"></el-table-column>
+                <el-table-column prop="psMatter"      label="事项"></el-table-column>
+                <el-table-column prop="psAlerttype"   label="动作"></el-table-column>
+                <el-table-column prop="ruleType"      label="规则类型"></el-table-column>
                 <el-table-column label="操作" width="100">
                   <template slot-scope="scope">
-                    <el-button icon="el-icon-delete" @click.native.prevent="deleteDailyDate(scope.$index, scope.row)"
-                      type="text">删除</el-button>
+                    <el-button icon="el-icon-delete" @click.native.prevent="deleteDailyDate(scope.$index, scope.row)" type="text">删除</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -76,13 +78,13 @@
                 </el-col>
               </el-row>
               <el-table :data="specialDates" stripe style="width: 100%">
-                <el-table-column prop="psStarttime" label="开始时间" width="100"></el-table-column>
-                <el-table-column prop="psEndtime" label="结束时间" width="100"></el-table-column>
-                <el-table-column prop="psDatetype" label="日期类型"></el-table-column>
-                <el-table-column prop="psDuration" label="时长" width="120"></el-table-column>
-                <el-table-column prop="psMatter" label="事项" width="100"></el-table-column>
-                <el-table-column prop="psArea" label="区域" width="100"></el-table-column>
-                <el-table-column prop="psAlerttype" label="动作" width="100"></el-table-column>
+                <el-table-column prop="psStarttime"   label="开始时间"  width="100"></el-table-column>
+                <el-table-column prop="psEndtime"     label="结束时间"  width="100"></el-table-column>
+                <el-table-column prop="psDatetype"    label="日期类型"></el-table-column>
+                <el-table-column prop="psDuration"    label="时长"      width="120"></el-table-column>
+                <el-table-column prop="psMatter"      label="事项"      width="100"></el-table-column>
+                <el-table-column prop="psArea"        label="区域"      width="100"></el-table-column>
+                <el-table-column prop="psAlerttype"   label="动作"      width="100"></el-table-column>
                 <el-table-column prop="psPersonrange" label="适用范围"></el-table-column>
               </el-table>
               <div class="el-pagination-wrap text-center">
@@ -104,54 +106,25 @@
   export default {
     data() {
       return {
-        message: '日历管理',
+        tabId: "tab-0",               // 默认页签标识
+        addDialog: false,             // 弹出增加窗口
+        isShowHolidyDialog: false,    // 弹出节日窗口
+        options: [],                  // 动作类型字典
+        dateTypes: [],                // 日期类型字典
+        ruleTypes: [],                // 规则类型字典
+        dailyDates: [],               // 日常作息列表
+        specialDates: [],             // 特殊作息列表
+        pagination: { totalRows: 0 }, // 记录总共条数
         params: {
-          psDatetype: "01",
-          psArea: "01",
-          psAlerttype: "01",
-          psPersonrange: "",
-          rangeTime: [new Date(0, 0, 0, 1, 0, 0), new Date(0, 0, 0, 23, 59, 59)],
-          rangeDate: [new Date(), new Date()]
-        },
-        pagination: {
-          totalRows: 100
-        },
-        tabId: "tab-0",
-        dailyDates: [],
-        specialDates: [],
-        dateTypes: [],
-        areas: [],
-        options: [],
-        scopes: [],
-        isShowHolidyDialog: false,
-        addDialog: false
+          ruleType: "",
+          psDatetype: "",
+          psAlerttype: "",
+          rangeDate: [new Date(), new Date()],
+          rangeTime: [new Date(0, 0, 0, 0, 0, 0), new Date(0, 0, 0, 23, 59, 59)]
+        }
       }
     },
     methods: {
-      /** 获取日期类型 */
-      getDateTypes: function () {
-        this.$get(this.urlconfig.scmGetDateTypes).then((res) => {
-          if (res.status === 0) {
-            this.dateTypes = res.data;
-          }
-        }).catch((error) => {
-          console.log(error);
-        }).then(() => {
-          // todo somthing...
-        });
-      },
-      /** 获取区间字典 */
-      getAreas: function () {
-        this.$get(this.urlconfig.scmGetAreas).then((res) => {
-          if (res.status === 0) {
-            this.areas = res.data;
-          }
-        }).catch((error) => {
-          console.log(error);
-        }).then(() => {
-          // todo something...
-        });
-      },
       /** 获取动作字典 */
       getOptions: function () {
         this.$get(this.urlconfig.scmGetOptions).then((res) => {
@@ -164,16 +137,28 @@
           // todo somthing...
         });
       },
-      /** 获取适用范围字典 */
-      getScopes: function () {
-        this.$get(this.urlconfig.scmGetScopes).then((res) => {
+      /** 获取日期类型 */
+      getDateTypes: function () {
+        this.$get(this.urlconfig.scmGetDateTypes).then((res) => {
           if (res.status === 0) {
-            this.scopes = res.data;
+            this.dateTypes = res.data;
           }
         }).catch((error) => {
           console.log(error);
         }).then(() => {
           // todo somthing...
+        });
+      },
+      /** 获取规则类型 */
+      getRuleTypes: function() {
+        this.$get(this.urlconfig.scmGetRuleTypes).then((res) => {
+          if (res.status === 0) {
+            this.ruleTypes = res.data;
+          }
+        }).catch((error) => {
+          console.log(error);
+        }).then(() => {
+          // todo something...
         });
       },
       /** 获取日常作息时间列表 */
@@ -252,6 +237,13 @@
           console.log(error);
         });
       },
+      /** 新增窗口初始化 */
+      addDialogInit: function() {
+        this.addDialog = true;
+        this.$nextTick(() => {
+          this.$refs.addDialog.initQuery();
+        });
+      },
       /** 关闭增加作息窗口前操作 */
       addDialogClose: function (done) {
         this.$confirm('确认关闭？').then(() => {
@@ -275,10 +267,9 @@
       clear: function () {
         this.params.rangeTime = [new Date(0, 0, 0, 0, 0, 0), new Date(0, 0, 0, 23, 59, 59)];
         this.params.rangeDate = [new Date(), new Date()];
-        this.params.psDatetype = "01";
-        this.params.psArea = "01";
-        this.params.psAlerttype = "01";
-        this.params.psPersonrange = "";
+        this.params.psAlerttype = "";
+        this.params.psDatetype = "";
+        this.params.ruleType = "";
       },
       /** 保存节假日管理弹层 */
       listenMsgFromeChild: function (type, data) {
@@ -293,9 +284,8 @@
     },
     mounted() {
       this.getDateTypes();
-      this.getAreas();
+      this.getRuleTypes();
       this.getOptions();
-      this.getScopes();
       this.getDailyDates();
     },
     components: {
@@ -304,7 +294,6 @@
       'v-tablePagination': tablePagination
     }
   }
-
 </script>
 
 <style scoped>
@@ -347,7 +336,6 @@
   .cal-header-toolbar {
     padding-left: 40px;
   }
-
 </style>
 
 <style>
@@ -372,4 +360,13 @@
     padding: 10px 20px;
   }
 
+  #calendarmanagement .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
+
+  #calendarmanagement .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+  }
 </style>

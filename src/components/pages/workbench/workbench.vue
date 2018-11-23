@@ -331,14 +331,19 @@
           })
       },
       // 预警事件分类
-      getPreWarningClass() {
-        this.$get(this.urlconfig.wkGetBenchChartbarData)
-          .then((res) => {
-            if (res.status === 0) {
-              this.benchChartbarData = res.data;
-              this.preWarningDetil = res.data.detils;
-            }
-          })
+      async getPreWarningClass() {
+        // this.$get(this.urlconfig.wkGetBenchChartbarData)
+        //   .then((res) => {
+        //     if (res.status === 0) {
+        //       this.benchChartbarData = res.data;
+        //       this.preWarningDetil = res.data.detils;
+        //     }
+        //   })
+        let res = await this.$get(this.urlconfig.wkGetBenchChartbarData);
+        if (res.status === 0) {
+          this.benchChartbarData = res.data;
+          this.preWarningDetil = res.data.detils;
+        }
       },
 
       // afterConfig 生成echarts配置进行额外的处理  Function   在数据转化为配置项结束后触发

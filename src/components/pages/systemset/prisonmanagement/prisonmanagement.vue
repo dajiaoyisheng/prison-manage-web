@@ -23,22 +23,22 @@
       <div class="h clearfix">
         <div class="aside-r-h-l fl inbl clearfix">
           <div class="l fl">
-            <img :src="images.exportgroup" alt="导出">
+            <img :src="images.exportgroup" title="导出">
             <el-upload style="display: inline-block;" ref="upload" action="" :on-change="handleFileListChange"
-              :file-list="fileList" :auto-upload="false" :show-file-list="false">
-              <img :src="images.importgroup" alt="导入平面图">
+              :file-list="fileList" :auto-upload="false" :show-file-list="false" title="导入平面图">
+              <img :src="images.importgroup">
             </el-upload>
-            <img :src="images.save" alt="">
+            <img :src="images.save" title="保存">
           </div>
           <div class="r fr clearfix">
-            <img :src="images.del" alt="">
-            <img :src="images.cancel" alt="">
-            <img :src="images.renew" alt="">
-            <img :src="images.div" @click="draw('rect')" alt="矩形">
-            <img :src="images.polygon" alt="多边形">
-            <img :src="images.label" @click="draw('text')" alt="标签">
-            <img :src="images.camera" @click="drawCamera()" alt="摄像头">
-            <img :src="images.textA" id="strokeColor" alt="">
+            <img :src="images.del" title="删除">
+            <img :src="images.cancel" title="撤销" @click="cUndo()">
+            <img :src="images.renew" title="重做" @click="cRedo()">
+            <img :src="images.div" @click="draw('rect')" title="矩形">
+            <img :src="images.polygon" title="多边形">
+            <img :src="images.label" @click="draw('text')" title="标签">
+            <img :src="images.camera" @click="drawCamera()" title="摄像头">
+            <img :src="images.textA" id="strokeColor" title="文本颜色">
           </div>
         </div>
         <div class="aside-r-h-r fr text-center">
@@ -48,17 +48,6 @@
 
       <div class="main">
         <div class="l fl inbl">
-          <!-- <div v-if="isDrawCamera">
-            <p class="h-line">摄像头设置</p>
-            <div class="camera-list">
-              <span v-for="camera in cameraList" :key="camera" @click="draw('camera')">
-                <span class="icon">
-                  <img :src="images.camera">
-                </span>
-                <span class="name" v-text="camera.name"></span>
-              </span>
-            </div>
-          </div> -->
           <div ref="canvasContainer" class="actionImage">
             <!-- 画图区域 -->
             <div ref="canvas" id="canvas"></div>
@@ -157,25 +146,6 @@
         strokeStyle: "#ff0000",
         shapeType: "rect",
         fileList: [],
-        cameraList: [{
-            name: 'J1JSL02L01'
-          },
-          {
-            name: 'J1JSL02L02'
-          },
-          {
-            name: 'J1JSL02L03'
-          },
-          {
-            name: 'J1JSL02L04'
-          },
-          {
-            name: 'J1JSL02L05'
-          },
-          {
-            name: 'J1JSL02L06'
-          }
-        ],
         isDrawCamera: false,
         backgroundImage: null,
         Prisonareatree: [],
@@ -280,11 +250,20 @@
         }
       },
       startDraw() {
+        // this.drawObj.cPush();
         this.drawObj.setDrawState(true);
         this.drawObj.setImage(this.cameraImg);
         this.drawObj.setShape(this.lineWidth, this.strokeStyle, this.shapeType);
-        this.drawObj.showMask();
+        // this.drawObj.showMask();
         this.drawObj.init();
+      },
+      //重做
+      cUndo() {
+        this.drawObj.cUndo();
+      },
+      //撤销
+      cRedo() {
+        this.drawObj.cRedo();
       }
     },
     mounted() {
@@ -292,7 +271,7 @@
       var canvasContainerRect = this.$refs.canvasContainer.getBoundingClientRect();
       this.drawObj = new Draw('canvas', canvasContainerRect.width, canvasContainerRect.height, function() {
         console.log(this.getAttr('uuid'));
-      }, function() {
+      }, function(evt) {
         //如果是监区对象拖拽的情况下设置图形和对象的关系
         if (_this.startDragNode) {
           let uuid = this.getAttr('uuid');
@@ -326,6 +305,11 @@
             });
           }
 
+
+          let clientRect = this.getClientRect();
+          
+          let pri_name = _this.draggingNode.data.name;
+          _this.drawObj.addText(pri_name, uuid, clientRect.x, clientRect.y, canvasContainerRect.top, canvasContainerRect.left);
           //设置当前节点数据
           let pri_code = _this.draggingNode.data.pri_code;
           _this.setNodeRelationed(_this.PrisonareaObjtree, pri_code);

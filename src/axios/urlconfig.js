@@ -43,10 +43,8 @@ let urlconfig = {
   // 定位异常预警begin
   // 查看服刑人员信息
   qpwGetShowPrisoner: `/earlyWarning.action?method=getPrisonerInfo`,
-  // 获取预警事件类型
-  qpwGetWarningEventTypes: `/earlyWarning.action?method=getWarningEventTypes`,
-  // 获取服刑人员类型
-  qpwGetSuperviseTypes: `/earlyWarning.action?method=getSuperviseType`,
+  // 获取人员当前状态
+  spmGetPositionWarningType: `/systemCode.action?method=getPositionWarningType`,
   // 获取定位异常清单
   qpwGetPosunusualItems: `/earlyWarning.action?method=getEarlyWarnings`,
   // 定位异常预警end
@@ -62,7 +60,7 @@ let urlconfig = {
   // 预警统计end
   // 违规预警begin
   // 获取预警事件类型
-  qvGetPreWarnType: `/violationWarning.action?method=getWarningEventTypes`,
+  scmGetVWTypes: `/systemCode.action?method=getViolationWarningType`,
   // 获取表格数据
   qvGetTableDatas: `/violationWarning.action?method=getViolationWarnings`,
   // 违规预警end
@@ -76,6 +74,14 @@ let urlconfig = {
   scmDeleteDailyDate: `/priSchedule.action?method=deleteDailyDate`,
   // 获取日期类型
   scmGetDateTypes: `/systemCode.action?method=getDateType`,
+  // 获取规则字典
+  scmGetRuleTypes: `/systemCode.action?method=getRuleType`,
+  // 获取所属区域
+  scmGetPrisonSubRegions: `/prisonRegion.action?method=getPrisonRegionTree`,
+  // 获取人员树形
+  scmGetCriminalTree: `/prisonRegion.action?method=getPrisonCriminalTree`,
+  // 获取人员列表
+  scmGetCriminalList: `/criminalManager.action?method=getCriminalList`,
   // 获取区间字典
   scmGetAreas: `/systemCode.action?method=getAreaType`,
   // 获取动作字典

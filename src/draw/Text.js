@@ -1,25 +1,38 @@
 import Konva from 'konva';
 
 class Text {
-    constructor(x, y, text) {
+    constructor(shape, layer) {
+        let x = shape.x;
+        let y = shape.y;
+        let text = shape.text;
+        let stageTop = shape.stageTop;
+        let stageLeft = shape.stageLeft;
+        let fill = shape.fill || '#555';
+        let padding = shape.padding || 20;
+        let align = shape.align || 'center';
+        let fontSize = shape.fontSize || 18;
+        let uuid = shape.uuid;
+        let name = shape.name || "PerfectText" + uuid;
+
         let textNode = new Konva.Text({
             x: x,
             y: y,
+            name: name,
+            type: "Text",
             text: text,
-            fontSize: 18,
-            fontFamily: 'Calibri',
-            fill: '#555',
-            padding: 20,
-            align: 'center'
+            fill: fill,
+            align: align,
+            padding: padding,
+            fontSize: fontSize,
+            uuid: uuid, //标识
         });
 
         textNode.on('dblclick', () => {
             var textPosition = textNode.getAbsolutePosition();
-            var stageBox = stage.getContainer().getBoundingClientRect();
 
             var areaPosition = {
-                x: textPosition.x + stageBox.left,
-                y: textPosition.y + stageBox.top
+                x: textPosition.x + stageLeft,
+                y: textPosition.y + stageTop
             };
 
             let textarea = document.createElement('textarea');

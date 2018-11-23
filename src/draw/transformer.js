@@ -4,16 +4,21 @@ import Konva from 'konva';
  */
 class Transformer {
     constructor(shape) {
-        let fillStyle = '#00BFF3';
         let uuid = shape.uuid;
+        let anchorSize = shape.anchorSize || 4;
+        let fillStyle = shape.borderStroke || '#00BFF3';
+        let resizeEnabled = shape.resizeEnabled || false;
+        let name = shape.name || "PerfectTransformer" + uuid;
+
         return new Konva.Transformer({
-            name: "PerfectTransformer" + uuid,
+            name: name,
             type: "Transformer",
             rotateEnabled: false,
+            resizeEnabled: resizeEnabled,
             borderStroke: fillStyle,
             anchorStroke: fillStyle,
             anchorFill: fillStyle,
-            anchorSize: 4,
+            anchorSize: anchorSize,
             uuid: uuid //标识
         });
     };

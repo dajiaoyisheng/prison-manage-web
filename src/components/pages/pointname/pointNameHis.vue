@@ -3,12 +3,12 @@
         <el-row style="text-align: center">
             {{ pointDate }} {{ pointTime }}点名情况
         </el-row>
-        <el-row style="text-align:left; margin-left:15px; font-size:14px;">
+        <el-row style="text-align:left; padding-left:15px; font-size:14px;">
             本次点名应到{{ totalCount }}人，已到{{ bottomTableData.length }}人，未到{{ topTableData.length }}人，详细信息如下：
         </el-row>
         <el-collapse v-model="activeNames">
             <el-collapse-item class="topItem" name="topItem" title="未识别人员列表">
-                <el-table :data="topTableData" stripe style="width: 100%" height="269">
+                <el-table :data="topTableData" stripe style="width: 100%" height="255">
                     <el-table-column type="index"   width="50"></el-table-column>
                     <el-table-column label="编号"   prop="criCode"  align="center"></el-table-column>
                     <el-table-column label="姓名"   prop="criName"  align="center"></el-table-column>
@@ -18,7 +18,7 @@
                     <el-table-column label="备注"   prop="pnRemark" >
                         <template slot-scope="scope">
                             <div @click="changePnRemark(scope.$index + 'top', scope.row)">
-                                <el-input size="small" v-model="tempRemark" v-show="current === scope.$index + 'top'" @blur="changePnRemarkBlur" clearable></el-input>
+                                <el-input size="small" v-model="tempRemark" v-show="current === scope.$index + 'top'" @blur="changePnRemarkBlur"></el-input>
                                 <span v-show="current !== scope.$index + 'top'">{{scope.row.pnRemark}}</span>
                             </div>
                         </template>
@@ -26,7 +26,7 @@
                 </el-table>
             </el-collapse-item>
             <el-collapse-item class="bottomItem" title="已识别人员列表" name="bottomItem">
-                <el-table :data="bottomTableData" stripe style="width: 100%" height="330">
+                <el-table :data="bottomTableData" stripe style="width: 100%" height="320">
                     <el-table-column type="index"   width="50"></el-table-column>
                     <el-table-column label="编号"   prop="criCode"  align="center"></el-table-column>
                     <el-table-column label="姓名"   prop="criName"  align="center"></el-table-column>
@@ -36,7 +36,7 @@
                     <el-table-column label="备注"   prop="pnRemark" >
                         <template slot-scope="scope">
                             <div @click="changePnRemark(scope.$index + 'bottom', scope.row)">
-                                <el-input size="small" v-model="tempRemark" v-show="current === scope.$index + 'bottom'" @blur="changePnRemarkBlur" clearable></el-input>
+                                <el-input size="small" v-model="tempRemark" v-show="current === scope.$index + 'bottom'" @blur="changePnRemarkBlur"></el-input>
                                 <span v-show="current !== scope.$index + 'bottom'">{{scope.row.pnRemark}}</span>
                             </div>
                         </template>
@@ -112,7 +112,7 @@ export default {
         },
         /** 备注失去焦点 */
         changePnRemarkBlur: function() {
-            if (this.tempRow.pnRemark !== this.tempRemark) {
+            if ((this.tempRow.pnRemark !== this.tempRemark) && (this.tempRemark != '')) {
                 this.$confirm('备注信息已修改，是否保存?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -137,6 +137,9 @@ export default {
                 }).catch((error) => {
                     console.log(error);
                 });
+            } else {
+                this.tempRow = null;
+                this.current = null;
             }
         }
     }
@@ -158,5 +161,6 @@ export default {
   #pointNameHis .el-collapse-item__header {
     font-size: 16px;
     padding-left: 15px;
+    padding-right: 15px;
   }
 </style>

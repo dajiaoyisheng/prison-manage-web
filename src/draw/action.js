@@ -11,6 +11,7 @@ export default class Action {
             width: width,
             height: height
         });
+        this.canvasId = canvasId;
         this.width = width;
         this.height = height;
         this.layer = new Layer(this.width, this.height);
@@ -34,28 +35,27 @@ export default class Action {
             "type": "rect",
             "isFill": true
         };
-        //撤销相关
-        this.cancelList = []; //撤销列表
-        this.cancelIndex = 0;
-        this.isredo = false; //是否重做
+        //撤销重做相关
+        this.cPushArray = [];
+        this.cStep = -1;
         self = this;
     };
 
     setShape(lineWidth, strokeStyle, type, fillStyle) {
-        this.shape.lineWidth = lineWidth || this.shape.lineWidth;
-        this.shape.strokeStyle = strokeStyle || this.shape.strokeStyle;
-        this.shape.fillStyle = fillStyle || this.shape.fillStyle;
-        this.shape.type = type || this.shape.type;
-        this.layer.disableShapeDrap();
+        self.shape.lineWidth = lineWidth || self.shape.lineWidth;
+        self.shape.strokeStyle = strokeStyle || self.shape.strokeStyle;
+        self.shape.fillStyle = fillStyle || self.shape.fillStyle;
+        self.shape.type = type || self.shape.type;
+        self.layer.disableShapeDrap();
     };
 
     setImage(image) {
-        this.shape.image = image;
+        self.shape.image = image;
     }
 
     //设置当前绘制状态
     setDrawState(state) {
-        this.drawing = state;
+        self.drawing = state;
     };
 
     //显示蒙层
@@ -88,14 +88,79 @@ export default class Action {
     mouseUp() {
         self.setDrawState(false);
         self.layer.hideMask();
-        self.layer.finished(self.uuid, self.shape.type);//禁止调整大小和移动
+        self.layer.finished(self.uuid, self.shape.type); //禁止调整大小和移动
         self.stage.off('contentMousedown');
         self.stage.off('contentMousemove');
         self.stage.off('contentMouseup');
         self.mouseupCallback && self.mouseupCallback(self.uuid);
+        self.cPush();
+    };
+
+    addText(text, uuid, x, y, stageTop, stageLeft) {
+        self.layer.addText({
+            x: x,
+            y: y,
+            text: text,
+            uuid: uuid,
+            stageTop: stageTop,
+            stageLeft: stageLeft
+        });
+        self.layer.draw();
+    };
+
+    //撤销重做相关操作
+    cPush() {
+        self.cStep++;
+        if (self.cStep < self.cPushArray.length) {
+            self.cPushArray.length = self.cStep;
+        }
+        self.cPushArray.push(self.stage.toJSON());
+    };
+
+    //重做
+    cUndo() {
+        if (self.cStep > 0) {
+            let json = self.cPushArray[--self.cStep];
+            self.loadFromJson(json);
+        }
+    };
+
+    //撤销
+    cRedo() {
+        if (self.cStep < self.cPushArray.length - 1) {
+            let json = self.cPushArray[++self.cStep];
+            self.loadFromJson(json);
+        }
+    };
+
+    //将舞台保存为 JSON 字符串
+    toJSON() {
+        return self.stage.toJSON();
+    };
+
+    //从导出的序列化json中加载
+    loadFromJson(json) {
+        try {
+            let stageObj = JSON.parse(json);
+            let stageChildren = stageObj.children;
+            if (stageObj.className == 'Stage' && stageChildren) {
+                let layer = stageChildren[0];
+                if (layer) {
+                    // self.stage.destroyChildren();
+                    self.layer = new Layer(self.width, self.height);
+                    //self.stage.add(self.layer);
+                    console.log(self.stage.getLayers());
+                    self.layer.draw();
+                    self.stage.draw();
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     init() {
-        this.stage.on('contentMousedown', self.mouseDown);
+        self.stage.on('contentMousedown', self.mouseDown);
+        self.cPush();
     }
 };

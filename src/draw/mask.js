@@ -9,6 +9,7 @@ class Mask {
         return new Konva.Rect({
             width: this.width,
             height: this.height,
+            type: "mask",
             fill: 'black',
             stroke: 'black',
             opacity: 0.6,

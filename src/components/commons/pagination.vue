@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ul class="mo-paging">
+    <ul class="mo-paging" v-if="total">
       <!-- prev -->
       <li :class="['paging-item', 'paging-item--prev', {'paging-item--disabled' : index === 1}]" @click="prev"><img
           class="ver-align" :src="prevPage" alt=""></li>

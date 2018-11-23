@@ -205,8 +205,7 @@
           </section>
         </section>
         <section class="pp-r-d-r pp-r-d-r-d">
-          <p class="h-line">
-            <!-- <p class="h-line"></p> -->
+          <p class="h-line" style="position: relative; top: 30px;"></p>
             <el-tabs v-model="activeName" @tab-click="handleClick" class="pos-res">
               <el-tab-pane label="当前活动区域" name="first">
                 <img :src="currentPos" alt="">
@@ -247,19 +246,18 @@
                 </section>
               </el-tab-pane>
             </el-tabs>
-          </p>
         </section>
         <section class="movie-wrap">
-          <!-- 视频 -->
+          <!--
           <video width="320" height="240" controls="controls">
             <source src="movie.ogg" type="video/ogg">
             <source src="movie.mp4" type="video/mp4"> Your browser does not support the video tag.
           </video>
-          <!-- 视频 -->
           <video width="320" height="240" controls="controls">
             <source src="movie.ogg" type="video/ogg">
             <source src="movie.mp4" type="video/mp4"> Your browser does not support the video tag.
           </video>
+          -->
         </section>
       </section>
     </section>

@@ -1,8 +1,9 @@
 import Konva from 'konva';
 import Rect from './rect';
 import Mask from './mask';
-import Text from './Text';
+import Text from './text';
 import Wedge from './wedge';
+import Transformer from './transformer';
 
 class Layer {
     constructor(width, height) {
@@ -18,6 +19,8 @@ class Layer {
                     return new Text(shape);
                 case 'camera':
                     return new Wedge(shape);
+                case 'transformer':
+                    return new Transformer(shape);
                 case 'rect':
                 default:
                     return new Rect(shape);
@@ -38,14 +41,25 @@ class Layer {
                 mask.hide();
                 this.draw();
             },
-            renderShape(type, shape) {
+            addText(shape) {
+                let textNode = new Text(shape, this);
+                this.add(textNode);
+                textNode.setZIndex(this.children.length - 1);
+            },
+            renderShape(type, shape, renderTransformer) {
                 let renderedShape = factory(type, shape);
                 if (type == 'rect') {
-                    let tr = renderedShape.getTransformer();
-                    this.add(renderedShape, tr);
+                    if (renderTransformer == undefined) {
+                        let tr = renderedShape.getTransformer();
+                        this.add(renderedShape, tr);
+                    } else {
+                        this.add(renderedShape);
+                    }
                 } else if (type == 'camera') {
                     let camera = renderedShape.getCamera();
                     this.add(renderedShape, camera);
+                } else if (type == 'transformer') {
+                    this.add(renderedShape);
                 }
                 return renderedShape;
             },
@@ -72,6 +86,20 @@ class Layer {
                     this.getShapeByUUID(uuid, 'Transformer').resizeEnabled(false);
                     this.getShapeByUUID(uuid, 'Rect').draggable(false);
                 }
+            },
+            //从导出的序列化json中加载
+            loadFromJson(layerJson) {
+                let that = this;
+                let layerChildren = layerJson.children;
+                layerChildren.forEach(element => {
+                    try {
+                        let shape = element.attrs;
+                        let type = shape.type.toLowerCase();
+                        that.renderShape(type, shape, false).draw();
+                    } catch (error) {
+                        console.log(error);
+                    }
+                });
             }
         });
 
